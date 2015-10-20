@@ -23,4 +23,5 @@ node_modules/
 # Source Folder & file
 src/
 *.json
+*.psd
 Gruntfile.js
