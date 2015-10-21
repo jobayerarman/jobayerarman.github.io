@@ -12,13 +12,15 @@ $(document).ready(function(){
 
 			// Scroll the background at var speed
 			// the yPos is a negative value because we're scrolling it UP!
-			var yPos = -($window.scrollTop() * $bgobj.data('speed'));
+			var yPos = -($window.scrollTop() / $bgobj.data('speed'));
 
 			// Put together our final background position
 			var coords = 'center '+ yPos + 'px';
 
 			// Move the background
-			$bgobj.css({ backgroundPosition: coords });
+			if($(window).width() > 768) {
+				$bgobj.css({ backgroundPosition: coords });
+			}
 
 		}); // window scroll Ends
 	});
