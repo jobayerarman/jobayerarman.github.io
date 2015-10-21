@@ -22,7 +22,7 @@ node_modules/
 
 # Source Folder & file
 src/
-*/psd/
+psd/
 *.json
 *.psd
 *.ai
