@@ -1076,6 +1076,7 @@ header .title h6 {
 }
 header .title h1 {
   font-size: 55px;
+  margin-top: -5px;
 }
 @media screen and (max-width: 768px) {
   header .title h1 {
@@ -1106,7 +1107,7 @@ header .title .img-responsive {
   margin: 20px 0;
 }
 .social {
-  margin: 40px 0;
+  margin: 25px 0 30px;
 }
 .social a {
   margin-right: 100px;
@@ -1205,7 +1206,7 @@ nav .navbar-toggle {
   display: none;
   text-align: right;
   padding: 10px 20px;
-  background: #000000;
+  background: #212121;
 }
 @media screen and (max-width: 768px) {
   nav .navbar-toggle {
@@ -1216,6 +1217,10 @@ nav .navbar-toggle a {
   color: white;
   cursor: pointer;
   padding: 10px 0 10px 10px;
+}
+nav .navbar-toggle a i {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
 }
 nav #navbar-mobile {
   position: relative;
@@ -1238,9 +1243,9 @@ nav #navbar-mobile ul {
 }
 nav #navbar-mobile li {
   display: block;
-  background: rgba(0, 0, 0, 0.8);
+  background: #424242;
   margin-bottom: 0;
-  border-bottom: 2px solid #111111;
+  border-bottom: 2px solid #9e9e9e;
 }
 nav #navbar-mobile a {
   display: block;
