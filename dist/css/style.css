@@ -1064,38 +1064,6 @@ header .gradient {
   weidth: 100%;
   background-color: rgba(0, 0, 0, 0.4);
 }
-header nav ul {
-  margin-bottom: 0;
-}
-header nav ul li {
-  display: inline-block;
-  margin-right: 20px;
-  margin-top: 10px;
-}
-header nav ul li:last-child {
-  margin-right: 0;
-}
-@media screen and (max-width: 768px) {
-  header nav ul li {
-    display: block;
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-}
-header nav ul li a {
-  color: white;
-  font-family: 'Montserrat', sans-serif;
-  padding: 10px 25px;
-  background: rgba(0, 0, 0, 0.2);
-}
-header nav ul li a:hover {
-  border-bottom: 3px solid #0074d9;
-}
-header nav ul li a:hover,
-header nav ul li a:focus,
-header nav ul li a:active {
-  color: white;
-}
 header .title h1,
 header .title h2,
 header .title h3,
@@ -1199,6 +1167,91 @@ header .title .img-responsive {
 .button-action:focus,
 .button-action:active {
   background: rgba(30, 30, 30, 0.3);
+  color: white;
+}
+nav #navbar-main ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+nav #navbar-main ul li {
+  display: inline-block;
+  margin-right: 20px;
+  margin-top: 8px;
+}
+nav #navbar-main ul li:last-child {
+  margin-right: 0;
+}
+nav #navbar-main ul li a {
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px 25px;
+  background: rgba(0, 0, 0, 0.2);
+}
+nav #navbar-main ul li a:hover {
+  border-bottom: 3px solid #0074d9;
+}
+nav #navbar-main ul li a:hover,
+nav #navbar-main ul li a:focus,
+nav #navbar-main ul li a:active {
+  color: white;
+}
+@media screen and (max-width: 768px) {
+  nav #navbar-main {
+    display: none;
+  }
+}
+nav .navbar-toggle {
+  display: none;
+  text-align: right;
+  padding: 10px 20px;
+  background: #000000;
+}
+@media screen and (max-width: 768px) {
+  nav .navbar-toggle {
+    display: block;
+  }
+}
+nav .navbar-toggle a {
+  color: white;
+  cursor: pointer;
+  padding: 10px 0 10px 10px;
+}
+nav #navbar-mobile {
+  position: relative;
+  display: none;
+  z-index: 10;
+}
+@media screen and (max-width: 768px) {
+  nav #navbar-mobile {
+    display: block;
+  }
+}
+nav #navbar-mobile ul {
+  display: none;
+  list-style-type: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+nav #navbar-mobile li {
+  display: block;
+  background: rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+  border-bottom: 2px solid #111111;
+}
+nav #navbar-mobile a {
+  display: block;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
+  padding: 10px 25px;
+}
+nav #navbar-mobile a:hover,
+nav #navbar-mobile a:focus,
+nav #navbar-mobile a:active {
   color: white;
 }
 #timeline {

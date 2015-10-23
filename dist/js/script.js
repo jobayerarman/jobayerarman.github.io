@@ -1,7 +1,6 @@
 
 $(document).ready(function(){
 	/* Parallax Scrolling */
-
 	// Cache the Window object
 	$window = $(window);
 
@@ -33,6 +32,23 @@ $(document).ready(function(){
 				scrollTop: $($anchor.attr('href')).offset().top
 			}, 1500, 'easeInOutExpo');
 			event.preventDefault();
+			if($(window).width() < 769) {
+				$("#navbar-mobile ul.expanded").removeClass("expanded").slideUp('fast');
+				$(this).removeClass("open");}
+		});
+	});
+
+	// slide up and down menu on mobile screen
+	$(function() {
+		$("#navbar-mobile").html($("#navbar-main").html());
+		$("#navbar-toggle").click(function (){
+			if ($("#navbar-mobile ul").hasClass("expanded")) {
+				$("#navbar-mobile ul.expanded").removeClass("expanded").slideUp(250);
+				$(this).removeClass("open");
+			} else {
+				$("#navbar-mobile ul").addClass("expanded").slideDown(250);
+				$(this).addClass("open");
+			}
 		});
 	});
 
