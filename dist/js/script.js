@@ -1,18 +1,17 @@
 
 $(document).ready(function(){
+
+
 	/* Parallax Scrolling */
 	// Cache the Window object
-	$window = $(window);
-
 	$('.parallax').each(function(){
+		$window = $(window);
 		var $bgobj = $(this); // assigning the object
 
 		$(window).scroll(function() {
-
 			// Scroll the background at var speed
 			// the yPos is a negative value because we're scrolling it UP!
 			var yPos = -($window.scrollTop() / $bgobj.data('speed'));
-
 			// Put together our final background position
 			var coords = 'center '+ yPos + 'px';
 
@@ -20,7 +19,6 @@ $(document).ready(function(){
 			if($(window).width() > 768) {
 				$bgobj.css({ backgroundPosition: coords });
 			}
-
 		}); // window scroll Ends
 	});
 
@@ -57,8 +55,27 @@ $(document).ready(function(){
 		var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
 			var height = $(window).height();
 		if(!isMobile && height > 750) {
-			$('#site-header').css({'height': height + 20 + "px"});
+			$('#site-header').css({'height': height + 10 + "px"});
 		}
+	});
+
+	/* Scroll to Top Button */
+	$(function scrolltotop() {
+		var offset = 250;
+
+		$(window).scroll(function() {
+			if ($(this).scrollTop() > offset) {
+				$('#scroll-top').fadeIn('slow');
+			} else{
+				$('#scroll-top').fadeOut('fast');
+			}
+		});
+
+		$('#scroll-top a').click(function(event) {
+			event.preventDefault();
+			$('html, body').animate({scrollTop: 0}, 600);
+			return false;
+		});
 	});
 
 });

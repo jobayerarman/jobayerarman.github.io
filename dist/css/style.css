@@ -198,7 +198,8 @@ figure {
  */
 hr {
   -moz-box-sizing: content-box;
-  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
   height: 0;
 }
 /**
@@ -304,8 +305,9 @@ input {
  */
 input[type="checkbox"],
 input[type="radio"] {
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
   /* 1 */
   padding: 0;
   /* 2 */
@@ -328,6 +330,7 @@ input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
   -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
   /* 2 */
   box-sizing: content-box;
 }
@@ -416,15 +419,17 @@ th {
   max-width: 1170px;
   margin: 0 auto;
   padding: 0 20px;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .column,
 .columns {
   width: 100%;
   float: left;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 /* For devices larger than 400px */
 @media (min-width: 400px) {
@@ -664,8 +669,9 @@ input[type="button"] {
   border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .button:hover,
 button:hover,
@@ -721,9 +727,11 @@ select {
   background-color: #fff;
   border: 1px solid #D1D1D1;
   border-radius: 4px;
-  box-shadow: none;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 /* Removes awkward default styles on some inputs for iOS */
 input[type="email"],
@@ -856,13 +864,15 @@ form {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .u-full-width {
   width: 100%;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .u-max-full-width {
   max-width: 100%;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .u-pull-right {
   float: right;
@@ -1013,8 +1023,9 @@ input[type="button"] {
   border-radius: 0;
   border: 1px solid white;
   cursor: pointer;
-  -moz-box-sizing: border-box;
-       box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .button:hover,
 button:hover,
@@ -1036,11 +1047,14 @@ input[type="button"]:focus {
   outline: 0;
 }
 .img-responsive {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
 }
-.img-thumnail {
+.img-thumbnail {
   border: 4px solid white;
+}
+.img-circle {
+  border-radius: 50%;
 }
 section {
   min-height: 500px;
@@ -1057,7 +1071,8 @@ section h6 {
 }
 header {
   background: url("/dist/image/bg-sunset.jpg") no-repeat fixed center 0 #aaaaaa;
-  background-size: cover;
+  -webkit-background-size: cover;
+          background-size: cover;
 }
 header .gradient {
   height: 100%;
@@ -1075,7 +1090,7 @@ header .title h6 {
   text-transform: uppercase;
 }
 header .title h1 {
-  font-size: 55px;
+  font-size: 52px;
   margin-top: -5px;
 }
 @media screen and (max-width: 768px) {
@@ -1095,16 +1110,12 @@ header .title h2 {
 }
 header .title img {
   width: 350px;
+  margin: 20px 0;
 }
 @media screen and (max-width: 768px) {
   header .title img {
     width: 90%;
   }
-}
-header .title .img-responsive {
-  border-radius: 50%;
-  border: 4px solid white;
-  margin: 20px 0;
 }
 .social {
   margin: 25px 0 30px;
@@ -1121,7 +1132,9 @@ header .title .img-responsive {
   height: 40px;
   width: 100px;
   padding: 11px 0 0;
-  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+       -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
 }
 @media screen and (max-width: 768px) {
   .social a i {
@@ -1162,7 +1175,9 @@ header .title .img-responsive {
   padding: 5px 0;
   border: 2px solid white;
   font-size: 18px;
-  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+       -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
 }
 .button-action:hover,
 .button-action:focus,
@@ -1329,7 +1344,8 @@ Modules - reusable parts of our design
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
 .cd-timeline-img img {
   display: block;
@@ -1369,7 +1385,8 @@ Modules - reusable parts of our design
   .cssanimations .cd-timeline-img.bounce-in {
     visibility: visible;
     -webkit-animation: cd-bounce-1 0.6s;
-    animation: cd-bounce-1 0.6s;
+    -o-animation: cd-bounce-1 0.6s;
+       animation: cd-bounce-1 0.6s;
   }
 }
 .cd-timeline-content {
@@ -1378,7 +1395,8 @@ Modules - reusable parts of our design
   background: white;
   border-radius: 0.25em;
   padding: 1em;
-  box-shadow: 0 4px 0 #d7e4ed;
+  -webkit-box-shadow: 0 4px 0 #d7e4ed;
+          box-shadow: 0 4px 0 #d7e4ed;
 }
 .cd-timeline-content:after {
   content: "";
@@ -1470,14 +1488,16 @@ Modules - reusable parts of our design
   .cssanimations .cd-timeline-content.bounce-in {
     visibility: visible;
     -webkit-animation: cd-bounce-2 0.6s;
-    animation: cd-bounce-2 0.6s;
+    -o-animation: cd-bounce-2 0.6s;
+       animation: cd-bounce-2 0.6s;
   }
 }
 @media only screen and (min-width: 1170px) {
   /* inverse bounce effect on even content blocks */
   .cssanimations .cd-timeline-block:nth-child(even) .cd-timeline-content.bounce-in {
     -webkit-animation: cd-bounce-2-inverse 0.6s;
-    animation: cd-bounce-2-inverse 0.6s;
+    -o-animation: cd-bounce-2-inverse 0.6s;
+       animation: cd-bounce-2-inverse 0.6s;
   }
 }
 @-webkit-keyframes cd-bounce-1 {
@@ -1493,22 +1513,47 @@ Modules - reusable parts of our design
     -webkit-transform: scale(1);
   }
 }
-@keyframes cd-bounce-1 {
+@-o-keyframes cd-bounce-1 {
   0% {
     opacity: 0;
     -webkit-transform: scale(0.5);
     -ms-transform: scale(0.5);
+    -o-transform: scale(0.5);
     transform: scale(0.5);
   }
   60% {
     opacity: 1;
     -webkit-transform: scale(1.2);
     -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
     transform: scale(1.2);
   }
   100% {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes cd-bounce-1 {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+    -ms-transform: scale(0.5);
+    -o-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
     transform: scale(1);
   }
 }
@@ -1525,22 +1570,47 @@ Modules - reusable parts of our design
     -webkit-transform: translateX(0);
   }
 }
-@keyframes cd-bounce-2 {
+@-o-keyframes cd-bounce-2 {
   0% {
     opacity: 0;
     -webkit-transform: translateX(-100px);
     -ms-transform: translateX(-100px);
+    -o-transform: translateX(-100px);
     transform: translateX(-100px);
   }
   60% {
     opacity: 1;
     -webkit-transform: translateX(20px);
     -ms-transform: translateX(20px);
+    -o-transform: translateX(20px);
     transform: translateX(20px);
   }
   100% {
     -webkit-transform: translateX(0);
     -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes cd-bounce-2 {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100px);
+    -ms-transform: translateX(-100px);
+    -o-transform: translateX(-100px);
+    transform: translateX(-100px);
+  }
+  60% {
+    opacity: 1;
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    -o-transform: translateX(20px);
+    transform: translateX(20px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
     transform: translateX(0);
   }
 }
@@ -1557,26 +1627,72 @@ Modules - reusable parts of our design
     -webkit-transform: translateX(0);
   }
 }
-@keyframes cd-bounce-2-inverse {
+@-o-keyframes cd-bounce-2-inverse {
   0% {
     opacity: 0;
     -webkit-transform: translateX(100px);
     -ms-transform: translateX(100px);
+    -o-transform: translateX(100px);
     transform: translateX(100px);
   }
   60% {
     opacity: 1;
     -webkit-transform: translateX(-20px);
     -ms-transform: translateX(-20px);
+    -o-transform: translateX(-20px);
     transform: translateX(-20px);
   }
   100% {
     -webkit-transform: translateX(0);
     -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes cd-bounce-2-inverse {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(100px);
+    -ms-transform: translateX(100px);
+    -o-transform: translateX(100px);
+    transform: translateX(100px);
+  }
+  60% {
+    opacity: 1;
+    -webkit-transform: translateX(-20px);
+    -ms-transform: translateX(-20px);
+    -o-transform: translateX(-20px);
+    transform: translateX(-20px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
     transform: translateX(0);
   }
 }
 footer {
   height: 80px;
   padding-top: 50px;
+}
+#scroll-top {
+  position: fixed;
+  right: 2%;
+  bottom: 4%;
+  z-index: 2;
+  display: none;
+}
+#scroll-top a {
+  text-align: center;
+  padding: 15px;
+  border-radius: 100%;
+  background: #2ecc71;
+  color: #16a085;
+  -webkit-transition: all 0.2s ease-in-out;
+       -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out;
+}
+#scroll-top a:hover,
+#scroll-top a:focus {
+  color: #2980b9;
 }
