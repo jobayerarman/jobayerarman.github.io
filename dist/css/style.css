@@ -197,9 +197,7 @@ figure {
  * Address differences between Firefox and other browsers.
  */
 hr {
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-          box-sizing: content-box;
+  box-sizing: content-box;
   height: 0;
 }
 /**
@@ -305,9 +303,7 @@ input {
  */
 input[type="checkbox"],
 input[type="radio"] {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   /* 1 */
   padding: 0;
   /* 2 */
@@ -329,8 +325,6 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   /* 2 */
   box-sizing: content-box;
 }
@@ -419,17 +413,13 @@ th {
   max-width: 1170px;
   margin: 0 auto;
   padding: 0 20px;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .column,
 .columns {
   width: 100%;
   float: left;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 /* For devices larger than 400px */
 @media (min-width: 400px) {
@@ -669,9 +659,7 @@ input[type="button"] {
   border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .button:hover,
 button:hover,
@@ -727,11 +715,8 @@ select {
   background-color: #fff;
   border: 1px solid #D1D1D1;
   border-radius: 4px;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-shadow: none;
+  box-sizing: border-box;
 }
 /* Removes awkward default styles on some inputs for iOS */
 input[type="email"],
@@ -864,15 +849,11 @@ form {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .u-full-width {
   width: 100%;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .u-max-full-width {
   max-width: 100%;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .u-pull-right {
   float: right;
@@ -1023,9 +1004,7 @@ input[type="button"] {
   border-radius: 0;
   border: 1px solid white;
   cursor: pointer;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 .button:hover,
 button:hover,
@@ -1071,8 +1050,7 @@ section h6 {
 }
 header {
   background: url("/dist/image/bg-sunset.jpg") no-repeat fixed center 0 #aaaaaa;
-  -webkit-background-size: cover;
-          background-size: cover;
+  background-size: cover;
 }
 header .gradient {
   height: 100%;
@@ -1123,50 +1101,61 @@ header .title img {
 .social a {
   margin-right: 100px;
   color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
 }
 .social a:last-child {
   margin-right: 0;
 }
+.social a#github {
+  border-bottom: 6px solid #333333;
+}
+.social a#twitter {
+  border-bottom: 6px solid #0087ba;
+}
+.social a#linkedIn {
+  border-bottom: 6px solid #005983;
+}
+.social a#facebook {
+  border-bottom: 6px solid #2d4373;
+}
+.social a .hoverLayer {
+  height: 57px;
+  width: 100px;
+  bottom: -57px;
+  z-index: 1;
+  position: absolute;
+  -webkit-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+.social a .github {
+  background: #4d4d4d;
+}
+.social a .twitter {
+  background: #00aced;
+}
+.social a .linkedIn {
+  background: #007bb6;
+}
+.social a .facebook {
+  background: #3b5998;
+}
+.social a:hover .hoverLayer {
+  bottom: 0;
+}
 .social a i {
-  background-color: rgba(0, 0, 0, 0.3);
   height: 40px;
   width: 100px;
   padding: 11px 0 0;
-  -webkit-transition: all 0.2s ease-in-out;
-       -o-transition: all 0.2s ease-in-out;
-          transition: all 0.2s ease-in-out;
+  z-index: 2;
+  position: relative;
 }
 @media screen and (max-width: 768px) {
   .social a i {
     margin-bottom: 10px;
   }
-}
-.social a i:hover {
-  color: white;
-}
-.social a i.fa-github {
-  border-bottom: 6px solid #333333;
-}
-.social a i.fa-github:hover {
-  background: #4d4d4d;
-}
-.social a i.fa-facebook {
-  border-bottom: 6px solid #2d4373;
-}
-.social a i.fa-facebook:hover {
-  background: #3b5998;
-}
-.social a i.fa-twitter {
-  border-bottom: 6px solid #0087ba;
-}
-.social a i.fa-twitter:hover {
-  background: #00aced;
-}
-.social a i.fa-linkedin {
-  border-bottom: 6px solid #005983;
-}
-.social a i.fa-linkedin:hover {
-  background: #007bb6;
 }
 .button-action {
   margin: 5px 0 70px;
@@ -1176,13 +1165,10 @@ header .title img {
   border: 2px solid white;
   font-size: 18px;
   -webkit-transition: all 0.2s ease-in-out;
-       -o-transition: all 0.2s ease-in-out;
           transition: all 0.2s ease-in-out;
 }
-.button-action:hover,
-.button-action:focus,
-.button-action:active {
-  background: rgba(30, 30, 30, 0.3);
+.button-action:hover {
+  background: rgba(30, 30, 30, 0.7);
   color: white;
 }
 nav #navbar-main ul {
@@ -1274,6 +1260,26 @@ nav #navbar-mobile a:focus,
 nav #navbar-mobile a:active {
   color: white;
 }
+#skills .progress {
+  width: 100%;
+  height: 10px;
+}
+#skills .progress-wrap {
+  margin-top: -15px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 15px;
+  background: #0074d9;
+}
+#skills .progress-wrap .progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #ddd;
+}
+#skills .row {
+  margin-bottom: 20px;
+}
 #timeline {
   background: #16a085;
 }
@@ -1344,8 +1350,7 @@ Modules - reusable parts of our design
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  -webkit-box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
-          box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
 .cd-timeline-img img {
   display: block;
@@ -1385,8 +1390,7 @@ Modules - reusable parts of our design
   .cssanimations .cd-timeline-img.bounce-in {
     visibility: visible;
     -webkit-animation: cd-bounce-1 0.6s;
-    -o-animation: cd-bounce-1 0.6s;
-       animation: cd-bounce-1 0.6s;
+    animation: cd-bounce-1 0.6s;
   }
 }
 .cd-timeline-content {
@@ -1395,8 +1399,7 @@ Modules - reusable parts of our design
   background: white;
   border-radius: 0.25em;
   padding: 1em;
-  -webkit-box-shadow: 0 4px 0 #d7e4ed;
-          box-shadow: 0 4px 0 #d7e4ed;
+  box-shadow: 0 4px 0 #d7e4ed;
 }
 .cd-timeline-content:after {
   content: "";
@@ -1488,16 +1491,14 @@ Modules - reusable parts of our design
   .cssanimations .cd-timeline-content.bounce-in {
     visibility: visible;
     -webkit-animation: cd-bounce-2 0.6s;
-    -o-animation: cd-bounce-2 0.6s;
-       animation: cd-bounce-2 0.6s;
+    animation: cd-bounce-2 0.6s;
   }
 }
 @media only screen and (min-width: 1170px) {
   /* inverse bounce effect on even content blocks */
   .cssanimations .cd-timeline-block:nth-child(even) .cd-timeline-content.bounce-in {
     -webkit-animation: cd-bounce-2-inverse 0.6s;
-    -o-animation: cd-bounce-2-inverse 0.6s;
-       animation: cd-bounce-2-inverse 0.6s;
+    animation: cd-bounce-2-inverse 0.6s;
   }
 }
 @-webkit-keyframes cd-bounce-1 {
@@ -1513,47 +1514,22 @@ Modules - reusable parts of our design
     -webkit-transform: scale(1);
   }
 }
-@-o-keyframes cd-bounce-1 {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0.5);
-    -ms-transform: scale(0.5);
-    -o-transform: scale(0.5);
-    transform: scale(0.5);
-  }
-  60% {
-    opacity: 1;
-    -webkit-transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    -o-transform: scale(1.2);
-    transform: scale(1.2);
-  }
-  100% {
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1);
-  }
-}
 @keyframes cd-bounce-1 {
   0% {
     opacity: 0;
     -webkit-transform: scale(0.5);
     -ms-transform: scale(0.5);
-    -o-transform: scale(0.5);
     transform: scale(0.5);
   }
   60% {
     opacity: 1;
     -webkit-transform: scale(1.2);
     -ms-transform: scale(1.2);
-    -o-transform: scale(1.2);
     transform: scale(1.2);
   }
   100% {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
-    -o-transform: scale(1);
     transform: scale(1);
   }
 }
@@ -1570,47 +1546,22 @@ Modules - reusable parts of our design
     -webkit-transform: translateX(0);
   }
 }
-@-o-keyframes cd-bounce-2 {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateX(-100px);
-    -ms-transform: translateX(-100px);
-    -o-transform: translateX(-100px);
-    transform: translateX(-100px);
-  }
-  60% {
-    opacity: 1;
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    -o-transform: translateX(20px);
-    transform: translateX(20px);
-  }
-  100% {
-    -webkit-transform: translateX(0);
-    -ms-transform: translateX(0);
-    -o-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
 @keyframes cd-bounce-2 {
   0% {
     opacity: 0;
     -webkit-transform: translateX(-100px);
     -ms-transform: translateX(-100px);
-    -o-transform: translateX(-100px);
     transform: translateX(-100px);
   }
   60% {
     opacity: 1;
     -webkit-transform: translateX(20px);
     -ms-transform: translateX(20px);
-    -o-transform: translateX(20px);
     transform: translateX(20px);
   }
   100% {
     -webkit-transform: translateX(0);
     -ms-transform: translateX(0);
-    -o-transform: translateX(0);
     transform: translateX(0);
   }
 }
@@ -1627,47 +1578,22 @@ Modules - reusable parts of our design
     -webkit-transform: translateX(0);
   }
 }
-@-o-keyframes cd-bounce-2-inverse {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateX(100px);
-    -ms-transform: translateX(100px);
-    -o-transform: translateX(100px);
-    transform: translateX(100px);
-  }
-  60% {
-    opacity: 1;
-    -webkit-transform: translateX(-20px);
-    -ms-transform: translateX(-20px);
-    -o-transform: translateX(-20px);
-    transform: translateX(-20px);
-  }
-  100% {
-    -webkit-transform: translateX(0);
-    -ms-transform: translateX(0);
-    -o-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
 @keyframes cd-bounce-2-inverse {
   0% {
     opacity: 0;
     -webkit-transform: translateX(100px);
     -ms-transform: translateX(100px);
-    -o-transform: translateX(100px);
     transform: translateX(100px);
   }
   60% {
     opacity: 1;
     -webkit-transform: translateX(-20px);
     -ms-transform: translateX(-20px);
-    -o-transform: translateX(-20px);
     transform: translateX(-20px);
   }
   100% {
     -webkit-transform: translateX(0);
     -ms-transform: translateX(0);
-    -o-transform: translateX(0);
     transform: translateX(0);
   }
 }
@@ -1689,7 +1615,6 @@ footer {
   background: #2ecc71;
   color: #16a085;
   -webkit-transition: all 0.2s ease-in-out;
-       -o-transition: all 0.2s ease-in-out;
           transition: all 0.2s ease-in-out;
 }
 #scroll-top a:hover,

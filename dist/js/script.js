@@ -1,7 +1,6 @@
 
 $(document).ready(function(){
 
-
 	/* Parallax Scrolling */
 	// Cache the Window object
 	$('.parallax').each(function(){
@@ -33,7 +32,7 @@ $(document).ready(function(){
 			if($(window).width() < 769) {
 				$("#navbar-mobile ul.expanded").removeClass("expanded").slideUp('fast');
 				$(this).removeClass("open");}
-		});
+			});
 	});
 
 	// slide up and down menu on mobile screen
@@ -53,7 +52,7 @@ $(document).ready(function(){
 	// dynamic header size
 	$(function () {
 		var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
-			var height = $(window).height();
+		var height = $(window).height();
 		if(!isMobile && height > 750) {
 			$('#site-header').css({'height': height + 10 + "px"});
 		}
@@ -78,4 +77,14 @@ $(document).ready(function(){
 		});
 	});
 
+	// Skills Progress
+	$('.progress-bar').each(function moveProgressBar() {
+		var animationTime = 2500;
+		var percent = ($(this).parent().data('progress-percent') / 100);
+		var getProgressWrapWidth = $(this).width();
+		var progressTotal = percent * getProgressWrapWidth;
+
+		console.log(progressTotal);
+		$(this).stop().animate({left: progressTotal}, animationTime);
+	});
 });
