@@ -892,6 +892,8 @@ there.
 /* Larger than tablet */
 /* Larger than desktop */
 /* Larger than Desktop HD */
+/* Misc Group
+========================== */
 /* Flat UI Color */
 /* Social Media Brand Colors */
 /* Timeline Content Shadow */
@@ -1109,6 +1111,18 @@ header .title img {
 .social a:last-child {
   margin-right: 0;
 }
+@media screen and (min-width: 769px) {
+  .social a:hover .hoverLayer {
+    bottom: 0;
+  }
+}
+@media screen and (max-width: 768px) {
+  .social a {
+    margin-right: 0;
+    margin-bottom: 10px;
+    display: block;
+  }
+}
 .social a#github {
   border-bottom: 6px solid #333333;
 }
@@ -1141,9 +1155,6 @@ header .title img {
 }
 .social a .facebook {
   background: #3b5998;
-}
-.social a:hover .hoverLayer {
-  bottom: 0;
 }
 .social a i {
   height: 40px;

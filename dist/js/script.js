@@ -1,90 +1,105 @@
-
-$(document).ready(function(){
-
-	/* Parallax Scrolling */
+/* Parallax Scrolling */
+$(function parallaxScrolling() {
 	// Cache the Window object
-	$('.parallax').each(function(){
-		$window = $(window);
-		var $bgobj = $(this); // assigning the object
+	$window = $(window);
+	var $bgobj = $('.parallax'); // assigning the object
 
-		$(window).scroll(function() {
-			// Scroll the background at var speed
-			// the yPos is a negative value because we're scrolling it UP!
-			var yPos = -($window.scrollTop() / $bgobj.data('speed'));
-			// Put together our final background position
-			var coords = 'center '+ yPos + 'px';
+	$window.scroll(function() {
+		// Scroll the background at var speed
+		// the yPos is a negative value because we're scrolling it UP!
+		var yPos = -($window.scrollTop() / $bgobj.data('speed'));
+		// Put together our final background position
+		var coords = 'center '+ yPos + 'px';
 
-			// Move the background
-			if($(window).width() > 768) {
-				$bgobj.css({ backgroundPosition: coords });
-			}
-		}); // window scroll Ends
+		var limit = $(document).scrollTop();
+
+		// Move the background
+		if($window.width() > 768 && limit < 800) {
+			$bgobj.css({ backgroundPosition: coords });
+		}
+	}); // window scroll Ends
+});
+
+// jQuery for page scrolling feature - requires jQuery Easing plugin
+$(function pageScroll() {
+	$('body').on('click', '.page-scroll a', function(event) {
+		var $anchor = $(this);
+
+		$('html, body').stop().animate({
+			scrollTop: $($anchor.attr('href')).offset().top
+		}, 1500, 'easeInOutExpo');
+		event.preventDefault();
+
+		if($(window).width() < 769) {
+			$("#navbar-mobile ul.expanded").removeClass("expanded").slideUp('fast');
+			$(this).removeClass("open");
+		}
 	});
+});
 
-	// jQuery for page scrolling feature - requires jQuery Easing plugin
-	$(function() {
-		$('body').on('click', '.page-scroll a', function(event) {
-			var $anchor = $(this);
-			$('html, body').stop().animate({
-				scrollTop: $($anchor.attr('href')).offset().top
-			}, 1500, 'easeInOutExpo');
-			event.preventDefault();
-			if($(window).width() < 769) {
-				$("#navbar-mobile ul.expanded").removeClass("expanded").slideUp('fast');
-				$(this).removeClass("open");}
-			});
-	});
+// sliding menu on mobile screen
+$(function mobileNav() {
+	var mobilenav = $('div#navbar-mobile'),
+			mainnav 	= $('div#navbar-main'),
+			navToggle = $('div.navbar-toggle').children('a');
+			width 		= $(window).width();
 
-	// slide up and down menu on mobile screen
-	$(function() {
-		$("#navbar-mobile").html($("#navbar-main").html());
-		$("#navbar-toggle").click(function (){
-			if ($("#navbar-mobile ul").hasClass("expanded")) {
-				$("#navbar-mobile ul.expanded").removeClass("expanded").slideUp(250);
+	if (width < 769) {
+		mobilenav.html(mainnav.html());
+
+		navToggle.on('click', function (){
+			if (mobilenav.children('ul').hasClass("expanded")) {
+				mobilenav.children('ul.expanded').removeClass("expanded").slideUp(250);
 				$(this).removeClass("open");
 			} else {
-				$("#navbar-mobile ul").addClass("expanded").slideDown(250);
+				mobilenav.children('ul').addClass("expanded").slideDown(250);
 				$(this).addClass("open");
 			}
 		});
-	});
+	}
+});
 
-	// dynamic header size
-	$(function () {
-		var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
-		var height = $(window).height();
-		if(!isMobile && height > 750) {
-			$('#site-header').css({'height': height + 10 + "px"});
+// dynamic header size
+$(function dynamicHeader() {
+	var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
+	var height = $(window).height();
+
+	if(!isMobile && height > 750) {
+		$('#site-header').css({'height': height + 10 + "px"});
+	}
+});
+
+// Scroll to Top Button
+$(function scrolltotop() {
+	var offset = 250,
+		scrollbutton = $('div#scroll-top');
+
+	$(window).scroll(function() {
+		if ($(this).scrollTop() > offset) {
+			scrollbutton.fadeIn('slow');
+		} else{
+			scrollbutton.fadeOut('fast');
 		}
 	});
 
-	/* Scroll to Top Button */
-	$(function scrolltotop() {
-		var offset = 250;
-
-		$(window).scroll(function() {
-			if ($(this).scrollTop() > offset) {
-				$('#scroll-top').fadeIn('slow');
-			} else{
-				$('#scroll-top').fadeOut('fast');
-			}
-		});
-
-		$('#scroll-top a').click(function(event) {
-			event.preventDefault();
-			$('html, body').animate({scrollTop: 0}, 600);
-			return false;
-		});
+	scrollbutton.children('a').on('click', function(event) {
+		event.preventDefault();
+		$('html, body').animate({scrollTop: 0}, 600);
+		return false;
 	});
+});
 
-	// Skills Progress
-	$('.progress-bar').each(function moveProgressBar() {
-		var animationTime = 2500;
-		var percent = ($(this).parent().data('progress-percent') / 100);
-		var getProgressWrapWidth = $(this).width();
-		var progressTotal = percent * getProgressWrapWidth;
+// Skills Progress
+$(function moveProgressBar() {
+	var animationTime = 2500,
+		skillFocus = $(document).scrollTop();
+		progressbar = $('div.progress-bar');
 
-		console.log(progressTotal);
+	progressbar.each(function() {
+		var percent = ($(this).parent().data('progress-percent') / 100),
+			getProgressWrapWidth = $(this).width(),
+			progressTotal = percent * getProgressWrapWidth;
+
 		$(this).stop().animate({left: progressTotal}, animationTime);
 	});
 });
