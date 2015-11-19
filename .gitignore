@@ -24,7 +24,5 @@ node_modules/
 src/
 psd/
 original/
-*.json
 *.psd
 *.ai
-Gruntfile.js
