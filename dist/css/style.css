@@ -1027,12 +1027,21 @@ input[type="button"]:focus {
   border-color: white;
   outline: 0;
 }
-.img-responsive {
-  max-width: 100%;
-  height: auto;
+img {
+  vertical-align: middle;
+}
+.img-rounded {
+  border-radius: 6px;
 }
 .img-thumbnail {
-  border: 4px solid white;
+  padding: 4px;
+  line-height: 1.42857143;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
 }
 .img-circle {
   border-radius: 50%;
