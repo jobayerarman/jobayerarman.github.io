@@ -1,23 +1,23 @@
 /* Parallax Scrolling */
 $(function parallaxScrolling() {
-	// Cache the Window object
 	$window = $(window);
-	var $bgobj = $('.parallax'); // assigning the object
+	var width = $window.width();
+	var $bgobj = $('.parallax');
 
-	$window.scroll(function() {
-		// Scroll the background at var speed
-		// the yPos is a negative value because we're scrolling it UP!
-		var yPos = -($window.scrollTop() / $bgobj.data('speed'));
-		// Put together our final background position
-		var coords = 'center '+ yPos + 'px';
+	$('.parallax').each(function(){
+		var $bgobj = $(this);
 
-		var limit = $(document).scrollTop();
+		$(window).scroll(function() {
 
-		// Move the background
-		if($window.width() > 768 && limit < 800) {
-			$bgobj.css({ backgroundPosition: coords });
-		}
-	}); // window scroll Ends
+			var scrollPos = $window.scrollTop();
+			var yPos = -(scrollPos / 5);
+			var coords = '50% '+ yPos + 'px';
+
+			if(width > 768 && scrollPos < 800) {
+				$bgobj.css({ backgroundPosition: coords });
+			}
+		});
+	});
 });
 
 // jQuery for page scrolling feature - requires jQuery Easing plugin
@@ -40,9 +40,9 @@ $(function pageScroll() {
 // sliding menu on mobile screen
 $(function mobileNav() {
 	var mobilenav = $('div#navbar-mobile'),
-			mainnav 	= $('div#navbar-main'),
-			navToggle = $('div.navbar-toggle').children('a');
-			width 		= $(window).width();
+	mainnav 	= $('div#navbar-main'),
+	navToggle = $('div.navbar-toggle').children('a');
+	width 		= $(window).width();
 
 	if (width < 769) {
 		mobilenav.html(mainnav.html());
@@ -72,7 +72,7 @@ $(function dynamicHeader() {
 // Scroll to Top Button
 $(function scrolltotop() {
 	var offset = 250,
-		scrollbutton = $('div#scroll-top');
+	scrollbutton = $('div#scroll-top');
 
 	$(window).scroll(function() {
 		if ($(this).scrollTop() > offset) {
@@ -92,13 +92,13 @@ $(function scrolltotop() {
 // Skills Progress
 $(function moveProgressBar() {
 	var animationTime = 2500,
-		skillFocus = $(document).scrollTop();
-		progressbar = $('div.progress-bar');
+	skillFocus = $(document).scrollTop();
+	progressbar = $('div.progress-bar');
 
 	progressbar.each(function() {
 		var percent = ($(this).parent().data('progress-percent') / 100),
-			getProgressWrapWidth = $(this).width(),
-			progressTotal = percent * getProgressWrapWidth;
+		getProgressWrapWidth = $(this).width(),
+		progressTotal = percent * getProgressWrapWidth;
 
 		$(this).stop().animate({left: progressTotal}, animationTime);
 	});
