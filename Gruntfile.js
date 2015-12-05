@@ -5,9 +5,11 @@ module.exports = function(grunt) {
 
 	var BUILD_DIR_JS   = BUILD_DIR     + 'js/';
 	var BUILD_FILE_JS  = BUILD_DIR_JS  + 'script.js';
+	var BUILD_FILES_JS  = BUILD_DIR_JS  + '*.js';
 
 	var BUILD_DIR_CSS  = BUILD_DIR     + 'css/';
 	var BUILD_FILE_CSS = BUILD_DIR_CSS + 'style.min.css';
+	var BUILD_FILES_CSS = BUILD_DIR_CSS + '*.css';
 
 
 	var SRC_DIR        = 'src/';
@@ -45,6 +47,11 @@ module.exports = function(grunt) {
 					'src/css/style.css': 'src/less/main.less'
 				}
 			}
+		},
+
+		clean: {
+			css: [BUILD_FILES_CSS, SRC_FILES_CSS],
+			js : [BUILD_FILES_JS]
 		},
 
 		copy: {
@@ -93,10 +100,13 @@ module.exports = function(grunt) {
 
 		jshint: {
 			options: {
-				curly: true
+				curly: true,
+				globals: {
+					jQuery: true
+				}
 			},
 			beforeconcat: [SRC_FILES_JS],
-			afterconcat: ['dist/js/script.js']
+			afterconcat: [BUILD_FILE_JS]
 		},
 
 		concat: {
@@ -104,15 +114,15 @@ module.exports = function(grunt) {
 				seperator: ";"
 			},
 			build: {
-				src: ['src/js/*.js'],
-				dest: 'dist/js/script.js'
+				src: [SRC_FILES_JS],
+				dest: BUILD_FILE_JS
 			}
 		},
 
 		uglify: {
 			build: {
 				files: {
-					"dist/js/script.min.js": 'dist/js/script.js'
+					'dist/js/script.min.js': 'dist/js/script.js'
 				}
 			}
 		},
@@ -123,14 +133,14 @@ module.exports = function(grunt) {
 					spawn: false
 				},
 				files: ['src/less/*.less', 'src/less/**/*.less'],
-				tasks: ['cssflow', 'copy'],
+				tasks: ['clean:css', 'cssflow', 'copy']
 			},
 			scripts: {
 				options: {
 					spawn: false
 				},
 				files: ['src/js//*.js'],
-				tasks: ['concat', 'uglify', 'jshint']
+				tasks: ['jshint:beforeconcat', 'clean:js', 'concat', 'uglify', 'jshint:afterconcat']
 			}
 		}
 	});
