@@ -8,7 +8,10 @@
   },
   "license": "MIT",
   "homepage": "http://jobayerarman.github.io/",
-  "repository": "https://github.com/jobayerarman/jobayerarman.github.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jobayerarman/build-system-template.git"
+    },
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-clean": "^0.6.0",
