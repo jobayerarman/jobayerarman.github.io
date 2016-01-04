@@ -1,5 +1,4 @@
-@charset "UTF-8";
-/* Flat UI Color */
+@charset 'UTF-8';
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Set default font family to sans-serif.
@@ -710,6 +709,7 @@ there.
 /* Larger than tablet */
 /* Larger than desktop */
 /* Larger than Desktop HD */
+/* Flat UI Color */
 html {
   font-size: 62.5%;
 }
