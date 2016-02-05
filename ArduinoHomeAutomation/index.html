@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+    <title>Arduino HAP</title>
+
+    <!-- User Stylesheet -->
+    <link href="css/style.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="text-center">
+          <h2>Arduino Home Automation</h2>
+          <p>Temperature</p>
+        </div>
+      </nav>
+
+      <section id="control">
+        <div class="row">
+          <div class="col-md-offset-4 col-md-4 col-lg-4">
+
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title text-center">Buttons</h3>
+              </div>
+              <div class="panel-body">
+                <table class="table table-striped">
+                  <tbody>
+                    <tr>
+                      <td><p>Button 1</p></td>
+                      <td><button type="button" class="btn btn-info" onclick="GetButton1()">Off</button></td>
+                    </tr>
+                    <tr>
+                      <td><p>Button 2</p></td>
+                      <td><button type="button" class="btn btn-info" onclick="GetButton2()">Off</button></td>
+                    </tr>
+                    <tr>
+                      <td><p>Button 3</p></td>
+                      <td><button type="button" class="btn btn-info" onclick="GetButton3()">Off</button></td>
+                    </tr>
+                    <tr>
+                      <td><p>Button 4 </p></td>
+                      <td><button type="button" class="btn btn-info" onclick="GetButton4()">Off</button></td>
+                    </tr>
+                    <tr>
+                      <td><p>Button 5</p></td>
+                      <td><button type="button" class="btn btn-info" onclick="GetButton5()">Off</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="row">
+          <div class="col-md-6 col-lg-6">
+            <p class="text-muted">All Rights Reserved &copy; 2015 - 2016 | Jobayer Arman</p>
+          </div>
+          <div class="col-md-6 col-lg-6">
+            <div class="social text-center">
+              <ul>
+                <li><a href="#"><i class="fa fa-lg fa-github-alt"></i></a></li>
+                <li><a href="#"><i class="fa fa-lg fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-lg fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-lg fa-google-plus"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Monserrat Font -->
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <!-- Font Awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
