@@ -195,5 +195,8 @@ module.exports = function(grunt) {
   //Default Task(s)
   grunt.registerTask('default', ['clean:css', 'cssflow', 'copy', 'watch']);
 
+  // Image compressing task
+  grunt.registerTask('compress', ['newer:imagemin']);
+  // remove unused css class
   grunt.registerTask('cleancss', ['uncss', 'cssmin:dist']);
 };
