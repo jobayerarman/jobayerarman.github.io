@@ -999,8 +999,8 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.42857143;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 4px;
   display: inline-block;
   max-width: 100%;
@@ -1011,8 +1011,8 @@ img {
 }
 section {
   min-height: 500px;
-  margin: 50px 0;
-  padding: 30px 0;
+  margin: 0;
+  padding: 45px 0;
 }
 section h1,
 section h2,
@@ -1021,6 +1021,9 @@ section h4,
 section h5,
 section h6 {
   font-family: "Montserrat", sans-serif;
+}
+#working-projects {
+  height: 530px;
 }
 header {
   background-image: url("/dist/image/bg-sunset.jpg");
@@ -1032,6 +1035,9 @@ header .gradient {
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+}
+header .top-fix {
+  padding-top: 40px;
 }
 header .title h1,
 header .title h2,
@@ -1063,12 +1069,22 @@ header .title h2 {
   }
 }
 header .title img {
-  width: 350px;
+  width: 320px;
   margin: 20px 0;
 }
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 480px) {
   header .title img {
-    width: 90%;
+    width: 260px;
+  }
+}
+@media screen and (min-width: 768px) {
+  header .title img {
+    width: 50%;
+  }
+}
+@media screen and (min-width: 900px) {
+  header .title img {
+    width: 31%;
   }
 }
 .social {
@@ -1158,39 +1174,51 @@ header .title img {
   color: white;
   background: rgba(30, 30, 30, 0.7);
 }
+nav {
+  position: fixed;
+  z-index: 999;
+  top: -2px;
+  left: 0;
+  width: 100%;
+}
 @media screen and (min-width: 768px) {
-  nav {
-    background-color: rgba(0, 0, 0, 0.3);
+  nav .navbar-main {
+    background-color: rgba(0, 0, 0, 0.1);
+    -webkit-transition: all 0.4s ease-in-out;
+            transition: all 0.4s ease-in-out;
   }
 }
-nav #navbar-main ul {
+nav .navbar-main ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-nav #navbar-main ul li {
+nav .navbar-main ul li {
   display: inline-block;
   margin-right: 20px;
   margin-top: 12px;
 }
-nav #navbar-main ul li:last-child {
+nav .navbar-main ul li:last-child {
   margin-right: 0;
 }
-nav #navbar-main ul li a {
+nav .navbar-main ul li a {
   color: white;
   font-family: 'Montserrat', sans-serif;
   padding: 10px 25px;
 }
-nav #navbar-main ul li a:hover {
-  border-bottom: 3px solid #0074d9;
+nav .navbar-main ul li a.active {
+  border-bottom: 3px solid #28b338;
 }
-nav #navbar-main ul li a:hover,
-nav #navbar-main ul li a:focus,
-nav #navbar-main ul li a:active {
+nav .navbar-main ul li a:hover {
+  border-bottom: 3px solid #0074D9;
+}
+nav .navbar-main ul li a:hover,
+nav .navbar-main ul li a:focus,
+nav .navbar-main ul li a:active {
   color: white;
 }
 @media screen and (max-width: 768px) {
-  nav #navbar-main {
+  nav .navbar-main {
     display: none;
   }
 }
@@ -1214,17 +1242,17 @@ nav .navbar-toggle a i {
   border: 2px solid rgba(255, 255, 255, 0.2);
   padding: 2px 6px;
 }
-nav #navbar-mobile {
+nav .navbar-mobile {
   position: relative;
   display: none;
   z-index: 10;
 }
 @media screen and (max-width: 768px) {
-  nav #navbar-mobile {
+  nav .navbar-mobile {
     display: block;
   }
 }
-nav #navbar-mobile ul {
+nav .navbar-mobile ul {
   display: none;
   list-style-type: none;
   position: absolute;
@@ -1233,22 +1261,22 @@ nav #navbar-mobile ul {
   margin-right: auto;
   margin-left: auto;
 }
-nav #navbar-mobile li {
+nav .navbar-mobile li {
   display: block;
   background: #424242;
   margin-bottom: 0;
-  border-bottom: 2px solid #9e9e9e;
+  border-bottom: 2px solid #9E9E9E;
 }
-nav #navbar-mobile a {
+nav .navbar-mobile a {
   display: block;
   color: white;
   font-family: 'Montserrat', sans-serif;
   text-align: left;
   padding: 10px 25px;
 }
-nav #navbar-mobile a:hover,
-nav #navbar-mobile a:focus,
-nav #navbar-mobile a:active {
+nav .navbar-mobile a:hover,
+nav .navbar-mobile a:focus,
+nav .navbar-mobile a:active {
   color: white;
 }
 #skills .progress {
@@ -1260,7 +1288,7 @@ nav #navbar-mobile a:active {
   overflow: hidden;
   margin-top: -15px;
   margin-bottom: 15px;
-  background: #0074d9;
+  background: #0074D9;
 }
 #skills .progress-wrap .progress-bar {
   position: absolute;
@@ -1341,7 +1369,7 @@ Modules - reusable parts of our design
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: 0 0 0 4px #ffffff, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
 .cd-timeline-img img {
   display: block;
@@ -1390,7 +1418,7 @@ Modules - reusable parts of our design
   background: white;
   border-radius: 0.25em;
   padding: 1em;
-  box-shadow: 0 4px 0 #d7e4ed;
+  box-shadow: 0 4px 0 #D7E4ED;
 }
 .cd-timeline-content:after {
   content: "";
@@ -1399,7 +1427,7 @@ Modules - reusable parts of our design
 }
 .cd-timeline-content .cd-date {
   display: inline-block;
-  color: #111111;
+  color: #111;
 }
 .cd-timeline-content p {
   margin: 1em 0;
