@@ -1,0 +1,34 @@
+// Image Mixins
+
+img {
+	vertical-align: middle;
+	margin-bottom: 6px;
+}
+
+.img-responsive(@display: block) {
+	display: @display;
+	max-width: 100%;
+	height: auto;
+}
+.img-responsive {
+  .img-responsive();
+}
+
+
+.img-rounded {
+	border-radius: @border-radius-large;
+}
+
+.img-thumbnail {
+	padding: @thumbnail-padding;
+	line-height: @line-height-base;
+	background-color: @thumbnail-bg;
+	border: 1px solid @thumbnail-border;
+	border-radius: @thumbnail-border-radius;
+
+	.img-responsive(inline-block);
+}
+
+.img-circle {
+	border-radius: 50%;
+}

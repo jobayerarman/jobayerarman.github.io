@@ -21,7 +21,6 @@ $RECYCLE.BIN/
 node_modules/
 
 # Source Folder & file
-src/
 psd/
 original/
 *.psd
