@@ -81,7 +81,7 @@ $(function navOpacity() {
         anchor  = $(".navbar-main a");
 
   $(window).scroll(function() {
-    if ($(this).scrollTop() > 764) {
+    if ($(this).scrollTop() > 370) {
       nav.css({'background-color': '#FFF'});
       anchor.css({'color': 'black'});
     } else{

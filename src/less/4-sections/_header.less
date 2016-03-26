@@ -1,5 +1,5 @@
 header {
-		background-image: url("/dist/image/bg-sunset.jpg");
+		background-image: url("/dist/images/bg-sunset.jpg");
 		background-repeat: no-repeat;
 		background-position: center 0;
 		background-size: cover;
@@ -146,9 +146,17 @@ header {
 	color: white;
 	border: 2px solid white;
 	border-radius: 0;
+
 	&:hover {
 		color: black;
-		background: #FFF;
 		border: 2px solid transparent;
+		background: #FFFFFF;
+	}
+	&:active,
+	&:focus {
+		color: white;
+		border: 2px solid white;
+		background: transparent;
 	}
 }
+

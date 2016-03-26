@@ -3,8 +3,10 @@ module.exports = function(grunt) {
   // Load the plugins
   require('load-grunt-tasks')(grunt);
 
-  // constants for various paths and files to be used by the task configuration
+  //mozjpeg is a production-quality JPEG encoder that improves compression while maintaining compatibility with the vast majority of deployed decoders
+  var mozjpeg = require('imagemin-mozjpeg');
 
+  // constants for various paths and files to be used by the task configuration
   /* Source Directories */
   // Source Base
   var SRC_DIR         = 'src/';
@@ -17,7 +19,7 @@ module.exports = function(grunt) {
   // Source Files
   var SRC_FILES_JS    = SRC_DIR_JS   + '*.js';
   var SRC_FILES_CSS   = SRC_DIR_CSS  + '*.css';
-  var SRC_FILES_LESS  = SRC_DIR_LESS + '*.less';
+  var SRC_FILES_LESS  = SRC_DIR_LESS + '**/*.less';
 
   // Browser prefix for Autoprefixing
   var AP_BROWSERS = [
@@ -48,34 +50,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    // Shows tasks completion notification
-    notify: {
-      html: {
-        options: {
-          title: 'HTML',
-          message: 'HTML files build success'
-        }
-      },
-      css: {
-        options: {
-          title: 'CSS',
-          message: 'Running CSSFlow'
-        }
-      },
-      copy: {
-        options: {
-          title: 'CSS Copy to dist folder',
-          message: 'CSS files copied to dist'
-        }
-      },
-      js: {
-        options: {
-          title: 'JavaScript',
-          message: 'JavaScript concated successfully'
-        }
-      },
-    },
-
     // clean each destination before output
     clean: {
       css: [SRC_FILES_CSS],
@@ -100,10 +74,10 @@ module.exports = function(grunt) {
     // copy CSS from source directory to dist folder
     copy: {
       build: {
+        expand: true,
         cwd: SRC_DIR_CSS,
         src: ['*.css'],
-        dest: BUILD_DIR_CSS,
-        expand: true
+        dest: BUILD_DIR_CSS
       }
     },
 
@@ -151,12 +125,36 @@ module.exports = function(grunt) {
       }
     },
 
+    // Minify images
+    imagemin: {
+      dynamic: {
+        files: [{
+          expand: true,
+          cwd: 'src/images/',
+          src: ['**/*.{png,jpg,gif}'],
+          dest: 'dist/images/'
+        }],
+        options: {
+          optimizationLevel: 3,
+          progressive: true,
+          svgoPlugins: [{ removeViewBox: false }],
+          use: [mozjpeg({quality: 70})]
+        }
+      }
+    },
+
     watch: {
+      configFiles: {
+        options: {
+          reload: true
+        },
+        files: [ 'Gruntfile.js'],
+      },
       styles: {
         options: {
           spawn: false
         },
-        files: ['src/less/*.less', 'src/less/**/*.less'],
+        files: SRC_FILES_LESS,
         tasks: ['cssflow', 'copy']
       },
       scripts: {

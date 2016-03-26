@@ -1,7 +1,7 @@
 {
   "name": "portfolio-website",
   "description": "Personal website to share about me & my work",
-  "version": "0.4.2-4",
+  "version": "0.8.5",
   "author": {
     "name": "Jobayer Arman",
     "email": "carbonjha@gmail.com"
@@ -14,19 +14,21 @@
   },
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-autoprefixer": "^3.0.4",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-concat": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-imagemin": "^1.0.0",
     "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-less": "^1.1.0",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-cssflow": "^0.2.0",
+    "grunt-newer": "^1.1.2",
     "grunt-notify": "^0.4.5",
     "grunt-uncss": "^0.5.0",
     "jshint-stylish": "^2.1.0",
     "load-grunt-tasks": "^3.4.1"
+  },
+  "dependencies": {
+    "imagemin-mozjpeg": "^5.1.0"
   }
 }
