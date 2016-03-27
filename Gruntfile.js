@@ -128,18 +128,18 @@ module.exports = function(grunt) {
     // Minify images
     imagemin: {
       dynamic: {
+        options: {
+          optimizationLevel: 1,
+          progressive: false,
+          svgoPlugins: [{ removeViewBox: false }],
+          use: [mozjpeg({quality: 75})]
+        },
         files: [{
           expand: true,
           cwd: 'src/images/',
           src: ['**/*.{png,jpg,gif}'],
           dest: 'dist/images/'
-        }],
-        options: {
-          optimizationLevel: 3,
-          progressive: true,
-          svgoPlugins: [{ removeViewBox: false }],
-          use: [mozjpeg({quality: 75})]
-        }
+        }]
       }
     },
 
