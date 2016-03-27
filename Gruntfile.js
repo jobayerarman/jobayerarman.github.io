@@ -138,7 +138,7 @@ module.exports = function(grunt) {
           optimizationLevel: 3,
           progressive: true,
           svgoPlugins: [{ removeViewBox: false }],
-          use: [mozjpeg({quality: 70})]
+          use: [mozjpeg({quality: 75})]
         }
       }
     },
