@@ -62,6 +62,9 @@ module.exports = function(grunt) {
         preprocessor: 'less',
         autoprefixer: {
           browsers: AP_BROWSERS
+        },
+        cssmin: {
+          keepSpecialComments: 0
         }
       },
       build: {
@@ -73,7 +76,7 @@ module.exports = function(grunt) {
 
     // copy CSS from source directory to dist folder
     copy: {
-      build: {
+      styles: {
         expand: true,
         cwd: SRC_DIR_CSS,
         src: ['*.css'],
@@ -155,7 +158,7 @@ module.exports = function(grunt) {
           spawn: false
         },
         files: SRC_FILES_LESS,
-        tasks: ['cssflow', 'copy']
+        tasks: ['cssflow', 'copy:styles']
       },
       scripts: {
         options: {
@@ -168,7 +171,7 @@ module.exports = function(grunt) {
   });
 
   //Default Task(s)
-  grunt.registerTask('default', ['clean:css', 'cssflow', 'copy', 'watch']);
+  grunt.registerTask('default', ['clean:css', 'cssflow', 'copy:styles', 'watch']);
 
   // Image compressing task
   grunt.registerTask('compress', ['newer:imagemin']);
