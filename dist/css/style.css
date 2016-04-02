@@ -1023,9 +1023,6 @@ section h5,
 section h6 {
   font-family: "Montserrat", sans-serif;
 }
-#working-projects {
-  height: 530px;
-}
 header {
   background-image: url("/dist/images/bg-sunset.jpg");
   background-repeat: no-repeat;
@@ -1625,6 +1622,16 @@ Modules - reusable parts of our design
     -ms-transform: translateX(0);
     transform: translateX(0);
   }
+}
+#working-projects .row h3 {
+  border-left: 5px solid #40a6ff;
+  padding-left: 10px;
+}
+#working-projects .row:nth-child(even) {
+  margin-bottom: 60px;
+}
+#working-projects .row img {
+  margin-bottom: 20px;
 }
 footer {
   height: 80px;
