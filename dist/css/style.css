@@ -1089,17 +1089,16 @@ header .title img {
   margin: 25px 0 30px;
 }
 .social a {
-  margin-right: 100px;
   color: white;
   background-color: rgba(0, 0, 0, 0.3);
   display: inline-block;
   position: relative;
   overflow: hidden;
 }
-.social a:last-child {
-  margin-right: 0;
-}
 @media screen and (min-width: 769px) {
+  .social a:not(:last-child) {
+    margin-right: 100px;
+  }
   .social a:hover .hoverLayer {
     bottom: 0;
   }

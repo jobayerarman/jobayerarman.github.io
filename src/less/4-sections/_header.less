@@ -61,17 +61,16 @@ header {
 	margin: 25px 0 30px;
 
 	a {
-		margin-right: 100px;
 		color: white;
 		background-color: rgba(0, 0, 0, 0.3);
 		display: inline-block;
 		position: relative;
 		overflow: hidden;
 
-		&:last-child {
-			margin-right: 0;
-		}
 		@media screen and (min-width: 769px) {
+			&:not(:last-child) {
+				margin-right: 100px;
+			}
 			&:hover .hoverLayer {
 				bottom: 0;
 			}

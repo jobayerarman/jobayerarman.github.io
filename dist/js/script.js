@@ -113,15 +113,21 @@ $(function scrolltotop() {
 
 // Skills Progress
 $(function moveProgressBar() {
-  var animationTime = 2500,
-  skillFocus = $(document).scrollTop();
-  progressbar = $('div.progress-bar');
+  $(window).scroll(function() {
+    var animationTime = 3000,
+        skillTop      = $('#skills').offset().top + 600,
+        windowTop     = $(window).scrollTop(),
+        windowBottom  = height + windowTop,
+        progressbar   = $('.progress-bar');
 
-  progressbar.each(function() {
-    var percent = ($(this).parent().data('progress-percent') / 100),
-    getProgressWrapWidth = $(this).width(),
-    progressTotal = percent * getProgressWrapWidth;
+    if (windowBottom > skillTop) {
+      progressbar.each(function() {
+        var percent = ($(this).parent().data('progress-percent') / 100),
+        getProgressWrapWidth = $(this).width(),
+        progressTotal = percent * getProgressWrapWidth;
 
-    $(this).stop().animate({left: progressTotal}, animationTime);
+        $(this).stop().animate({left: progressTotal}, animationTime);
+      });
+    }
   });
 });
