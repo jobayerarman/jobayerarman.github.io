@@ -922,6 +922,39 @@ hr {
 .text-center {
   text-align: center;
 }
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+/*----------  Quotes  ----------*/
+.quotes {
+  padding: 25px 0;
+  background: #32c5ff;
+}
+.quotes p {
+  margin-bottom: 0;
+}
+blockquote {
+  margin-bottom: 0;
+}
+blockquote:before {
+  font-size: 4em;
+  line-height: 1px;
+  margin-right: 0.1em;
+  content: open-quote;
+  vertical-align: -0.4em;
+  color: #111;
+}
+blockquote:after {
+  font-size: 4em;
+  line-height: 1px;
+  margin-left: 0.15em;
+  content: close-quote;
+  vertical-align: -0.6em;
+  color: #111;
+}
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .button,
@@ -1083,6 +1116,33 @@ header .title img {
 @media screen and (min-width: 900px) {
   header .title img {
     width: 31%;
+  }
+}
+.typed-cursor {
+  opacity: 1;
+  -webkit-animation: blink 0.7s infinite;
+  animation: blink 0.7s infinite;
+}
+@-webkit-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 .social {
@@ -1621,6 +1681,12 @@ Modules - reusable parts of our design
     -ms-transform: translateX(0);
     transform: translateX(0);
   }
+}
+.box img {
+  margin: 0 auto 10px;
+}
+.box h5 {
+  margin-bottom: 0;
 }
 #working-projects .row h3 {
   border-left: 5px solid #40a6ff;

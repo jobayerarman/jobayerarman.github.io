@@ -2,6 +2,18 @@
 var width = $(window).width();
 var height = $(window).height();
 
+// Typed.js designation
+$(function(){
+  $(".role").typed({
+    strings: ["am a Dreamer ^650 | Coder ^650 | Developer ", "love Sublime^700, music^900 &amp;^400 spicy foods "],
+    startDelay: 1000,
+    typeSpeed: 70,
+    backSpeed: 10,
+    backDelay: 1500,
+    loop: true
+  });
+});
+
 // jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function pageScroll() {
   $('body').on('click', '.page-scroll a', function(event) {
@@ -106,7 +118,7 @@ $(function scrolltotop() {
 
   scrollbutton.children('a').on('click', function(event) {
     event.preventDefault();
-    $('html, body').animate({scrollTop: 0}, 600);
+    $('html, body').animate({scrollTop: 0}, 800);
     return false;
   });
 });

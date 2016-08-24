@@ -64,3 +64,45 @@ hr {
 .text-center {
 	text-align: center;
 }
+.text-right {
+	text-align: right;
+}
+.text-left {
+	text-align: left;
+}
+
+
+/*----------  Quotes  ----------*/
+.quotes {
+	padding: 25px 0;
+
+	background: darken(@aqua, 15%);
+	p {
+		margin-bottom: 0;
+	}
+}
+blockquote {
+	margin-bottom: 0;
+}
+blockquote:before {
+	font-size: 4em;
+	line-height: 1px;
+
+	margin-right: 0.1em;
+
+	content: open-quote;
+	vertical-align: -0.4em;
+
+	color: @black;
+}
+blockquote:after {
+	font-size: 4em;
+	line-height: 1px;
+
+	margin-left: 0.15em;
+
+	content: close-quote;
+	vertical-align: -0.6em;
+
+	color: @black;
+}
