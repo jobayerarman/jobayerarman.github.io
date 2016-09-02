@@ -27,15 +27,16 @@ header {
 			margin-top: -5px;
 
 			@media screen and (max-width: 768px) {
-				font-size: 30px;
+				font-size: 28px;
 			}
 		}
 		h2 {
 			letter-spacing: 1.5px;
 			font-weight: normal;
 			font-size: 36px;
+      word-wrap: break-word;
 			@media screen and (max-width: 768px) {
-				font-size: 100%;
+				font-size: 14px;
 			}
 		}
 
@@ -79,6 +80,7 @@ header {
 		position: relative;
 		overflow: hidden;
 
+
 		@media screen and (min-width: 769px) {
 			&:not(:last-child) {
 				margin-right: 100px;
@@ -88,11 +90,19 @@ header {
 			}
 		}
 
-		@media screen and (max-width: 768px) {
-			margin-right: 0;
-			margin-bottom: 10px;
-			display: block;
-		}
+    @media screen and (max-width: 768px) {
+      margin-bottom: 10px;
+      max-width: 120px;
+      max-height: 50px;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+    @media screen and (max-width: 550px) {
+      display: block;
+      margin-right: 0;
+      margin-left: 33.3333%;
+    }
 
 		&#github {
 			border-bottom: 6px solid darken(@github, 10%);

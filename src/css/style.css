@@ -939,6 +939,11 @@ hr {
 blockquote {
   margin-bottom: 0;
 }
+@media screen and (max-width: 550px) {
+  blockquote em {
+    font-size: 20px;
+  }
+}
 blockquote:before {
   font-size: 4em;
   line-height: 1px;
@@ -947,6 +952,11 @@ blockquote:before {
   vertical-align: -0.4em;
   color: #111;
 }
+@media screen and (max-width: 550px) {
+  blockquote:before {
+    font-size: 3em;
+  }
+}
 blockquote:after {
   font-size: 4em;
   line-height: 1px;
@@ -954,6 +964,11 @@ blockquote:after {
   content: close-quote;
   vertical-align: -0.6em;
   color: #111;
+}
+@media screen and (max-width: 550px) {
+  blockquote:after {
+    font-size: 3em;
+  }
 }
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -1056,6 +1071,12 @@ section h5,
 section h6 {
   font-family: "Montserrat", sans-serif;
 }
+@media screen and (max-width: 768px) {
+  #portfolio .columns:not(:last-child),
+  #working-projects .columns:not(:last-child) {
+    margin-bottom: 30px;
+  }
+}
 header {
   background-image: url("/dist/images/bg-sunset.jpg");
   background-repeat: no-repeat;
@@ -1086,17 +1107,18 @@ header .title h1 {
 }
 @media screen and (max-width: 768px) {
   header .title h1 {
-    font-size: 30px;
+    font-size: 28px;
   }
 }
 header .title h2 {
   letter-spacing: 1.5px;
   font-weight: normal;
   font-size: 36px;
+  word-wrap: break-word;
 }
 @media screen and (max-width: 768px) {
   header .title h2 {
-    font-size: 100%;
+    font-size: 14px;
   }
 }
 header .title img {
@@ -1165,9 +1187,19 @@ header .title img {
 }
 @media screen and (max-width: 768px) {
   .social a {
-    margin-right: 0;
     margin-bottom: 10px;
+    max-width: 120px;
+    max-height: 50px;
+  }
+  .social a:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .social a {
     display: block;
+    margin-right: 0;
+    margin-left: 33.3333%;
   }
 }
 .social a#github {

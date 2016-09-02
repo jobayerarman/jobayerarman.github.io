@@ -1,11 +1,13 @@
 // Global Variables
-var width = $(window).width();
+var width  = $(window).width();
 var height = $(window).height();
+var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
+
 
 // Typed.js designation
 $(function(){
   $(".role").typed({
-    strings: ["am a Dreamer ^650 | Coder ^650 | Developer ", "love Sublime^700, music^900 &amp;^400 spicy foods "],
+    strings: ["am a ^400 Dreamer ^650 | Coder ^650 | Developer ", "love ^400 Sublime^700, music^900 &amp;^400 spicy foods "],
     startDelay: 1000,
     typeSpeed: 70,
     backSpeed: 10,
@@ -17,15 +19,15 @@ $(function(){
 // jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function pageScroll() {
   $('body').on('click', '.page-scroll a', function(event) {
+    event.preventDefault();
     var $anchor = $(this);
 
     $('html, body').stop().animate({
       scrollTop: $($anchor.attr('href')).offset().top - 41
     }, 1500, 'easeInOutExpo');
-    event.preventDefault();
 
     if(width < 769) {
-      $(".navbar-mobile ul.expanded").removeClass("expanded").slideUp('fast');
+      $(".navbar-mobile ul.expanded").slideUp('fast').removeClass("expanded");
       $(this).removeClass("open");
     }
   });
@@ -80,10 +82,8 @@ $(function mobileNav() {
 
 // dynamic header size
 $(function dynamicHeader() {
-  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
-
   if(!isMobile && height > 750) {
-    $('#site-header').css({'height': height + 10 + "px"});
+    $('#site-header').css({'height': height + 5 + "px"});
   }
 });
 
@@ -126,7 +126,8 @@ $(function scrolltotop() {
 // Skills Progress
 $(function moveProgressBar() {
   $(window).scroll(function() {
-    var animationTime = 3000,
+    var animationTime = 2000,
+        easing        = 'easeInOutExpo',
         skillTop      = $('#skills').offset().top + 600,
         windowTop     = $(window).scrollTop(),
         windowBottom  = height + windowTop,
@@ -134,11 +135,11 @@ $(function moveProgressBar() {
 
     if (windowBottom > skillTop) {
       progressbar.each(function() {
-        var percent = ($(this).parent().data('progress-percent') / 100),
-        getProgressWrapWidth = $(this).width(),
-        progressTotal = percent * getProgressWrapWidth;
+        var percent           = ($(this).parent().data('progress-percent') / 100),
+            progressWrapWidth = $(this).width(),
+            progressTotal     = percent * progressWrapWidth;
 
-        $(this).stop().animate({left: progressTotal}, animationTime);
+        $(this).stop().animate({left: progressTotal}, animationTime, easing);
       });
     }
   });

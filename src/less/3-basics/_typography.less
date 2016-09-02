@@ -83,6 +83,11 @@ hr {
 }
 blockquote {
 	margin-bottom: 0;
+  @media screen and (max-width: 550px) {
+    em {
+      font-size: 20px;
+    }
+  }
 }
 blockquote:before {
 	font-size: 4em;
@@ -94,6 +99,10 @@ blockquote:before {
 	vertical-align: -0.4em;
 
 	color: @black;
+
+  @media screen and (max-width: 550px) {
+    font-size: 3em;
+  }
 }
 blockquote:after {
 	font-size: 4em;
@@ -105,4 +114,8 @@ blockquote:after {
 	vertical-align: -0.6em;
 
 	color: @black;
+
+  @media screen and (max-width: 550px) {
+    font-size: 3em;
+  }
 }
