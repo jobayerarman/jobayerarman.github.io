@@ -7,7 +7,7 @@ var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userA
 // Typed.js designation
 $(function(){
   $(".role").typed({
-    strings: ["am a ^400 Dreamer ^650 | Coder ^650 | Developer ", "love ^400 Sublime^700, music^900 &amp;^400 spicy foods "],
+    strings: ["am a ^400 Dreamer ^650 | Coder ^650 | Developer ", "love ^400 Sublime^700, music^900 &amp;^400 spicy food "],
     startDelay: 1000,
     typeSpeed: 70,
     backSpeed: 10,
@@ -84,7 +84,7 @@ $(function mobileNav() {
 
 // dynamic header size
 $(function dynamicHeader() {
-  if(!isMobile && height > 750) {
+  if( height > 750) {
     $('#site-header').css({'height': height + 5 + "px"});
   }
 });
@@ -128,9 +128,9 @@ $(function scrolltotop() {
 // Skills Progress
 $(function moveProgressBar() {
   $(window).scroll(function() {
-    var animationTime = 2000,
+    var animationTime = 1000,
         easing        = 'easeInOutExpo',
-        skillTop      = $('#skills').offset().top + 600,
+        skillTop      = $('#skills').offset().top + 500,
         windowTop     = $(window).scrollTop(),
         windowBottom  = height + windowTop,
         progressbar   = $('.progress-bar');

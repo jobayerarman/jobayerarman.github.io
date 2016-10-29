@@ -1,10 +1,15 @@
 header {
-    background-image: url("/dist/images/bg-sunset.jpg");
-    background-repeat: no-repeat;
-    background-position: center 0;
-    background-size: cover;
+  background-image: url("/dist/images/bg-sunset.jpg");
+  background-repeat: no-repeat;
+  background-position: center 0;
+  background-size: cover;
+
+  position: relative;
 
   .gradient {
+    @media (max-width: 768px) {
+      padding-bottom: 70px;
+    }
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
@@ -34,9 +39,9 @@ header {
       letter-spacing: 1.5px;
       font-weight: normal;
       font-size: 36px;
-      word-wrap: break-word;
       @media screen and (max-width: 768px) {
         font-size: 14px;
+        letter-spacing: 1px;
       }
     }
 
@@ -58,6 +63,11 @@ header {
   }
 }
 
+.typed-animation {
+  @media (max-width: 768px) {
+    height: 30px;
+  }
+}
 .typed-cursor {
   opacity: 1;
   -webkit-animation: blink 0.7s infinite;
@@ -94,14 +104,10 @@ header {
       margin-bottom: 10px;
       max-width: 120px;
       max-height: 50px;
-      &:not(:last-child) {
-        margin-right: 10px;
-      }
     }
     @media screen and (max-width: 550px) {
       display: block;
-      margin-right: 0;
-      margin-left: 33.3333%;
+      margin: 0 auto 10px;
     }
 
     &#github {
@@ -154,6 +160,13 @@ header {
 }
 
 .nav-down {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 70px;
+  margin: 0 auto;
+  padding-top: 50px;
   img {
     height: 70px;
     width: 70px;

@@ -1082,11 +1082,17 @@ header {
   background-repeat: no-repeat;
   background-position: center 0;
   background-size: cover;
+  position: relative;
 }
 header .gradient {
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 768px) {
+  header .gradient {
+    padding-bottom: 70px;
+  }
 }
 header .top-fix {
   padding-top: 40px;
@@ -1114,11 +1120,11 @@ header .title h2 {
   letter-spacing: 1.5px;
   font-weight: normal;
   font-size: 36px;
-  word-wrap: break-word;
 }
 @media screen and (max-width: 768px) {
   header .title h2 {
     font-size: 14px;
+    letter-spacing: 1px;
   }
 }
 header .title img {
@@ -1138,6 +1144,11 @@ header .title img {
 @media screen and (min-width: 900px) {
   header .title img {
     width: 31%;
+  }
+}
+@media (max-width: 768px) {
+  .typed-animation {
+    height: 30px;
   }
 }
 .typed-cursor {
@@ -1191,15 +1202,11 @@ header .title img {
     max-width: 120px;
     max-height: 50px;
   }
-  .social a:not(:last-child) {
-    margin-right: 10px;
-  }
 }
 @media screen and (max-width: 550px) {
   .social a {
     display: block;
-    margin-right: 0;
-    margin-left: 33.3333%;
+    margin: 0 auto 10px;
   }
 }
 .social a#github {
@@ -1246,6 +1253,15 @@ header .title img {
   .social a i {
     margin-bottom: 10px;
   }
+}
+.nav-down {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 70px;
+  margin: 0 auto;
+  padding-top: 50px;
 }
 .nav-down img {
   height: 70px;
