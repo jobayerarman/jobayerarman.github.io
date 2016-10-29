@@ -78,7 +78,7 @@ var watch = {
   styles    : styles.src.allFiles,
   scripts   : scripts.src.files,
   images    : images.src.files,
-  html      : html.dest.files
+  html      : html.src.files
 };
 
 // Browsers you care about for autoprefixing.
@@ -117,6 +117,7 @@ var uglify       = require('gulp-uglify');           // Minifies JS files
 
 // HTML template engine
 var htmlRender   = require('gulp-nunjucks-render');  // Render Nunjucks templates
+var processhtml  = require('gulp-processhtml');      // Process html files at build time to modify them depending on the release environment
 
 // Image realted plugins.
 var imagemin     = require('gulp-imagemin');         // Minify PNG, JPEG, GIF and SVG images with imagemin.
@@ -184,7 +185,7 @@ gulp.task('clean:html', function() {
 gulp.task('clean:js', function() {
   return del([scripts.dest.files]);
 });
-gulp.task('clean:all', gulpSequence('clean:css', 'clean:js'));
+gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
 
 /**
  * Task: `styles`.
@@ -259,6 +260,7 @@ gulp.task( 'render-html', function() {
     .pipe(htmlRender({
       path: html.src.templates
     }))
+    .pipe( gulpif( config.production, processhtml() ) )
     .pipe( gulp.dest( html.dest.path ))
     .pipe( size({
       showFiles: true
@@ -326,7 +328,7 @@ gulp.task( 'browser-sync', function() {
 /**
  * Default Gulp task
  */
-gulp.task( 'default', gulpSequence('clean:all', 'styles', 'scripts'));
+gulp.task( 'default', gulpSequence('clean:all', 'styles', 'scripts', 'render-html'));
 
 
 /**
@@ -348,7 +350,7 @@ gulp.task( 'watch', ['browser-sync'], function() {
 });
 
 // reloading browsers
-gulp.task('watch-html', function (done) {
+gulp.task('watch-html', ['render-html'], function (done) {
     browserSync.reload();
     done();
 });
