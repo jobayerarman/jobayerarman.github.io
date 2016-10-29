@@ -1,36 +1,36 @@
 nav {
-	position: fixed;
-	z-index: 999;
-	top: -2px;
-	left: 0;
-	width: 100%;
+  position: fixed;
+  z-index: 999;
+  top: -2px;
+  left: 0;
+  width: 100%;
 
-	.navbar-main {
+  .navbar-main {
 
-		@media screen and (min-width: 768px) {
-			background: transparent;
-			transition: all 0.4s ease-in-out;
-		}
+    @media screen and (min-width: 768px) {
+      background: transparent;
+      transition: all 0.4s ease-in-out;
+    }
 
-		ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
 
-			li {
-				display: inline-block;
-				margin-right: 20px;
-				margin-top: 12px;
+      li {
+        display: inline-block;
+        margin-right: 20px;
+        margin-top: 12px;
         position: relative;
 
-				&:last-child {
-					margin-right: 0;
-				}
+        &:last-child {
+          margin-right: 0;
+        }
 
-				a {
-					color: white;
-					font-family: 'Montserrat', sans-serif;
-					padding: 10px 25px;
+        a {
+          color: white;
+          font-family: 'Montserrat', sans-serif;
+          padding: 10px 25px;
           position: relative;
 
           &:after {
@@ -44,92 +44,136 @@ nav {
             transition: width 0.3s ease 0s, left 0.3s ease 0s;
           }
 
-					&.active {
-						&:after {
+          &.active {
+            &:after {
               width: 100%;
               left: 0;
               background: lighten(@blue, 5%);
             }
-					}
+          }
 
-					&:hover {
-						&:after {
+          &:hover {
+            &:after {
               width: 100%;
               left: 0;
             }
-					}
-					&:hover,
+          }
+          &:hover,
           &:focus,
           &:active {
-						color: white;
-					}
-				}
-			}
-		}
+            color: white;
+          }
+        }
+      }
+    }
 
-		@media screen and (max-width: 768px) {
-			display: none;
-		}
-	}
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
 
-	.navbar-toggle {
-		display: none;
-		text-align: right;
-		padding: 10px 20px;
-		background: @mdc-grey-900;
+  @bar-width: 45px;
+  @bar-height: 5px;
+  @bar-spacing: 12px;
+  @animation-time: 0.2s;
 
-		@media screen and (max-width: 768px) {
-			display: block;
-		}
+  .navbar-toggle {
+    display: none;
+    padding: 15px 20px;
+    height: (@bar-height*3) + @bar-spacing;
+    background: @mdc-grey-900;
 
-		a {
-			color: white;
-			cursor: pointer;
-			padding: 10px 0 10px 10px;
+    @media screen and (max-width: 768px) {
+      display: block;
+    }
 
-			i {
-				border: 2px solid rgba(255, 255, 255, 0.2);
-				padding: 2px 6px;
-			}
-		}
-	}
+    .bar,
+    .bar:after,
+    .bar:before {
+      width: @bar-width;
+      height: @bar-height;
+    }
 
-	.navbar-mobile {
-		position: relative;
-		display: none;
-		z-index: 10;
+    .bar {
+      float: right;
+      cursor: pointer;
+      position: relative;
+      transform: translateY(@bar-spacing);
+      background: rgba(255, 255, 255, 1);
+      transition: all 0ms @animation-time;
 
-		@media screen and (max-width: 768px) {
-			display: block;
-		}
+      &.animate {
+        background: rgba(255, 255, 255, 0);
+      }
+    }
 
-		ul {
-			display: none;
-			list-style-type: none;
-			position: absolute;
-			left: 0;
-			right: 0;
-			margin-right: auto;
-			margin-left: auto;
-		}
+    .bar:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: @bar-spacing;
+      background: rgba(255, 255, 255, 1);
+      transition: bottom @animation-time @animation-time cubic-bezier(0.23, 1, 0.32, 1), transform @animation-time cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-		li {
-			display: block;
-			background: @mdc-grey-800;
-			margin-bottom: 0;
-			border-bottom: 2px solid @mdc-grey-500;
-		}
+    .bar:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: @bar-spacing;
+      background: rgba(255, 255, 255, 1);
+      transition: top @animation-time @animation-time cubic-bezier(0.23, 1, 0.32, 1), transform @animation-time cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-		a {
-			display: block;
-			color: white;
-			font-family: 'Montserrat', sans-serif;
-			text-align: left;
-			padding: 10px 25px;
+    .bar.animate:after {
+      top: 0;
+      transform: rotate(45deg);
+      transition: top @animation-time cubic-bezier(0.23, 1, 0.32, 1), transform @animation-time @animation-time cubic-bezier(0.23, 1, 0.32, 1);;
+    }
 
-			&:hover, &:focus, &:active {
-				color: white;
-			}
-		}
-	}
+    .bar.animate:before {
+      bottom: 0;
+      transform: rotate(-45deg);
+      transition: bottom @animation-time cubic-bezier(0.23, 1, 0.32, 1), transform @animation-time @animation-time cubic-bezier(0.23, 1, 0.32, 1);;
+    }
+  }
+
+  .navbar-mobile {
+    position: relative;
+    display: none;
+    z-index: 10;
+
+    @media screen and (max-width: 768px) {
+      display: block;
+    }
+
+    ul {
+      display: none;
+      list-style-type: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    li {
+      display: block;
+      background: @mdc-grey-800;
+      margin-bottom: 0;
+      border-bottom: 2px solid @mdc-grey-500;
+    }
+
+    a {
+      display: block;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      text-align: left;
+      padding: 10px 25px;
+
+      &:hover, &:focus, &:active {
+        color: white;
+      }
+    }
+  }
 }

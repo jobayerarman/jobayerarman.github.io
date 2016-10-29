@@ -1123,7 +1123,7 @@ header .title h2 {
 }
 header .title img {
   width: 320px;
-  margin: 20px 0;
+  margin: 25px 0;
 }
 @media screen and (min-width: 480px) {
   header .title img {
@@ -1355,8 +1355,8 @@ nav .navbar-main ul li a:active {
 }
 nav .navbar-toggle {
   display: none;
-  text-align: right;
-  padding: 10px 20px;
+  padding: 15px 20px;
+  height: 27px;
   background: #212121;
 }
 @media screen and (max-width: 768px) {
@@ -1364,14 +1364,59 @@ nav .navbar-toggle {
     display: block;
   }
 }
-nav .navbar-toggle a {
-  color: white;
-  cursor: pointer;
-  padding: 10px 0 10px 10px;
+nav .navbar-toggle .bar,
+nav .navbar-toggle .bar:after,
+nav .navbar-toggle .bar:before {
+  width: 45px;
+  height: 5px;
 }
-nav .navbar-toggle a i {
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  padding: 2px 6px;
+nav .navbar-toggle .bar {
+  float: right;
+  cursor: pointer;
+  position: relative;
+  -webkit-transform: translateY(12px);
+      -ms-transform: translateY(12px);
+          transform: translateY(12px);
+  background: #ffffff;
+  -webkit-transition: all 0ms 0.2s;
+          transition: all 0ms 0.2s;
+}
+nav .navbar-toggle .bar.animate {
+  background: rgba(255, 255, 255, 0);
+}
+nav .navbar-toggle .bar:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 12px;
+  background: #ffffff;
+  -webkit-transition: bottom 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: bottom 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1), transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+nav .navbar-toggle .bar:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  background: #ffffff;
+  -webkit-transition: top 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: top 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1), transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+nav .navbar-toggle .bar.animate:after {
+  top: 0;
+  -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+  -webkit-transition: top 0.2s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: top 0.2s cubic-bezier(0.23, 1, 0.32, 1), transform 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+nav .navbar-toggle .bar.animate:before {
+  bottom: 0;
+  -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  -webkit-transition: bottom 0.2s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: bottom 0.2s cubic-bezier(0.23, 1, 0.32, 1), transform 0.2s 0.2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 nav .navbar-mobile {
   position: relative;
