@@ -25,7 +25,7 @@ $(function pageScroll() {
     var menuToggle   = $(".bar");
 
     $('html, body').stop().animate({
-      scrollTop: $($anchor.attr('href')).offset().top - 41
+      scrollTop: $($anchor.attr('href')).offset().top - 73
     }, 1500, 'easeInOutExpo');
 
     if(width < 769) {
@@ -39,14 +39,14 @@ $(function pageScroll() {
 $(function onScroll() {
   var sections     = $('section'),
       nav          = $('.navbar-main'),
-      nav_height   = nav.outerHeight();
+      nav_height   = nav.outerHeight() + 46;
 
   $(window).on('scroll', function() {
     var cur_pos = $(this).scrollTop();
 
     sections.each(function() {
       var top = $(this).offset().top - nav_height,
-          bottom = top + $(this).outerHeight();
+          bottom = top + $(this).outerHeight() + 30;
 
       if (cur_pos >= top && cur_pos <= bottom) {
         nav.find('a').removeClass('active');
