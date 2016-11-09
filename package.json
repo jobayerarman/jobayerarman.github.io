@@ -1,16 +1,16 @@
 {
   "name": "portfolio-website",
   "description": "Personal website hosted on github",
-  "version": "2.0.4",
+  "version": "2.1.1",
   "author": {
     "name": "Jobayer Arman",
     "email": "carbonjha@gmail.com"
   },
-  "license": "MIT",
+  "license": " ",
   "homepage": "http://jobayerarman.github.io/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jobayerarman/build-system-template"
+    "url": "https://github.com/jobayerarman/jobayerarman.github.io"
   },
   "devDependencies": {
     "browser-sync": "^2.17.3",
