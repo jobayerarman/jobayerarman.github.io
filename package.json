@@ -1,7 +1,7 @@
 {
   "name": "portfolio-website",
-  "description": "Personal website to share about me & my work",
-  "version": "1.1.8",
+  "description": "Personal website hosted on github",
+  "version": "2.0.4",
   "author": {
     "name": "Jobayer Arman",
     "email": "carbonjha@gmail.com"
@@ -10,25 +10,32 @@
   "homepage": "http://jobayerarman.github.io/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jobayerarman/build-system-template.git"
+    "url": "https://github.com/jobayerarman/build-system-template"
   },
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-imagemin": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-cssflow": "^0.2.0",
-    "grunt-newer": "^1.2.0",
-    "grunt-notify": "^0.4.5",
-    "grunt-uncss": "^0.5.0",
-    "jshint-stylish": "^2.2.0",
-    "load-grunt-tasks": "^3.5.0"
-  },
-  "dependencies": {
-    "imagemin-mozjpeg": "^5.1.0"
+    "browser-sync": "^2.17.3",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssmin": "^0.1.6",
+    "gulp-filter": "^4.0.0",
+    "gulp-if": "^2.0.1",
+    "gulp-imagemin": "^3.0.3",
+    "gulp-jshint": "^2.0.1",
+    "gulp-less": "^3.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-nunjucks-render": "^2.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-processhtml": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^0.4.6",
+    "gulp-size": "^2.1.0",
+    "gulp-sourcemap": "^1.0.1",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.3",
+    "jshint": "^2.9.3",
+    "jshint-stylish": "^2.2.1",
+    "lazypipe": "^1.0.1"
   }
 }
