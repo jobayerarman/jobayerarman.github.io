@@ -1,13 +1,15 @@
 // Global Variables
-var width  = $(window).width();
-var height = $(window).height();
-var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
+var config = {
+  width  : window.innerWidth,
+  height : window.innerHeight,
+  isMobile : /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
+};
 
 
 // Typed.js designation
-$(function(){
+$(function() {
   $(".role").typed({
-    strings: ["am a ^400 Dreamer ^650 | Coder ^650 | Developer ", "love ^400 Sublime^700, music^900 &amp;^400 spicy food "],
+    strings: ["am a ^400 Dreamer ^650 | Coder ^650 | Developer ", "love ^400 Sleeping^700, music^900 &amp;^400 spicy food "],
     startDelay: 1000,
     typeSpeed: 70,
     backSpeed: 10,
@@ -18,7 +20,7 @@ $(function(){
 
 // jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function pageScroll() {
-  $('body').on('click', '.page-scroll a', function(event) {
+  $('.page-scroll').on('click', 'a', function(event) {
     event.preventDefault();
     var $anchor      = $(this);
     var navbarMobile = $(".navbar-mobile ul.expanded");
@@ -28,7 +30,7 @@ $(function pageScroll() {
       scrollTop: $($anchor.attr('href')).offset().top - 73
     }, 1500, 'easeInOutExpo');
 
-    if(width < 769) {
+    if(config.width < 769) {
       navbarMobile.slideUp('fast').removeClass("expanded");
       menuToggle.removeClass("animate");
     }
@@ -67,7 +69,7 @@ $(function mobileNav() {
   mainnav   = $('div.navbar-main'),
   navToggle = $('.bar');
 
-  if (width < 769) {
+  if (config.width < 769) {
     mobilenav.html(mainnav.html());
 
     navToggle.on('click', function () {
@@ -84,8 +86,8 @@ $(function mobileNav() {
 
 // dynamic header size
 $(function dynamicHeader() {
-  if( height > 750) {
-    $('#site-header').css({'height': height + 5 + "px"});
+  if( config.height > 750) {
+    $('#site-header').css({'height': config.height + 5 + "px"});
   }
 });
 
@@ -98,7 +100,7 @@ $(function navOpacity() {
     if ($(this).scrollTop() > 370) {
       nav.css({'background-color': '#FFF'});
       anchor.css({'color': 'black'});
-    } else{
+    } else {
       nav.css({'background': 'transparent'});
       anchor.css({'color': 'white'});
     }
@@ -107,18 +109,18 @@ $(function navOpacity() {
 
 // Scroll to Top Button
 $(function scrolltotop() {
-  var offset = 250,
-  scrollbutton = $('div#scroll-top');
+  var offset = 250;
+  var scrollbutton = $('div#scroll-top');
 
-  $(window).scroll(function() {
+  $(window).on('scroll', function() {
     if ($(this).scrollTop() > offset) {
       scrollbutton.fadeIn('slow');
-    } else{
+    } else {
       scrollbutton.fadeOut('fast');
     }
   });
 
-  scrollbutton.children('a').on('click', function(event) {
+  scrollbutton.on('click', 'a', function(event) {
     event.preventDefault();
     $('html, body').animate({scrollTop: 0}, 800);
     return false;
@@ -127,22 +129,24 @@ $(function scrolltotop() {
 
 // Skills Progress
 $(function moveProgressBar() {
-  $(window).scroll(function() {
-    var animationTime = 1000,
-        easing        = 'easeInOutExpo',
-        skillTop      = $('#skills').offset().top + 500,
-        windowTop     = $(window).scrollTop(),
-        windowBottom  = height + windowTop,
-        progressbar   = $('.progress-bar');
+  var animationTime = 1000;
+  var easing        = 'easeInOutExpo';
+  var skillTop      = $('#skills').offset().top + 500;
+  var progressbar   = $('.progress-bar');
+
+  $(window).on('scroll', function() {
+    var windowTop     = $(window).scrollTop();
+    var windowBottom  = config.height + windowTop;
 
     if (windowBottom > skillTop) {
       progressbar.each(function() {
-        var percent           = ($(this).parent().data('progress-percent') / 100),
-            progressWrapWidth = $(this).width(),
-            progressTotal     = percent * progressWrapWidth;
+        var percent           = ($(this).parent().data('progress-percent') / 100);
+        var progressWrapWidth = $(this).width();
+        var progressTotal     = percent * progressWrapWidth;
 
         $(this).stop().animate({left: progressTotal}, animationTime, easing);
       });
     }
+    return false;
   });
 });
