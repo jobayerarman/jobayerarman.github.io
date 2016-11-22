@@ -1,0 +1,17 @@
+{
+  // Enforcing
+  "camelcase"     : true,     // Identifiers must be in camelCase
+  "indent"        : 2,        // Specify indentation spacing
+  "quotmark"      : "single", // Quotation mark consistency
+
+  // Relaxing
+  "expr"          : true,     // Tolerate `ExpressionStatement` as Programs
+
+  // Environments
+  "jquery"        : true,
+
+  // Custom Globals
+  "globals": {
+    "jQuery": true
+  }
+}

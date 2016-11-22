@@ -8,8 +8,8 @@ var config = {
 
 // Typed.js designation
 $(function() {
-  $(".role").typed({
-    strings: ["am a ^400 Dreamer ^650 | Coder ^650 | Developer ", "love ^400 Sleeping^700, music^900 &amp;^400 spicy food "],
+  $('.role').typed({
+    strings: ['am a ^400 Dreamer ^650 | Coder ^650 | Developer ', 'love ^400 Reading^700, music^900 &amp;^400 spicy food '],
     startDelay: 1000,
     typeSpeed: 70,
     backSpeed: 10,
@@ -23,16 +23,16 @@ $(function pageScroll() {
   $('.page-scroll').on('click', 'a', function(event) {
     event.preventDefault();
     var $anchor      = $(this);
-    var navbarMobile = $(".navbar-mobile ul.expanded");
-    var menuToggle   = $(".bar");
+    var navbarMobile = $('.navbar-mobile ul.expanded');
+    var menuToggle   = $('.bar');
 
     $('html, body').stop().animate({
       scrollTop: $($anchor.attr('href')).offset().top - 73
     }, 1500, 'easeInOutExpo');
 
     if(config.width < 769) {
-      navbarMobile.slideUp('fast').removeClass("expanded");
-      menuToggle.removeClass("animate");
+      navbarMobile.slideUp('fast').removeClass('expanded');
+      menuToggle.removeClass('animate');
     }
   });
 });
@@ -41,16 +41,16 @@ $(function pageScroll() {
 $(function onScroll() {
   var sections     = $('section'),
       nav          = $('.navbar-main'),
-      nav_height   = nav.outerHeight() + 46;
+      navHeight   = nav.outerHeight() + 46;
 
   $(window).on('scroll', function() {
-    var cur_pos = $(this).scrollTop();
+    var curPos = $(this).scrollTop();
 
     sections.each(function() {
-      var top = $(this).offset().top - nav_height,
+      var top = $(this).offset().top - navHeight,
           bottom = top + $(this).outerHeight() + 30;
 
-      if (cur_pos >= top && cur_pos <= bottom) {
+      if (curPos >= top && curPos <= bottom) {
         nav.find('a').removeClass('active');
         sections.removeClass('active');
 
@@ -73,28 +73,21 @@ $(function mobileNav() {
     mobilenav.html(mainnav.html());
 
     navToggle.on('click', function () {
-      if (mobilenav.children('ul').hasClass("expanded")) {
-        mobilenav.children('ul.expanded').removeClass("expanded").slideUp(250);
-        $(this).removeClass("animate");
+      if (mobilenav.children('ul').hasClass('expanded')) {
+        mobilenav.children('ul.expanded').removeClass('expanded').slideUp(250);
+        $(this).removeClass('animate');
       } else {
-        mobilenav.children('ul').addClass("expanded").slideDown(250);
-        $(this).addClass("animate");
+        mobilenav.children('ul').addClass('expanded').slideDown(250);
+        $(this).addClass('animate');
       }
     });
   }
 });
 
-// dynamic header size
-$(function dynamicHeader() {
-  if( config.height > 750) {
-    $('#site-header').css({'height': config.height + 5 + "px"});
-  }
-});
-
 // Navbar background opacity
 $(function navOpacity() {
-  var   nav     = $(".navbar-main"),
-        anchor  = $(".navbar-main a");
+  var   nav     = $('.navbar-main');
+  var   anchor  = nav.find('a');
 
   $(window).scroll(function() {
     if ($(this).scrollTop() > 370) {
@@ -110,21 +103,17 @@ $(function navOpacity() {
 // Scroll to Top Button
 $(function scrolltotop() {
   var offset = 250;
-  var scrollbutton = $('div#scroll-top');
+  var scrollButton = $('div#scroll-top');
 
   $(window).on('scroll', function() {
     if ($(this).scrollTop() > offset) {
-      scrollbutton.fadeIn('slow');
+      scrollButton.fadeIn('slow');
     } else {
-      scrollbutton.fadeOut('fast');
+      scrollButton.fadeOut('fast');
     }
   });
 
-  scrollbutton.on('click', 'a', function(event) {
-    event.preventDefault();
-    $('html, body').animate({scrollTop: 0}, 800);
-    return false;
-  });
+
 });
 
 // Skills Progress
@@ -149,4 +138,37 @@ $(function moveProgressBar() {
     }
     return false;
   });
+});
+
+// OOP
+var custom = {
+  // global variable
+  width  : window.innerWidth,
+  height : window.innerHeight,
+  isMobile : /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
+
+  // selectors | memebers
+
+
+  // methods
+  dynamicHeader : function () {
+    if (this.height > 750) {
+      $('#site-header').css({'height': config.height + 5 + 'px'});
+    }
+  },
+  navBackground : function () {
+    // change navbar background as user scroll
+  },
+  scrollToTop : function () {
+    var scrollButton = $('#scroll-top');
+    scrollButton.on('click', 'a', function(event) {
+      event.preventDefault();
+      $('html, body').animate({scrollTop: 0}, 800);
+      return false;
+    });
+  }
+};
+$(function() {
+    custom.dynamicHeader();
+    custom.scrollToTop();
 });

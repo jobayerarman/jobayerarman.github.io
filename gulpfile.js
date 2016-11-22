@@ -237,7 +237,7 @@ gulp.task( 'scripts', ['clean:js'], function() {
   return gulp.src( scripts.src.files )
     .pipe( plumber({errorHandler: errorLog}) )
 
-    .pipe( jshint() )
+    .pipe( jshint('.jshintrc') )
     .pipe( jshint.reporter('jshint-stylish') )
 
     .pipe( concat( scripts.dest.filename ) )
