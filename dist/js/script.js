@@ -1,10 +1,9 @@
 // Global Variables
 var config = {
-  width  : window.innerWidth,
-  height : window.innerHeight,
-  isMobile : /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
+  width: window.innerWidth,
+  height: window.innerHeight,
+  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
 };
-
 
 // Typed.js designation
 $(function() {
@@ -20,25 +19,25 @@ $(function() {
 
 // Active link on scroll
 $(function onScroll() {
-  var sections     = $('section'),
-      nav          = $('.navbar-main'),
-      navHeight   = nav.outerHeight() + 46;
+  var $sections   = $('section');
+  var $nav        = $('.navbar-main');
+  var navHeight   = $nav.outerHeight() + 46;
 
-  $(window).on('scroll', function() {
+  $(window).on('scroll', function()  {
     var curPos = $(this).scrollTop();
 
-    sections.each(function() {
-      var top = $(this).offset().top - navHeight,
-          bottom = top + $(this).outerHeight() + 30;
+    $sections.each(function() {
+      var top = $(this).offset().top - navHeight;
+      var bottom = top + $(this).outerHeight() + 30;
 
       if (curPos >= top && curPos <= bottom) {
-        nav.find('a').removeClass('active');
-        sections.removeClass('active');
+        $nav.find('a').removeClass('active');
+        $sections.removeClass('active');
 
         $(this).addClass('active');
-        nav.find('a[href="#'+$(this).attr('id')+'"]').addClass('active');
+        $nav.find('a[href="#' + $(this).attr('id') + '"]').addClass('active');
       } else {
-        nav.find('a[href="#'+$(this).attr('id')+'"]').removeClass('active');
+        $nav.find('a[href="#' + $(this).attr('id') + '"]').removeClass('active');
       }
     });
   });
@@ -48,22 +47,23 @@ $(function onScroll() {
 $(function moveProgressBar() {
   var animationTime = 1000;
   var easing        = 'easeInOutExpo';
-  var skillTop      = $('#skills').offset().top + 500;
-  var progressbar   = $('.progress-bar');
+  var $skillTop      = $('#skills').offset().top + 500;
+  var $progressbar   = $('.progress-bar');
 
   $(window).on('scroll', function() {
     var windowTop     = $(window).scrollTop();
     var windowBottom  = config.height + windowTop;
 
-    if (windowBottom > skillTop) {
+    if (windowBottom > $skillTop) {
       progressbar.each(function() {
         var percent           = ($(this).parent().data('progress-percent') / 100);
         var progressWrapWidth = $(this).width();
         var progressTotal     = percent * progressWrapWidth;
 
-        $(this).stop().animate({left: progressTotal}, animationTime, easing);
+        $(this).stop().animate({ left: progressTotal }, animationTime, easing);
       });
     }
+
     return false;
   });
 });
@@ -78,7 +78,7 @@ var custom = {
   // methods
   dynamicHeader: function() {
     if (this.height > 750) {
-      $('#site-header').css({'height': config.height + 5 + 'px'});
+      $('#site-header').css({ 'height': config.height + 5 + 'px' });
     }
   },
 
@@ -104,15 +104,15 @@ var custom = {
       } else {
         scrollButton.fadeOut('fast');
       }
+
       return false;
     });
 
     scrollButton.on('click', 'a', function(event) {
       event.preventDefault();
-      $('html, body').animate({scrollTop: 0}, 800);
+      $('html, body').animate({ scrollTop: 0 }, 800);
       return false;
     });
-
   },
 
   navigation: function() {
@@ -131,14 +131,16 @@ var custom = {
         scrollTop: $($anchor.attr('href')).offset().top - 73
       }, 1500, 'easeInOutExpo');
 
-      if(mobileNav.children('ul').hasClass('expanded')) {
+      if (mobileNav.children('ul').hasClass('expanded')) {
         mobileChild.slideUp('fast').removeClass('expanded');
         menuToggle.children('.bar').removeClass('animate');
       }
     });
+
     if (this.width <= 768) {
       mobileNav.html(mainNav.html());
     }
+
     menuToggle.on('click', '.bar', function (e) {
       e.preventDefault();
       if (mobileNav.children('ul').hasClass('expanded')) {
@@ -154,6 +156,7 @@ var custom = {
   animateSkill: function() {
     // body...
   },
+
   linkHighlight: function() {
     // body...
   }
