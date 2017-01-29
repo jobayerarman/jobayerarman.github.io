@@ -25,7 +25,7 @@
 
 ! function($) {
 
-  "use strict";
+  'use strict';
 
   var Typed = function(el, options) {
 
@@ -120,7 +120,7 @@
       var self = this;
       // Insert cursor
       if (this.showCursor === true) {
-        this.cursor = $("<span class=\"typed-cursor\">" + this.cursorChar + "</span>");
+        this.cursor = $('<span class=\"typed-cursor\">' + this.cursorChar + '</span>');
         this.el.after(this.cursor);
       }
       if (this.stringsElement) {
@@ -400,7 +400,7 @@ backspace: function(curString, curStrPos) {
   };
 
   $.fn.typed.defaults = {
-    strings: ["These are the default values...", "You know what you should do?", "Use your own!", "Have a great day!"],
+    strings: ['These are the default values...', 'You know what you should do?', 'Use your own!', 'Have a great day!'],
     stringsElement: null,
     // typing speed
     typeSpeed: 0,
@@ -419,7 +419,7 @@ backspace: function(curString, curStrPos) {
     // show cursor
     showCursor: true,
     // character for cursor
-    cursorChar: "|",
+    cursorChar: '|',
     // attribute to type (null == text)
     attr: null,
     // either html or text

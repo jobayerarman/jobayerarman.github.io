@@ -237,7 +237,7 @@ gulp.task( 'scripts', ['clean:js'], function() {
   return gulp.src( scripts.src.files )
     .pipe( plumber({errorHandler: errorLog}) )
 
-    .pipe( jshint() )
+    .pipe( jshint('.jshintrc') )
     .pipe( jshint.reporter('jshint-stylish') )
 
     .pipe( concat( scripts.dest.filename ) )
@@ -257,7 +257,7 @@ gulp.task( 'scripts', ['clean:js'], function() {
 gulp.task( 'render-html', function() {
   return gulp.src( html.src.pages )
     .pipe( plumber({errorHandler: errorLog}) )
-    .pipe(htmlRender({
+    .pipe( htmlRender({
       path: html.src.templates
     }))
     .pipe( gulpif( config.production, processhtml() ) )
