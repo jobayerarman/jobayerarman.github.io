@@ -2,17 +2,18 @@
 var config = {
   width: window.innerWidth,
   height: window.innerHeight,
-  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
+  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
+  trigger: false
 };
 
 // Typed.js designation
 $(function() {
   $('.role').typed({
-    strings: ['am a ^400 Dreamer ^650 | Coder ^650 | Developer ', 'love ^400 Reading^700, music^900 &amp;^400 spicy food '],
-    startDelay: 1000,
+    strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer '],
+    startDelay: 1500,
     typeSpeed: 70,
-    backSpeed: 10,
-    backDelay: 1500,
+    backSpeed: 50,
+    backDelay: 2000,
     loop: true
   });
 });
@@ -45,17 +46,20 @@ $(function onScroll() {
 
 // Skills Progress
 $(function moveProgressBar() {
-  var animationTime = 1000;
-  var easing        = 'easeInOutExpo';
+  var animationTime  = 2000;
+  var easing         = 'easeInOutExpo';
   var $skillTop      = $('#skills').offset().top + 500;
   var $progressbar   = $('.progress-bar');
 
   $(window).on('scroll', function() {
+    if (config.trigger) { return; }
+
     var windowTop     = $(window).scrollTop();
     var windowBottom  = config.height + windowTop;
 
     if (windowBottom > $skillTop) {
-      progressbar.each(function() {
+      $progressbar.each(function() {
+        config.trigger = true;
         var percent           = ($(this).parent().data('progress-percent') / 100);
         var progressWrapWidth = $(this).width();
         var progressTotal     = percent * progressWrapWidth;
@@ -63,8 +67,6 @@ $(function moveProgressBar() {
         $(this).stop().animate({ left: progressTotal }, animationTime, easing);
       });
     }
-
-    return false;
   });
 });
 
@@ -154,12 +156,16 @@ var custom = {
   },
 
   animateSkill: function() {
-    // body...
+
   },
 
   linkHighlight: function() {
     // body...
-  }
+  },
+
+  scrollTrigger: function() {
+
+  },
 };
 
 $(function() {
@@ -167,4 +173,5 @@ $(function() {
   custom.navBackground();
   custom.navigation();
   custom.scrollToTop();
+  custom.scrollTrigger();
 });
