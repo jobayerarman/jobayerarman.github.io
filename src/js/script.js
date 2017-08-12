@@ -60,11 +60,12 @@ $(function moveProgressBar() {
     if (windowBottom > $skillTop) {
       $progressbar.each(function() {
         config.trigger = true;
-        var percent           = ($(this).parent().data('progress-percent') / 100);
-        var progressWrapWidth = $(this).width();
+        var $this             = $(this);
+        var percent           = ($this.parent().data('progress-percent') / 100);
+        var progressWrapWidth = $this.width();
         var progressTotal     = percent * progressWrapWidth;
 
-        $(this).stop().animate({ left: progressTotal }, animationTime, easing);
+        $this.stop().animate({ left: progressTotal }, animationTime, easing);
       });
     }
   });
@@ -79,8 +80,10 @@ var custom = {
 
   // methods
   dynamicHeader: function() {
+    var $siteHeader = $('#site-header');
+
     if (this.height > 750) {
-      $('#site-header').css({ 'height': config.height + 5 + 'px' });
+      $siteHeader.css({ 'height': config.height + 5 + 'px' });
     }
   },
 
@@ -110,22 +113,22 @@ var custom = {
       return false;
     });
 
-    $scrollButton.on('click', 'a', function(event) {
-      event.preventDefault();
+    $scrollButton.on('click', 'a', function(e) {
+      e.preventDefault();
       $('html, body').animate({ scrollTop: 0 }, 800);
       return false;
     });
   },
 
   navigation: function() {
-    var $nav = $('#navigation');
+    var $nav       = $('#navigation');
     var scrollable = $nav.find('.page-scroll');
-    var mainNav   = $nav.find('#main-navbar');
-    var mobileNav = $nav.find('#mobile-navbar');
-    var menuToggle   = $nav.find('#toggle-navbar');
+    var mainNav    = $nav.find('#main-navbar');
+    var mobileNav  = $nav.find('#mobile-navbar');
+    var menuToggle = $nav.find('#toggle-navbar');
 
-    $('body').on('click', '.page-scroll a', function(event) {
-      event.preventDefault();
+    $('body').on('click', '.page-scroll a', function(e) {
+      e.preventDefault();
       var $anchor = $(this);
       var mobileChild = mobileNav.children('ul.expanded');
 
@@ -144,7 +147,6 @@ var custom = {
     }
 
     menuToggle.on('click', '.bar', function(e) {
-      e.preventDefault();
       if (mobileNav.children('ul').hasClass('expanded')) {
         mobileNav.children('ul.expanded').removeClass('expanded').slideUp(250);
         $(this).removeClass('animate');
@@ -152,6 +154,8 @@ var custom = {
         mobileNav.children('ul').addClass('expanded').slideDown(250);
         $(this).addClass('animate');
       }
+
+      e.preventDefault();
     });
   },
 

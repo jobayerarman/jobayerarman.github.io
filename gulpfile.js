@@ -309,6 +309,9 @@ gulp.task( 'browser-sync', function() {
     // built-in static server for basic HTML/JS/CSS websites
     server: true,
 
+    // Will not attempt to determine your network status, assumes you're ONLINE
+    online: true,
+
     // Open the site in Chrome
     browser: "chrome.exe",
 
