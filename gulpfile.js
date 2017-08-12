@@ -122,6 +122,13 @@ var processhtml  = require('gulp-processhtml');      // Process html files at bu
 // Image realted plugins.
 var imagemin     = require('gulp-imagemin');         // Minify PNG, JPEG, GIF and SVG images with imagemin.
 
+// Github related plugins
+var fs           = require('fs');
+var semver       = require('semver');
+var bump         = require('gulp-bump');
+var prompt       = require('gulp-prompt');
+var replace      = require('gulp-replace');
+
 // Utility related plugins.
 var browserSync  = require('browser-sync').create(); // Reloads browser and injects CSS. Time-saving synchronised browser testing.
 var del          = require('del');                   // Delete files and folders
@@ -139,6 +146,13 @@ var config = {
   production: !!gutil.env.production, // Two exclamations turn undefined into a proper false.
   sourceMaps:  !gutil.env.production
 };
+
+/**
+ * get version from package.json
+ */
+function getPackageJsonVersion() {
+  return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
+}
 
 /**
  * Notify Errors
@@ -170,6 +184,52 @@ function errorLog(error) {
   this.emit('end');
 };
 
+/**
+ * Datestamp for cache busting
+ */
+var getDate = function() {
+  var myDate = new Date();
+
+  var myYear    = myDate.getFullYear().toString();
+  var myMonth   = ('0' + (myDate.getMonth() + 1)).slice(-2);
+  var myDay     = ('0' + myDate.getDate()).slice(-2);
+  var mySeconds = myDate.getSeconds().toString();
+
+  var dateStamp = myYear + myMonth + myDay + mySeconds;
+
+  return dateStamp;
+};
+
+/**
+ * Github workflow
+ *
+ * Task: bump version
+ */
+gulp.task( 'bump:version', function (callback) {
+  var currentVersion = getPackageJsonVersion();
+  gulp.src('/', {read: false})
+    .pipe(prompt.prompt({
+      type: 'list',
+      name: 'bump',
+      message: 'What type of bump would you like to do?',
+      choices: ['patch', 'minor', 'major', 'prerelease']
+    },
+    function (res) {
+      var selectedChoice = res.bump;
+      var newVer = semver.inc(currentVersion, selectedChoice);
+
+      bumpFiles(newVer, callback);
+    }))
+});
+function bumpFiles(newVer, callback) {
+
+  gulp.src(['./package.json'])
+    .pipe(plumber({errorHandler: errorLog}))
+    .pipe(bump({version: newVer}))
+    .pipe(gulp.dest('./'));
+
+  callback();
+};
 
 /**
  * Task: Cleanup
@@ -193,11 +253,11 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
  * Compiles Less, Autoprefixes it and Minifies CSS.
  *
  */
-var minifyCss = lazypipe()
+ gulp.task('styles', ['clean:css'], function() {
+  var minifyCss = lazypipe()
   .pipe( rename, {suffix: '.min'})
   .pipe( cssmin, {keepSpecialComments: false});
 
- gulp.task('styles', ['clean:css'], function() {
   return gulp.src( styles.src.mainFile )
     .pipe( plumber( {errorHandler: errorLog}) )
     .pipe( gulpif( config.sourceMaps, sourcemaps.init() ) )
@@ -229,11 +289,11 @@ var minifyCss = lazypipe()
   * Concatenate and uglify custom scripts.
   *
   */
-var minifyScripts = lazypipe()
+gulp.task( 'scripts', ['clean:js'], function() {
+  var minifyScripts = lazypipe()
   .pipe( rename, {suffix: '.min'})
   .pipe( uglify );
 
-gulp.task( 'scripts', ['clean:js'], function() {
   return gulp.src( scripts.src.files )
     .pipe( plumber({errorHandler: errorLog}) )
 
@@ -254,19 +314,23 @@ gulp.task( 'scripts', ['clean:js'], function() {
 /**
  * Task: render HTML template
  */
-gulp.task( 'render-html', function() {
+gulp.task( 'render:html', function() {
+  var date = getDate();
+  var cacheBust = lazypipe()
+    .pipe( replace, /(dist)(.*)(\.)(css|js)/g, '$1$2$3$4?' + date );
+
   return gulp.src( html.src.pages )
     .pipe( plumber({errorHandler: errorLog}) )
     .pipe( htmlRender({
       path: html.src.templates
     }))
     .pipe( gulpif( config.production, processhtml() ) )
+    .pipe( gulpif( config.production, cacheBust() ) )
     .pipe( gulp.dest( html.dest.path ))
     .pipe( size({
       showFiles: true
     }) );
 });
-
 
 /**
   * Task: `images`.
@@ -309,6 +373,9 @@ gulp.task( 'browser-sync', function() {
     // built-in static server for basic HTML/JS/CSS websites
     server: true,
 
+    // Will not attempt to determine your network status, assumes you're ONLINE
+    online: true,
+
     // Open the site in Chrome
     browser: "chrome.exe",
 
@@ -328,14 +395,19 @@ gulp.task( 'browser-sync', function() {
 /**
  * Default Gulp task
  */
-gulp.task( 'default', gulpSequence('clean:all', 'styles', 'scripts', 'render-html'));
+gulp.task( 'default', gulpSequence('clean:all', 'styles', 'scripts', 'render:html'));
+
+/**
+ * Production task
+ */
+gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'scripts', 'render:html'));
 
 
 /**
  * Run all the tasks sequentially
  * Use this task for development
  */
-gulp.task( 'serve', gulpSequence('render-html', 'styles', 'scripts', 'watch'));
+gulp.task( 'serve', gulpSequence('render:html', 'styles', 'scripts', 'watch'));
 
 /**
   * Watch Tasks.
@@ -344,21 +416,21 @@ gulp.task( 'serve', gulpSequence('render-html', 'styles', 'scripts', 'watch'));
   */
 gulp.task( 'watch', ['browser-sync'], function() {
   gulp.watch( watch.styles, [ 'styles' ] );    // Run LESS task on file changes.
-  gulp.watch( watch.html, [ 'watch-html' ] );  // Render files and reload on HTML file changes.
-  gulp.watch( watch.scripts, [ 'watch-js' ] ); // Reload on customJS file changes.
-  gulp.watch( watch.images, [ 'watch-img' ] ); // Reload on image file changes.
+  gulp.watch( watch.html, [ 'watch:html' ] );  // Render files and reload on HTML file changes.
+  gulp.watch( watch.scripts, [ 'watch:js' ] ); // Reload on customJS file changes.
+  gulp.watch( watch.images, [ 'watch:img' ] ); // Reload on image file changes.
 });
 
 // reloading browsers
-gulp.task('watch-html', ['render-html'], function (done) {
+gulp.task('watch:html', ['render:html'], function (done) {
     browserSync.reload();
     done();
 });
-gulp.task('watch-js', ['scripts'], function (done) {
+gulp.task('watch:js', ['scripts'], function (done) {
     browserSync.reload();
     done();
 });
-gulp.task('watch-img', ['image:compress'], function (done) {
+gulp.task('watch:img', ['image:compress'], function (done) {
     browserSync.reload();
     done();
 });

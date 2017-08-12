@@ -2,17 +2,18 @@
 var config = {
   width: window.innerWidth,
   height: window.innerHeight,
-  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
+  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
+  trigger: false
 };
 
 // Typed.js designation
 $(function() {
   $('.role').typed({
-    strings: ['am a ^400 Dreamer ^650 | Coder ^650 | Developer ', 'love ^400 Reading^700, music^900 &amp;^400 spicy food '],
-    startDelay: 1000,
+    strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer '],
+    startDelay: 1500,
     typeSpeed: 70,
-    backSpeed: 10,
-    backDelay: 1500,
+    backSpeed: 50,
+    backDelay: 2000,
     loop: true
   });
 });
@@ -45,26 +46,28 @@ $(function onScroll() {
 
 // Skills Progress
 $(function moveProgressBar() {
-  var animationTime = 1000;
-  var easing        = 'easeInOutExpo';
+  var animationTime  = 2000;
+  var easing         = 'easeInOutExpo';
   var $skillTop      = $('#skills').offset().top + 500;
   var $progressbar   = $('.progress-bar');
 
   $(window).on('scroll', function() {
+    if (config.trigger) { return; }
+
     var windowTop     = $(window).scrollTop();
     var windowBottom  = config.height + windowTop;
 
     if (windowBottom > $skillTop) {
-      progressbar.each(function() {
-        var percent           = ($(this).parent().data('progress-percent') / 100);
-        var progressWrapWidth = $(this).width();
+      $progressbar.each(function() {
+        config.trigger = true;
+        var $this             = $(this);
+        var percent           = ($this.parent().data('progress-percent') / 100);
+        var progressWrapWidth = $this.width();
         var progressTotal     = percent * progressWrapWidth;
 
-        $(this).stop().animate({ left: progressTotal }, animationTime, easing);
+        $this.stop().animate({ left: progressTotal }, animationTime, easing);
       });
     }
-
-    return false;
   });
 });
 
@@ -77,8 +80,10 @@ var custom = {
 
   // methods
   dynamicHeader: function() {
+    var $siteHeader = $('#site-header');
+
     if (this.height > 750) {
-      $('#site-header').css({ 'height': config.height + 5 + 'px' });
+      $siteHeader.css({ 'height': config.height + 5 + 'px' });
     }
   },
 
@@ -108,22 +113,22 @@ var custom = {
       return false;
     });
 
-    $scrollButton.on('click', 'a', function(event) {
-      event.preventDefault();
+    $scrollButton.on('click', 'a', function(e) {
+      e.preventDefault();
       $('html, body').animate({ scrollTop: 0 }, 800);
       return false;
     });
   },
 
   navigation: function() {
-    var $nav = $('#navigation');
+    var $nav       = $('#navigation');
     var scrollable = $nav.find('.page-scroll');
-    var mainNav   = $nav.find('#main-navbar');
-    var mobileNav = $nav.find('#mobile-navbar');
-    var menuToggle   = $nav.find('#toggle-navbar');
+    var mainNav    = $nav.find('#main-navbar');
+    var mobileNav  = $nav.find('#mobile-navbar');
+    var menuToggle = $nav.find('#toggle-navbar');
 
-    $('body').on('click', '.page-scroll a', function(event) {
-      event.preventDefault();
+    $('body').on('click', '.page-scroll a', function(e) {
+      e.preventDefault();
       var $anchor = $(this);
       var mobileChild = mobileNav.children('ul.expanded');
 
@@ -142,7 +147,6 @@ var custom = {
     }
 
     menuToggle.on('click', '.bar', function(e) {
-      e.preventDefault();
       if (mobileNav.children('ul').hasClass('expanded')) {
         mobileNav.children('ul.expanded').removeClass('expanded').slideUp(250);
         $(this).removeClass('animate');
@@ -150,16 +154,22 @@ var custom = {
         mobileNav.children('ul').addClass('expanded').slideDown(250);
         $(this).addClass('animate');
       }
+
+      e.preventDefault();
     });
   },
 
   animateSkill: function() {
-    // body...
+
   },
 
   linkHighlight: function() {
     // body...
-  }
+  },
+
+  scrollTrigger: function() {
+
+  },
 };
 
 $(function() {
@@ -167,4 +177,5 @@ $(function() {
   custom.navBackground();
   custom.navigation();
   custom.scrollToTop();
+  custom.scrollTrigger();
 });
