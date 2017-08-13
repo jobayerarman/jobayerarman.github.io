@@ -2,8 +2,7 @@
 var config = {
   width: window.innerWidth,
   height: window.innerHeight,
-  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
-  trigger: false
+  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
 };
 
 // Typed.js designation
@@ -16,62 +15,6 @@ $(function() {
     backDelay: 2000,
     loop: true
   });
-});
-
-// Active link on scroll
-$(function onScroll() {
-  var $sections   = $('section');
-  var $nav        = $('.navbar-main');
-  var navHeight   = $nav.outerHeight() + 46;
-
-  $(window).on('scroll', function()  {
-    var curPos = $(this).scrollTop();
-
-    $sections.each(function() {
-      var top = $(this).offset().top - navHeight;
-      var bottom = top + $(this).outerHeight() + 30;
-
-      if (curPos >= top && curPos <= bottom) {
-        $nav.find('a').removeClass('active');
-        $sections.removeClass('active');
-
-        $(this).addClass('active');
-        $nav.find('a[href="#' + $(this).attr('id') + '"]').addClass('active');
-      } else {
-        $nav.find('a[href="#' + $(this).attr('id') + '"]').removeClass('active');
-      }
-    });
-  });
-});
-
-// Skills Progress
-$(function moveProgressBar() {
-  var animationTime  = 2000;
-  var easing         = 'easeInOutExpo';
-  var $skillTop      = $('#skills').offset().top + 500;
-  var $progressbar   = $('.progress-bar');
-
-  setTimeout( function() {
-
-    $(window).on('scroll', function() {
-      if (config.trigger) { return; }
-
-      var windowTop     = $(window).scrollTop();
-      var windowBottom  = config.height + windowTop;
-
-      if (windowBottom > $skillTop) {
-        $progressbar.each(function() {
-          config.trigger = true;
-          var $this             = $(this);
-          var percent           = ($this.parent().data('progress-percent') / 100);
-          var progressWrapWidth = $this.width();
-          var progressTotal     = percent * progressWrapWidth;
-
-          $this.stop().animate({ left: progressTotal }, animationTime, easing);
-        });
-      }
-    });
-  }, 200);
 });
 
 // OOP
@@ -89,7 +32,7 @@ var custom = {
     $(window).load(function() {
       setTimeout(function() {
         $preloader.children().velocity({
-          opacity: 0.1,
+          opacity: 0,
           translateY: '-80px'
         }, {
           duration: 400,
@@ -190,11 +133,60 @@ var custom = {
   },
 
   animateSkill: function() {
+    var animationTime  = 2000;
+    var easing         = 'easeInOutExpo';
+    var $skill         = '#' + $('#skills').attr('id');
+    var $skillHeight   = $('#skills').outerHeight();
+    var $progressbar   = $('.progress-bar');
 
+    var controller     = new ScrollMagic.Controller();
+
+    var skillProgress  = new ScrollMagic.Scene({
+            triggerElement: $skill,
+            duration: $skillHeight,
+            offset: 100
+          });
+    if (!config.trigger) {
+      config.trigger = true;
+      skillProgress.on('enter', function() {
+        $progressbar.each(function() {
+          var $this             = $(this);
+          var percent           = ($this.parent().data('progress-percent') / 100);
+          var progressWrapWidth = $this.width();
+          var progressTotal     = percent * progressWrapWidth;
+
+          $this.stop().animate({ left: progressTotal }, animationTime, easing);
+        });
+      })
+      .addTo(controller);
+    }
   },
 
   linkHighlight: function() {
-    // body...
+
+    var controller  = new ScrollMagic.Controller();
+    var $sections   = $('section');
+    var $nav        = $('.navbar-main');
+
+    $sections.each(function() {
+      var $this = $(this);
+      var $triggerID = '#' + $this.attr('id');
+      var $elementHeight = $this.outerHeight() + 40;
+
+      var highlightNav = new ScrollMagic.Scene({
+              triggerElement: $triggerID,
+              duration: $elementHeight
+            })
+  					.setClassToggle($triggerID, 'active')
+            .on('enter leave', function (event) {
+              if (event.type == 'enter') {
+                $nav.find('a[href="#' + $this.attr('id') + '"]').addClass('active');
+              } else {
+                $nav.find('a[href="#' + $this.attr('id') + '"]').removeClass('active');
+              }
+            })
+  					.addTo(controller);
+    });
   },
 
   scrollTrigger: function() {
@@ -206,9 +198,10 @@ $(function() {
   custom.preloader();
   custom.dynamicHeader();
   custom.navBackground();
-  custom.navigation();
   custom.scrollToTop();
-  custom.scrollTrigger();
+  custom.navigation();
+  custom.animateSkill();
+  custom.linkHighlight();
 });
 
 // The MIT License (MIT)
