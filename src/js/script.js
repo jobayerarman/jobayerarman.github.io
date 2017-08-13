@@ -51,24 +51,27 @@ $(function moveProgressBar() {
   var $skillTop      = $('#skills').offset().top + 500;
   var $progressbar   = $('.progress-bar');
 
-  $(window).on('scroll', function() {
-    if (config.trigger) { return; }
+  setTimeout( function() {
 
-    var windowTop     = $(window).scrollTop();
-    var windowBottom  = config.height + windowTop;
+    $(window).on('scroll', function() {
+      if (config.trigger) { return; }
 
-    if (windowBottom > $skillTop) {
-      $progressbar.each(function() {
-        config.trigger = true;
-        var $this             = $(this);
-        var percent           = ($this.parent().data('progress-percent') / 100);
-        var progressWrapWidth = $this.width();
-        var progressTotal     = percent * progressWrapWidth;
+      var windowTop     = $(window).scrollTop();
+      var windowBottom  = config.height + windowTop;
 
-        $this.stop().animate({ left: progressTotal }, animationTime, easing);
-      });
-    }
-  });
+      if (windowBottom > $skillTop) {
+        $progressbar.each(function() {
+          config.trigger = true;
+          var $this             = $(this);
+          var percent           = ($this.parent().data('progress-percent') / 100);
+          var progressWrapWidth = $this.width();
+          var progressTotal     = percent * progressWrapWidth;
+
+          $this.stop().animate({ left: progressTotal }, animationTime, easing);
+        });
+      }
+    });
+  }, 200);
 });
 
 // OOP
@@ -79,6 +82,33 @@ var custom = {
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
   // methods
+  preloader: function () {
+    var $preloader = $('.spinner-wrapper');
+    var $overlay   = $('#preloader');
+
+    $(window).load(function() {
+      setTimeout(function() {
+        $preloader.children().velocity({
+          opacity: 0.1,
+          translateY: '-80px'
+        }, {
+          duration: 400,
+          complete: function() {
+            $preloader.velocity({
+              translateY: '-100%'
+            }, {
+              duration: 1000,
+              complete: function() {
+                $preloader.hide();
+                $overlay.removeClass().addClass('loaded');
+              }
+            }
+          )}
+        });
+      }, 1000);
+    });
+  },
+
   dynamicHeader: function() {
     var $siteHeader = $('#site-header');
 
@@ -173,6 +203,7 @@ var custom = {
 };
 
 $(function() {
+  custom.preloader();
   custom.dynamicHeader();
   custom.navBackground();
   custom.navigation();
