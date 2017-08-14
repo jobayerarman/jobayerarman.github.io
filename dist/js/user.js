@@ -25,7 +25,7 @@ var custom = {
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
   // methods
-  preloader: function () {
+  preloader: function() {
     var $preloader = $('.spinner-wrapper');
     var $overlay   = $('#preloader');
 
@@ -158,12 +158,12 @@ var custom = {
           $this.stop().animate({ left: progressTotal }, animationTime, easing);
         });
       })
+      // .addIndicators()
       .addTo(controller);
     }
   },
 
   linkHighlight: function() {
-
     var controller  = new ScrollMagic.Controller();
     var $sections   = $('section');
     var $nav        = $('.navbar-main');
@@ -178,13 +178,14 @@ var custom = {
               duration: $elementHeight
             })
   					.setClassToggle($triggerID, 'active')
-            .on('enter leave', function (event) {
+            .on('enter leave', function(event) {
               if (event.type == 'enter') {
                 $nav.find('a[href="#' + $this.attr('id') + '"]').addClass('active');
               } else {
                 $nav.find('a[href="#' + $this.attr('id') + '"]').removeClass('active');
               }
             })
+            // .addIndicators()
   					.addTo(controller);
     });
   },
