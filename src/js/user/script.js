@@ -1,30 +1,23 @@
-// Global Variables
-var config = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false
-};
-
-// Typed.js designation
-$(function() {
-  $('.role').typed({
-    strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer '],
-    startDelay: 1500,
-    typeSpeed: 70,
-    backSpeed: 50,
-    backDelay: 2000,
-    loop: true
-  });
-});
-
 // OOP
 var custom = {
   // global variable
+  trigger: false,
   width: window.innerWidth,
   height: window.innerHeight,
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
   // methods
+  typeAnimation: function() {
+    $('.role').typed({
+      strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer ', '^500 Lifelong Learner '],
+      startDelay: 200,
+      typeSpeed: 70,
+      backSpeed: 50,
+      backDelay: 2000,
+      loop: true
+    });
+  },
+
   preloader: function() {
     var $preloader = $('.spinner-wrapper');
     var $overlay   = $('#preloader');
@@ -41,6 +34,9 @@ var custom = {
               translateY: '-100%'
             }, {
               duration: 1000,
+              progress: function() {
+                custom.typeAnimation();
+              },
               complete: function() {
                 $preloader.hide();
                 $overlay.removeClass().addClass('loaded');
@@ -56,7 +52,7 @@ var custom = {
     var $siteHeader = $('#site-header');
 
     if (this.height > 750) {
-      $siteHeader.css({ 'height': config.height + 5 + 'px' });
+      $siteHeader.css({ 'height': custom.height + 5 + 'px' });
     }
   },
 
@@ -146,8 +142,8 @@ var custom = {
             duration: $skillHeight,
             offset: 100
           });
-    if (!config.trigger) {
-      config.trigger = true;
+    if (!custom.trigger) {
+      custom.trigger = true;
       skillProgress.on('enter', function() {
         $progressbar.each(function() {
           var $this             = $(this);
@@ -169,15 +165,15 @@ var custom = {
     var $nav        = $('.navbar-main');
 
     $sections.each(function() {
-      var $this = $(this);
-      var $triggerID = '#' + $this.attr('id');
+      var $this          = $(this);
+      var $triggerID     = '#' + $this.attr('id');
       var $elementHeight = $this.outerHeight() + 40;
 
       var highlightNav = new ScrollMagic.Scene({
               triggerElement: $triggerID,
               duration: $elementHeight
             })
-  					.setClassToggle($triggerID, 'active')
+            .setClassToggle($triggerID, 'active')
             .on('enter leave', function(event) {
               if (event.type == 'enter') {
                 $nav.find('a[href="#' + $this.attr('id') + '"]').addClass('active');
@@ -186,7 +182,7 @@ var custom = {
               }
             })
             // .addIndicators()
-  					.addTo(controller);
+            .addTo(controller);
     });
   },
 
