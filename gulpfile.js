@@ -39,14 +39,27 @@ var styles = {
 };
 // Scripts folders and files
 var scripts = {
-  src: {
-    path      : basePaths.src + 'js/',
-    files     : basePaths.src + 'js/*.js'
+  user: {
+    src: {
+      path      : basePaths.src + 'js/user/',
+      files     : basePaths.src + 'js/user/*.js'
+    },
+    dest: {
+      path      : basePaths.dest + 'js/',
+      files     : basePaths.dest + 'js/*.js',
+      filename  : 'user.js'
+    }
   },
-  dest: {
-    path      : basePaths.dest + 'js/',
-    files     : basePaths.dest + 'js/*.js',
-    filename  : 'script.js'
+  vendor: {
+    src: {
+      path      : basePaths.src + 'js/vendor/',
+      files     : basePaths.src + 'js/vendor/*.js'
+    },
+    dest: {
+      path      : basePaths.dest + 'js/',
+      files     : basePaths.dest + 'js/*.js',
+      filename  : 'vendor.js'
+    }
   }
 };
 // HTML folders and files
@@ -76,7 +89,7 @@ var images = {
 // Watch variables
 var watch = {
   styles    : styles.src.allFiles,
-  scripts   : scripts.src.files,
+  scripts   : scripts.user.src.files,
   images    : images.src.files,
   html      : html.src.files
 };
@@ -243,7 +256,7 @@ gulp.task('clean:html', function() {
   return del([html.dest.files]);
 });
 gulp.task('clean:js', function() {
-  return del([scripts.dest.files]);
+  return del([scripts.vendor.dest.files, scripts.user.dest.files]);
 });
 gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
 
@@ -290,24 +303,37 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
   *
   */
 gulp.task( 'scripts', ['clean:js'], function() {
-  var minifyScripts = lazypipe()
+  var uglifyScripts = lazypipe()
   .pipe( rename, {suffix: '.min'})
   .pipe( uglify );
 
-  return gulp.src( scripts.src.files )
+  gulp.src( scripts.vendor.src.files )
+    .pipe( plumber({errorHandler: errorLog}) )
+
+    .pipe( concat( scripts.vendor.dest.filename ) )
+    .pipe( uglifyScripts() )
+
+    .pipe( gulp.dest( scripts.vendor.dest.path ) )
+
+    .pipe( size({
+      showFiles: true
+    }) );
+
+  gulp.src( scripts.user.src.files )
     .pipe( plumber({errorHandler: errorLog}) )
 
     .pipe( jshint('.jshintrc') )
     .pipe( jshint.reporter('jshint-stylish') )
 
-    .pipe( concat( scripts.dest.filename ) )
-    .pipe( gulpif( config.production, minifyScripts() ) )
+    .pipe( concat( scripts.user.dest.filename ) )
+    .pipe( gulpif( config.production, uglifyScripts() ) )
 
-    .pipe( gulp.dest( scripts.dest.path ) )
+    .pipe( gulp.dest( scripts.user.dest.path ) )
 
     .pipe( size({
       showFiles: true
     }) );
+
 });
 
 
