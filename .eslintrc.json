@@ -9,7 +9,7 @@
     // http://eslint.org/docs/rules/block-spacing
     "block-spacing": ["error", "always"],
     // enforce one true brace style
-    "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     // require camel case names
     "camelcase": ["error", { "properties": "never" }],
     // enforce spacing before and after comma
@@ -99,8 +99,6 @@
     "quotes": ["error", "single", { "avoidEscape": true }],
     // require or disallow use of semicolons instead of ASI
     "semi": ["error", "always"],
-    // requires to declare all vars on top of their containing scope
-    "vars-on-top": "error",
     // require immediate function invocation to be wrapped in parentheses
     "wrap-iife": ["error", "outside", { "functionPrototypeMethods": false }]
   }
