@@ -1,9 +1,34 @@
 {
+  "extends": "eslint:recommended",
   "env": {
+    "browser": true,
     "es6": true,
     "jquery": true
   },
   "rules": {
-
+    // require camel case names
+    "camelcase": ["error", { "properties": "never" }],
+    // enforce spacing before and after comma
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "indent": ["error", 2, {
+      "VariableDeclarator": 1,
+      "outerIIFEBody": 1,
+      "FunctionDeclaration": {
+        "parameters": 1,
+        "body": 1
+      },
+      "FunctionExpression": {
+        "parameters": 1,
+        "body": 1
+      }
+    }],
+    // disallow use of undeclared variables unless mentioned in a /*global */ block
+    "no-undef": "error",
+    // disallow declaration of variables that are not used in the code
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
+    // specify whether double or single quotes should be used
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    // require or disallow use of semicolons instead of ASI
+    "semi": ["error", "always"]
   }
 }
