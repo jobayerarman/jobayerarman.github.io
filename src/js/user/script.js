@@ -7,7 +7,7 @@ var custom = {
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
   // methods
-  typeAnimation: function() {
+  typeAnimation: () => {
     $('.role').typed({
       strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer ', '^500 Lifelong Learner '],
       startDelay: 200,
@@ -18,27 +18,27 @@ var custom = {
     });
   },
 
-  preloader: function() {
-    var $preloader = $('.spinner-wrapper');
-    var $overlay   = $('#preloader');
+  preloader: () => {
+    const $preloader = $('.spinner-wrapper');
+    const $overlay   = $('#preloader');
 
-    $(window).load(function() {
-      setTimeout(function() {
+    $(window).load(() => {
+      setTimeout(() => {
         $preloader.children().velocity({
           opacity: 0,
           translateY: '-80px'
         }, {
           duration: 400,
-          complete: function() {
+          complete: () => {
             $preloader.velocity({
               translateY: '-100%'
             },
             {
               duration: 1000,
-              progress: function() {
+              progress: () => {
                 custom.typeAnimation();
               },
-              complete: function() {
+              complete: () => {
                 $preloader.hide();
                 $overlay.removeClass().addClass('loaded');
               }
@@ -49,7 +49,7 @@ var custom = {
     });
   },
 
-  dynamicHeader: function() {
+  dynamicHeader: () => {
     var $siteHeader = $('#site-header');
 
     if (this.height > 750) {
@@ -57,10 +57,10 @@ var custom = {
     }
   },
 
-  navBackground: function() {
+  navBackground: () => {
     var $nav = $('.navbar-main');
 
-    $(window).on('scroll', function() {
+    $(window).on('scroll', () => {
       if ($(this).scrollTop() > 50) {
         $nav.addClass('scrolled');
       } else {
@@ -69,11 +69,11 @@ var custom = {
     });
   },
 
-  scrollToTop: function() {
+  scrollToTop: () => {
     var $scrollButton = $('#scroll-top');
     var offset = 250;
 
-    $(window).on('scroll', function() {
+    $(window).on('scroll', () => {
       if ($(this).scrollTop() > offset) {
         $scrollButton.fadeIn('slow');
       } else {
@@ -90,7 +90,7 @@ var custom = {
     });
   },
 
-  navigation: function() {
+  navigation: () => {
     var $nav       = $('#navigation');
     var scrollable = $nav.find('.page-scroll');
     var mainNav    = $nav.find('#main-navbar');
@@ -129,7 +129,7 @@ var custom = {
     });
   },
 
-  animateSkill: function() {
+  animateSkill: () => {
     var animationTime  = 2000;
     var easing         = 'easeInOutExpo';
     var $skill         = '#' + $('#skills').attr('id');
@@ -145,8 +145,8 @@ var custom = {
     });
     if (!custom.trigger) {
       custom.trigger = true;
-      skillProgress.on('enter', function() {
-        $progressbar.each(function() {
+      skillProgress.on('enter', () => {
+        $progressbar.each(() => {
           var $this             = $(this);
           var percent           = ($this.parent().data('progress-percent') / 100);
           var progressWrapWidth = $this.width();
@@ -160,12 +160,12 @@ var custom = {
     }
   },
 
-  linkHighlight: function() {
+  linkHighlight: () => {
     var controller  = new ScrollMagic.Controller();
     var $sections   = $('section');
     var $nav        = $('.navbar-main');
 
-    $sections.each(function() {
+    $sections.each(() => {
       var $this          = $(this);
       var $triggerID     = '#' + $this.attr('id');
       var $elementHeight = $this.outerHeight() + 40;
@@ -187,7 +187,7 @@ var custom = {
     });
   },
 
-  scrollTrigger: function() {
+  scrollTrigger: () => {
 
   },
 
@@ -202,6 +202,6 @@ var custom = {
   }
 };
 
-$(function() {
+$(() => {
   custom.init();
 });
