@@ -19,6 +19,7 @@ $RECYCLE.BIN/
 
 # Node.js Modules
 node_modules/
+yarn.lock
 
 # Source Folder & file
 psd/
