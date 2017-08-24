@@ -150,7 +150,6 @@ var filter       = require('gulp-filter');           // Helps work on a subset o
 var gulpSequence = require('gulp-sequence');         // Run a series of gulp tasks in order
 var gulpif       = require('gulp-if');               // A ternary gulp plugin: conditionally control the flow of vinyl objects.
 var lazypipe     = require('lazypipe');              // Lazypipe allows to create an immutable, lazily-initialized pipeline.
-var notify       = require('gulp-notify');           // Sends message notification to you
 var plumber      = require('gulp-plumber');          // Prevent pipe breaking caused by errors from gulp plugins
 var reload       = browserSync.reload;               // For manual browser reload.
 var rename       = require('gulp-rename');           // Renames files E.g. style.css -> style.min.css
@@ -172,24 +171,12 @@ function getPackageJsonVersion() {
  * Notify Errors
  */
 function errorLog(error) {
-  var lineNumber = (error.line) ? 'Line ' + error.line + ' -- ' : '';
-  var column     = (error.column) ? 'Col ' + error.column : '';
-
-  notify({
-    title: 'Task [' + error.plugin + '] Failed',
-    message: lineNumber + '' + column
-  }).write(error); //Error Notification
-
-  // Inspect the error object
-  // console.log(error);
-
   // Pretty error reporting
   var report = '';
   var chalk = gutil.colors.white.bgRed;
 
-  report += '\n';
   report += chalk('TASK:') + ' [' + error.plugin + ']\n';
-  report += chalk('PROB:') + ' ' + error.message + '\n';
+  report += chalk('ERRR:') + ' ' + error.message + '\n';
   if (error.lineNumber) { report += chalk('LINE:') + ' ' + error.lineNumber + '\n'; }
   if (error.column) { report += chalk('COL:') + '  ' + error.column + '\n'; }
   if (error.fileName)   { report += chalk('FILE:') + ' ' + error.fileName + '\n'; }
