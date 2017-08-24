@@ -46,7 +46,7 @@ var scripts = {
     },
     dest: {
       path      : basePaths.dest + 'js/',
-      files     : basePaths.dest + 'js/*.js',
+      files     : basePaths.dest + 'js/*.+(js|map)',
       filename  : 'user.js'
     }
   },
@@ -57,7 +57,7 @@ var scripts = {
     },
     dest: {
       path      : basePaths.dest + 'js/',
-      files     : basePaths.dest + 'js/*.js',
+      files     : basePaths.dest + 'js/*.+(js|map)',
       filename  : 'vendor.js'
     }
   }
@@ -290,46 +290,42 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
   * Concatenate and uglify custom scripts.
   *
   */
-  gulp.task('js:lint', () => {
-    return gulp.src(scripts.user.src.files)
-      .pipe(plumber({ errorHandler: errorLog }))
-      .pipe(eslint())
-      // eslint.format() outputs the lint results to the console.
-      .pipe(eslint.format())
-      // To have the process exit with an error code (1) on
-      // lint error, return the stream and pipe to failAfterError last.
-      .pipe(eslint.failAfterError());
-  });
-gulp.task( 'scripts', ['js:lint', 'clean:js'], function() {
-  var uglifyScripts = lazypipe()
-  .pipe( rename, {suffix: '.min'})
-  .pipe( uglify );
-
-  gulp.src( scripts.vendor.src.files )
-    .pipe( plumber({errorHandler: errorLog}) )
-
-    .pipe( concat( scripts.vendor.dest.filename ) )
-    .pipe( uglifyScripts() )
-
-    .pipe( gulp.dest( scripts.vendor.dest.path ) )
-
-    .pipe( size({
-      showFiles: true
-    }) );
-
-  gulp.src( scripts.user.src.files )
-    .pipe( plumber({errorHandler: errorLog}) )
-    .pipe( babel({ presets: ['babel-preset-es2015'] }) )
-    .pipe( concat( scripts.user.dest.filename ) )
-    .pipe( gulpif( config.production, uglifyScripts() ) )
-
-    .pipe( gulp.dest( scripts.user.dest.path ) )
-
-    .pipe( size({
-      showFiles: true
-    }) );
-
+gulp.task('js:lint', () => {
+  return gulp.src(scripts.user.src.files)
+    .pipe(plumber({ errorHandler: errorLog }))
+    .pipe(eslint())
+    // eslint.format() outputs the lint results to the console.
+    .pipe(eslint.format())
+    // To have the process exit with an error code (1) on
+    // lint error, return the stream and pipe to failAfterError last.
+    .pipe(eslint.failAfterError());
 });
+gulp.task( 'js:custom', ['js:lint'], () => {
+  let uglifyScripts = lazypipe().pipe( rename, {suffix: '.min'}).pipe( uglify );
+  gulp.src( scripts.user.src.files )
+  .pipe( plumber({errorHandler: errorLog}) )
+  .pipe( babel({ presets: ['babel-preset-es2015'] }))
+  .pipe( concat( scripts.user.dest.filename ) )
+  .pipe( gulpif( config.production, uglifyScripts() ))
+  .pipe( gulp.dest( scripts.user.dest.path ) )
+  .pipe( size({
+    showFiles: true
+  }) );
+});
+gulp.task( 'js:vendor', () => {
+  let uglifyScripts = lazypipe().pipe( rename, {suffix: '.min'}).pipe( uglify );
+  gulp.src( scripts.vendor.src.files )
+  .pipe( plumber({errorHandler: errorLog}) )
+  .pipe( concat( scripts.vendor.dest.filename ))
+  .pipe( uglifyScripts() )
+  .pipe( gulp.dest( scripts.vendor.dest.path ))
+  .pipe( size({
+    showFiles: true
+  }));
+});
+gulp.task( 'js:all', gulpSequence('clean:js', 'js:vendor', 'js:custom'));
+
+
 
 
 /**
@@ -416,19 +412,19 @@ gulp.task( 'browser-sync', function() {
 /**
  * Default Gulp task
  */
-gulp.task( 'default', gulpSequence('clean:all', 'styles', 'scripts', 'render:html'));
+gulp.task( 'default', gulpSequence('clean:all', 'styles', 'js:all', 'render:html'));
 
 /**
  * Production task
  */
-gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'scripts', 'render:html'));
+gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'js:all', 'render:html'));
 
 
 /**
  * Run all the tasks sequentially
  * Use this task for development
  */
-gulp.task( 'serve', gulpSequence('render:html', 'styles', 'scripts', 'watch'));
+gulp.task( 'serve', gulpSequence('render:html', 'js:all', 'scripts', 'watch'));
 
 /**
   * Watch Tasks.
@@ -447,7 +443,7 @@ gulp.task('watch:html', ['render:html'], function (done) {
     browserSync.reload();
     done();
 });
-gulp.task('watch:js', ['scripts'], function (done) {
+gulp.task('watch:js', ['js:custom'], function (done) {
     browserSync.reload();
     done();
 });
