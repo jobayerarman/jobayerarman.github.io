@@ -124,7 +124,6 @@ var autoprefixer = require('gulp-autoprefixer');     // Autoprefixing magic.
 var sourcemaps   = require('gulp-sourcemaps');       // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file.
 
 // JS related plugins.
-var jshint       = require('gulp-jshint');           // JSHint plugin for gulp
 var eslint       = require('gulp-eslint');           // ESLint plugin for gulp
 var concat       = require('gulp-concat');           // Concatenates JS files
 var uglify       = require('gulp-uglify');           // Minifies JS files
@@ -333,9 +332,6 @@ gulp.task( 'scripts', ['js:lint', 'clean:js'], function() {
 
   gulp.src( scripts.user.src.files )
     .pipe( plumber({errorHandler: errorLog}) )
-
-    .pipe( jshint('.jshintrc') )
-    .pipe( jshint.reporter('jshint-stylish') )
 
     .pipe( concat( scripts.user.dest.filename ) )
     .pipe( gulpif( config.production, uglifyScripts() ) )
