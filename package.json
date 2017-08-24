@@ -1,7 +1,7 @@
 {
   "name": "portfolio-website",
   "description": "Personal website hosted on github",
-  "version": "4.1.1",
+  "version": "5.1.0",
   "author": {
     "name": "Jobayer Arman",
     "email": "carbonjha@gmail.com"
@@ -17,17 +17,20 @@
     "build": "gulp build:prod --production"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "browser-sync": "^2.18.13",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
+    "gulp-babel": "^7.0.0",
     "gulp-bump": "^2.7.0",
     "gulp-concat": "^2.6.1",
     "gulp-cssmin": "^0.2.0",
+    "gulp-eslint": "^4.0.0",
     "gulp-filter": "^5.0.1",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.3.0",
-    "gulp-jshint": "^2.0.4",
     "gulp-less": "^3.3.2",
     "gulp-notify": "^3.0.0",
     "gulp-nunjucks-render": "^2.2.1",
@@ -41,8 +44,6 @@
     "gulp-sourcemap": "^1.0.1",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "jshint": "^2.9.5",
-    "jshint-stylish": "^2.2.1",
     "lazypipe": "^1.0.1",
     "semver": "^5.4.1"
   }

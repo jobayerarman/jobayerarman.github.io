@@ -1,6 +1,6 @@
 // OOP
 var custom = {
-  // global variable
+  // variables
   trigger: false,
   width: window.innerWidth,
   height: window.innerHeight,
@@ -32,7 +32,8 @@ var custom = {
           complete: function() {
             $preloader.velocity({
               translateY: '-100%'
-            }, {
+            },
+            {
               duration: 1000,
               progress: function() {
                 custom.typeAnimation();
@@ -41,8 +42,8 @@ var custom = {
                 $preloader.hide();
                 $overlay.removeClass().addClass('loaded');
               }
-            }
-          )}
+            });
+          }
         });
       }, 1000);
     });
@@ -138,10 +139,10 @@ var custom = {
     var controller     = new ScrollMagic.Controller();
 
     var skillProgress  = new ScrollMagic.Scene({
-            triggerElement: $skill,
-            duration: $skillHeight,
-            offset: 100
-          });
+      triggerElement: $skill,
+      duration: $skillHeight,
+      offset: 100
+    });
     if (!custom.trigger) {
       custom.trigger = true;
       skillProgress.on('enter', function() {
@@ -155,7 +156,7 @@ var custom = {
         });
       })
       // .addIndicators()
-      .addTo(controller);
+        .addTo(controller);
     }
   },
 
@@ -170,33 +171,37 @@ var custom = {
       var $elementHeight = $this.outerHeight() + 40;
 
       var highlightNav = new ScrollMagic.Scene({
-              triggerElement: $triggerID,
-              duration: $elementHeight
-            })
-            .setClassToggle($triggerID, 'active')
-            .on('enter leave', function(event) {
-              if (event.type == 'enter') {
-                $nav.find('a[href="#' + $this.attr('id') + '"]').addClass('active');
-              } else {
-                $nav.find('a[href="#' + $this.attr('id') + '"]').removeClass('active');
-              }
-            })
-            // .addIndicators()
-            .addTo(controller);
+        triggerElement: $triggerID,
+        duration: $elementHeight
+      })
+        .setClassToggle($triggerID, 'active')
+        .on('enter leave', function(event) {
+          if (event.type == 'enter') {
+            $nav.find('a[href="#' + $this.attr('id') + '"]').addClass('active');
+          } else {
+            $nav.find('a[href="#' + $this.attr('id') + '"]').removeClass('active');
+          }
+        })
+        // .addIndicators()
+        .addTo(controller);
     });
   },
 
   scrollTrigger: function() {
 
   },
+
+  init: () => {
+    custom.preloader();
+    custom.dynamicHeader();
+    custom.navBackground();
+    custom.scrollToTop();
+    custom.navigation();
+    custom.animateSkill();
+    custom.linkHighlight();
+  }
 };
 
 $(function() {
-  custom.preloader();
-  custom.dynamicHeader();
-  custom.navBackground();
-  custom.scrollToTop();
-  custom.navigation();
-  custom.animateSkill();
-  custom.linkHighlight();
+  custom.init();
 });
