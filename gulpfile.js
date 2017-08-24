@@ -124,6 +124,7 @@ var autoprefixer = require('gulp-autoprefixer');     // Autoprefixing magic.
 var sourcemaps   = require('gulp-sourcemaps');       // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file.
 
 // JS related plugins.
+var babel        = require('gulp-babel');            // Next-gen JavaScript, with Babel
 var eslint       = require('gulp-eslint');           // ESLint plugin for gulp
 var concat       = require('gulp-concat');           // Concatenates JS files
 var uglify       = require('gulp-uglify');           // Minifies JS files
@@ -304,7 +305,7 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
   */
   gulp.task('js:lint', () => {
     return gulp.src(scripts.user.src.files)
-      .pipe( plumber({errorHandler: errorLog}) )
+      .pipe(plumber({ errorHandler: errorLog }))
       .pipe(eslint())
       // eslint.format() outputs the lint results to the console.
       .pipe(eslint.format())
@@ -312,7 +313,6 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
       // lint error, return the stream and pipe to failAfterError last.
       .pipe(eslint.failAfterError());
   });
-
 gulp.task( 'scripts', ['js:lint', 'clean:js'], function() {
   var uglifyScripts = lazypipe()
   .pipe( rename, {suffix: '.min'})
@@ -332,7 +332,7 @@ gulp.task( 'scripts', ['js:lint', 'clean:js'], function() {
 
   gulp.src( scripts.user.src.files )
     .pipe( plumber({errorHandler: errorLog}) )
-
+    .pipe( babel({ presets: ['babel-preset-es2015'] }) )
     .pipe( concat( scripts.user.dest.filename ) )
     .pipe( gulpif( config.production, uglifyScripts() ) )
 
