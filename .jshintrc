@@ -1,4 +1,5 @@
 {
+  "esversion"     : 6,
   // Enforcing
   "camelcase"     : true,     // Identifiers must be in camelCase
   "indent"        : 2,        // Specify indentation spacing
