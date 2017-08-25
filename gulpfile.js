@@ -283,7 +283,6 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
     }) );
 });
 
-
 /**
   * Task: `scripts`.
   *
@@ -324,9 +323,6 @@ gulp.task( 'js:vendor', () => {
   }));
 });
 gulp.task( 'js:all', gulpSequence('clean:js', 'js:vendor', 'js:custom'));
-
-
-
 
 /**
  * Task: render HTML template
