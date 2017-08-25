@@ -46,7 +46,7 @@ var scripts = {
     },
     dest: {
       path      : basePaths.dest + 'js/',
-      files     : basePaths.dest + 'js/*.js',
+      files     : basePaths.dest + 'js/*.+(js|map)',
       filename  : 'user.js'
     }
   },
@@ -57,7 +57,7 @@ var scripts = {
     },
     dest: {
       path      : basePaths.dest + 'js/',
-      files     : basePaths.dest + 'js/*.js',
+      files     : basePaths.dest + 'js/*.+(js|map)',
       filename  : 'vendor.js'
     }
   }
@@ -150,7 +150,6 @@ var filter       = require('gulp-filter');           // Helps work on a subset o
 var gulpSequence = require('gulp-sequence');         // Run a series of gulp tasks in order
 var gulpif       = require('gulp-if');               // A ternary gulp plugin: conditionally control the flow of vinyl objects.
 var lazypipe     = require('lazypipe');              // Lazypipe allows to create an immutable, lazily-initialized pipeline.
-var notify       = require('gulp-notify');           // Sends message notification to you
 var plumber      = require('gulp-plumber');          // Prevent pipe breaking caused by errors from gulp plugins
 var reload       = browserSync.reload;               // For manual browser reload.
 var rename       = require('gulp-rename');           // Renames files E.g. style.css -> style.min.css
@@ -172,24 +171,12 @@ function getPackageJsonVersion() {
  * Notify Errors
  */
 function errorLog(error) {
-  var lineNumber = (error.line) ? 'Line ' + error.line + ' -- ' : '';
-  var column     = (error.column) ? 'Col ' + error.column : '';
-
-  notify({
-    title: 'Task [' + error.plugin + '] Failed',
-    message: lineNumber + '' + column
-  }).write(error); //Error Notification
-
-  // Inspect the error object
-  // console.log(error);
-
   // Pretty error reporting
   var report = '';
   var chalk = gutil.colors.white.bgRed;
 
-  report += '\n';
   report += chalk('TASK:') + ' [' + error.plugin + ']\n';
-  report += chalk('PROB:') + ' ' + error.message + '\n';
+  report += chalk('ERRR:') + ' ' + error.message + '\n';
   if (error.lineNumber) { report += chalk('LINE:') + ' ' + error.lineNumber + '\n'; }
   if (error.column) { report += chalk('COL:') + '  ' + error.column + '\n'; }
   if (error.fileName)   { report += chalk('FILE:') + ' ' + error.fileName + '\n'; }
@@ -296,54 +283,46 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
     }) );
 });
 
-
 /**
   * Task: `scripts`.
   *
   * Concatenate and uglify custom scripts.
   *
   */
-  gulp.task('js:lint', () => {
-    return gulp.src(scripts.user.src.files)
-      .pipe(plumber({ errorHandler: errorLog }))
-      .pipe(eslint())
-      // eslint.format() outputs the lint results to the console.
-      .pipe(eslint.format())
-      // To have the process exit with an error code (1) on
-      // lint error, return the stream and pipe to failAfterError last.
-      .pipe(eslint.failAfterError());
-  });
-gulp.task( 'scripts', ['js:lint', 'clean:js'], function() {
-  var uglifyScripts = lazypipe()
-  .pipe( rename, {suffix: '.min'})
-  .pipe( uglify );
-
-  gulp.src( scripts.vendor.src.files )
-    .pipe( plumber({errorHandler: errorLog}) )
-
-    .pipe( concat( scripts.vendor.dest.filename ) )
-    .pipe( uglifyScripts() )
-
-    .pipe( gulp.dest( scripts.vendor.dest.path ) )
-
-    .pipe( size({
-      showFiles: true
-    }) );
-
-  gulp.src( scripts.user.src.files )
-    .pipe( plumber({errorHandler: errorLog}) )
-    .pipe( babel({ presets: ['babel-preset-es2015'] }) )
-    .pipe( concat( scripts.user.dest.filename ) )
-    .pipe( gulpif( config.production, uglifyScripts() ) )
-
-    .pipe( gulp.dest( scripts.user.dest.path ) )
-
-    .pipe( size({
-      showFiles: true
-    }) );
-
+gulp.task('js:lint', () => {
+  return gulp.src(scripts.user.src.files)
+    .pipe(plumber({ errorHandler: errorLog }))
+    .pipe(eslint())
+    // eslint.format() outputs the lint results to the console.
+    .pipe(eslint.format())
+    // To have the process exit with an error code (1) on
+    // lint error, return the stream and pipe to failAfterError last.
+    .pipe(eslint.failAfterError());
 });
-
+gulp.task( 'js:custom', ['js:lint'], () => {
+  let uglifyScripts = lazypipe().pipe( rename, {suffix: '.min'}).pipe( uglify );
+  gulp.src( scripts.user.src.files )
+  .pipe( plumber({errorHandler: errorLog}) )
+  .pipe( babel({ presets: ['babel-preset-es2015'] }))
+  .pipe( concat( scripts.user.dest.filename ) )
+  .pipe( gulpif( config.production, uglifyScripts() ))
+  .pipe( gulp.dest( scripts.user.dest.path ) )
+  .pipe( size({
+    showFiles: true
+  }) );
+});
+gulp.task( 'js:vendor', () => {
+  let uglifyScripts = lazypipe().pipe( rename, {suffix: '.min'}).pipe( uglify );
+  gulp.src( scripts.vendor.src.files )
+  .pipe( plumber({errorHandler: errorLog}) )
+  .pipe( concat( scripts.vendor.dest.filename ))
+  .pipe( uglifyScripts() )
+  .pipe( gulp.dest( scripts.vendor.dest.path ))
+  .pipe( size({
+    showFiles: true
+  }));
+});
+gulp.task( 'js:all', gulpSequence('clean:js', 'js:vendor', 'js:custom'));
 
 /**
  * Task: render HTML template
@@ -429,19 +408,19 @@ gulp.task( 'browser-sync', function() {
 /**
  * Default Gulp task
  */
-gulp.task( 'default', gulpSequence('clean:all', 'styles', 'scripts', 'render:html'));
+gulp.task( 'default', gulpSequence('clean:all', 'styles', 'js:all', 'render:html'));
 
 /**
  * Production task
  */
-gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'scripts', 'render:html'));
+gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'js:all', 'render:html'));
 
 
 /**
  * Run all the tasks sequentially
  * Use this task for development
  */
-gulp.task( 'serve', gulpSequence('render:html', 'styles', 'scripts', 'watch'));
+gulp.task( 'serve', gulpSequence('render:html', 'styles', 'js:all', 'watch'));
 
 /**
   * Watch Tasks.
@@ -460,7 +439,7 @@ gulp.task('watch:html', ['render:html'], function (done) {
     browserSync.reload();
     done();
 });
-gulp.task('watch:js', ['scripts'], function (done) {
+gulp.task('watch:js', ['js:custom'], function (done) {
     browserSync.reload();
     done();
 });

@@ -7,7 +7,7 @@ var custom = {
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
   // methods
-  typeAnimation: function() {
+  typeAnimation: () => {
     $('.role').typed({
       strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer ', '^500 Lifelong Learner '],
       startDelay: 200,
@@ -18,9 +18,9 @@ var custom = {
     });
   },
 
-  preloader: function() {
-    var $preloader = $('.spinner-wrapper');
-    var $overlay   = $('#preloader');
+  preloader: () => {
+    const $preloader = $('.spinner-wrapper');
+    const $overlay   = $('#preloader');
 
     $(window).load(function() {
       setTimeout(function() {
@@ -191,7 +191,7 @@ var custom = {
 
   },
 
-  init: () => {
+  init: function() {
     custom.preloader();
     custom.dynamicHeader();
     custom.navBackground();
