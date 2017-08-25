@@ -420,7 +420,7 @@ gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'js
  * Run all the tasks sequentially
  * Use this task for development
  */
-gulp.task( 'serve', gulpSequence('render:html', 'js:all', 'scripts', 'watch'));
+gulp.task( 'serve', gulpSequence('render:html', 'styles', 'js:all', 'watch'));
 
 /**
   * Watch Tasks.
