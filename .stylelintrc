@@ -1,7 +1,23 @@
 {
   "rules": {
+    "at-rule-no-vendor-prefix": true,
+    "block-closing-brace-empty-line-before": null,
+    "block-closing-brace-newline-after": null,
+    "block-opening-brace-space-before": null,
+    "color-named": "never",
+    "comment-no-empty": true,
     "indentation": 2,
-    "max-empty-lines": 1,
+    "max-empty-lines": 2,
+    "no-duplicate-selectors": true,
     "no-eol-whitespace": true,
- }
+    "no-extra-semicolons": true,
+    "number-leading-zero": "never",
+    "property-no-vendor-prefix": true,
+    "selector-list-comma-newline-after": "always",
+    "selector-list-comma-newline-before": "never-multi-line",
+    "selector-list-comma-space-after": "always-single-line",
+    "selector-list-comma-space-before": "never-single-line",
+    "selector-no-vendor-prefix": true,
+    "string-quotes": "double",
+  }
 }
