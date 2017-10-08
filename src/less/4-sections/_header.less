@@ -21,9 +21,14 @@ header {
 
   .title {
 
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Montserrat', sans-serif;
-      color: white;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Montserrat", sans-serif;
+      color: @white;
       text-transform: uppercase;
     }
 
@@ -70,21 +75,19 @@ header {
 }
 .typed-cursor {
   opacity: 1;
-  -webkit-animation: blink 0.7s infinite;
-  -moz-animation: blink 0.7s infinite;
   animation: blink 0.7s infinite;
 }
 @keyframes blink {
-  0% { opacity:1; }
-  50% { opacity:0; }
-  100% { opacity:1; }
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .social {
   margin: 25px 0 30px;
 
   a {
-    color: white;
+    color: @white;
     background-color: rgba(0, 0, 0, 0.3);
     display: inline-block;
     position: relative;
@@ -174,7 +177,11 @@ header {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
