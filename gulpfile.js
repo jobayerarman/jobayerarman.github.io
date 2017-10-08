@@ -444,15 +444,19 @@ gulp.task( 'watch', ['browser-sync'], function() {
 });
 
 // reloading browsers
-gulp.task('watch:html', ['render:html'], function (done) {
-    browserSync.reload();
-    done();
+gulp.task('watch:html', ['render:html'], function(done) {
+  browserSync.reload();
+  done();
 });
-gulp.task('watch:js', ['js:custom'], function (done) {
-    browserSync.reload();
-    done();
+gulp.task('watch:js', ['js:custom'], function(done) {
+  browserSync.reload();
+  done();
 });
-gulp.task('watch:img', ['image:compress'], function (done) {
-    browserSync.reload();
-    done();
+gulp.task('watch:img', ['image:compress'], function(done) {
+  browserSync.reload();
+  done();
+});
+
+gulp.task('debug:styles', ['lint'], function() {
+  gulp.watch( watch.styles, ['lint'] );
 });
