@@ -122,6 +122,7 @@ var less         = require('gulp-less');             // Gulp pluign for Sass com
 var cssmin       = require('gulp-cssmin');           // Minifies CSS files.
 var autoprefixer = require('gulp-autoprefixer');     // Autoprefixing magic.
 var sourcemaps   = require('gulp-sourcemaps');       // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file.
+var stylelint    = require('gulp-stylelint');        // Modern CSS linter and fixer
 
 // JS related plugins.
 var babel        = require('gulp-babel');            // Next-gen JavaScript, with Babel
@@ -254,7 +255,15 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
  * Compiles Less, Autoprefixes it and Minifies CSS.
  *
  */
- gulp.task('styles', ['clean:css'], function() {
+ gulp.task('lint', function() {
+   return gulp.src(styles.src.allFiles)
+     .pipe(stylelint({
+       reporters: [
+         {formatter: 'string', console: true}
+       ]
+     }));
+ });
+ gulp.task('styles', ['lint', 'clean:css'], function() {
   var minifyCss = lazypipe()
   .pipe( rename, {suffix: '.min'})
   .pipe( cssmin, {keepSpecialComments: false});

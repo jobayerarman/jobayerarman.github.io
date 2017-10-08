@@ -41,6 +41,7 @@
     "gulp-sequence": "^0.4.6",
     "gulp-size": "^2.1.0",
     "gulp-sourcemap": "^1.0.1",
+    "gulp-stylelint": "^5.0.0",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "lazypipe": "^1.0.1",
