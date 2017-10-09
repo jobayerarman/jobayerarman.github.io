@@ -258,6 +258,7 @@ gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
  gulp.task('lint', function() {
    return gulp.src(styles.src.allFiles)
      .pipe(stylelint({
+      syntax: "less",
       failAfterError: false,
        reporters: [
          {formatter: 'string', console: true}
