@@ -6,7 +6,7 @@ var custom = {
   height: window.innerHeight,
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
-  // Initializes a typing animation using the Typed.js library on the ".role" element, with the specified strings and configuration options.
+  // Initializes a typing animation using the Typed.js library on the ".role" element, with the specified strings and configuration options
   typeAnimation: () => {
     $('.role').typed({
       strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer ', '^500 Lifelong Learner '],
@@ -18,26 +18,36 @@ var custom = {
     });
   },
 
+  // Displays a preloader animation before the page content is fully loaded, then fades it out and removes it from the DOM
+  // Uses jQuery to animate the preloader elements
   preloader: () => {
+    // Select the preloader elements.
     const $preloader = $('.spinner-wrapper');
     const $overlay   = $('#preloader');
 
+    // Wait for the page to fully load before triggering the preloader animation
     $(window).on('load', () => {
+      // Wait for 1 second before starting the animation
       setTimeout(() => {
+        // Animate the preloader elements using Velocity.js
         $preloader.children().velocity({
           opacity: 0,
           translateY: '-80px'
         }, {
           duration: 400,
           complete: () => {
+            // Hide the preloader elements
             $preloader.velocity({
               translateY: '-100%'
             },
             {
               duration: 1000,
+              // Trigger the typeAnimation function while the preloader elements are fading out
               progress: custom.typeAnimation,
               complete: () => {
+                // Removes the preloader elements from the DOM
                 $preloader.hide();
+                // Add the "loaded" class to the overlay element to trigger the fade out animation
                 $overlay.removeClass().addClass('loaded');
               }
             });
@@ -47,22 +57,22 @@ var custom = {
     });
   },
 
-  // This function dynamically adjusts the height of the site header based on the window height.
-  // If the window height is greater than 750 pixels, the custom height plus 5 pixels is used.
-  // Otherwise, the header height is set to the window height.
+  // This function dynamically adjusts the height of the site header based on the window height
+  // If the window height is greater than 750 pixels, the custom height plus 5 pixels is used
+  // Otherwise, the header height is set to the window height
   adjustHeaderHeight: function() {
     const MIN_HEIGHT = 750;
     const $siteHeader = document.querySelector('#site-header');
     // Set the header height to the window height
     $siteHeader.style.height = `${window.innerHeight}px`;
 
-    // If the window height is greater than the minimum height, adjust the header height to the custom height plus 5 pixels.
+    // If the window height is greater than the minimum height, adjust the header height to the custom height plus 5 pixels
     if (window.innerHeight > MIN_HEIGHT) {
       $siteHeader.style.height = `${custom.height + 5}px`;
     }
   },
 
-  // Adds or removes "scrolled" class on ".navbar-main" based on the scroll position.
+  // Adds or removes "scrolled" class on ".navbar-main" based on the scroll position
   navBackground: function() {
     const $nav = $('.navbar-main');
     const threshold = 50;
