@@ -112,42 +112,54 @@ var custom = {
     });
   },
 
+  // Defines the navigation function to handle the page scrolling and mobile menu toggle
   navigation: function() {
-    var $nav       = $('#navigation');
-    var scrollable = $nav.find('.page-scroll');
-    var mainNav    = $nav.find('#main-navbar');
-    var mobileNav  = $nav.find('#mobile-navbar');
-    var menuToggle = $nav.find('#toggle-navbar');
+    // Define variables to store relevant elements of the navigation
+    const $nav       = $('#navigation');
+    const scrollable = $nav.find('.page-scroll');
+    const mainNav    = $nav.find('#main-navbar');
+    const mobileNav  = $nav.find('#mobile-navbar');
+    const menuToggle = $nav.find('#toggle-navbar');
 
-    $('body').on('click', '.page-scroll a', function(e) {
+    // If the screen width is less than or equal to 768px, copy the main nav HTML into the mobile nav
+    if (this.width <= 768) {
+      mobileNav.html(mainNav.html());
+    }
+
+    // Scrolls to clicked page section and closes mobile menu if open
+    document.body.addEventListener('click', (e) => {
+      if (!e.target.matches('.page-scroll a')) return;
       e.preventDefault();
-      var $anchor = $(this);
-      var mobileChild = mobileNav.children('ul.expanded');
 
+      const $anchor = $(e.target);
+      const href = $anchor.attr('href');
+      const mobileChild = mobileNav.children('ul.expanded');
+
+      // Scroll to the clicked section using smooth animation
       $('html, body').stop().animate({
-        scrollTop: $($anchor.attr('href')).offset().top - 73
+        scrollTop: $(href).offset().top - 73
       }, 1500, 'easeInOutExpo');
 
+      // Collapse mobile navigation if expanded
       if (mobileNav.children('ul').hasClass('expanded')) {
         mobileChild.slideUp('fast').removeClass('expanded');
         menuToggle.children('.bar').removeClass('animate');
       }
     });
 
-    if (this.width <= 768) {
-      mobileNav.html(mainNav.html());
-    }
-
-    menuToggle.on('click', '.bar', function(e) {
+    // Toggles mobile menu on button click
+    menuToggle.on('click', '.bar', (e) => {
+      e.preventDefault();
+      const $bar = menuToggle.find('.bar');
+      // Collapse mobile navigation if expanded
       if (mobileNav.children('ul').hasClass('expanded')) {
         mobileNav.children('ul.expanded').removeClass('expanded').slideUp(250);
-        $(this).removeClass('animate');
+        $bar.removeClass('animate');
       } else {
+        // Expand mobile navigation if collapsed
         mobileNav.children('ul').addClass('expanded').slideDown(250);
-        $(this).addClass('animate');
+        $bar.addClass('animate');
       }
-
-      e.preventDefault();
     });
   },
 
