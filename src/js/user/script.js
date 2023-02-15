@@ -49,25 +49,34 @@ var custom = {
     });
   },
 
-  dynamicHeader: function() {
-    var $siteHeader = $('#site-header');
+  // This function dynamically adjusts the height of the site header based on the window height.
+  // If the window height is greater than 750 pixels, the custom height plus 5 pixels is used.
+  // Otherwise, the header height is set to the window height.
+  adjustHeaderHeight: function() {
+    const MIN_HEIGHT = 750;
+    const $siteHeader = document.querySelector('#site-header');
+    // Set the header height to the window height
+    $siteHeader.style.height = `${window.innerHeight}px`;
 
-    if (this.height > 750) {
-      $siteHeader.css({ 'height': custom.height + 5 + 'px' });
+    // If the window height is greater than the minimum height, adjust the header height to the custom height plus 5 pixels.
+    if (window.innerHeight > MIN_HEIGHT) {
+      $siteHeader.style.height = `${custom.height + 5}px`;
     }
   },
 
+  // Adds or removes "scrolled" class on ".navbar-main" based on the scroll position.
   navBackground: function() {
-    var $nav = $('.navbar-main');
-
+    const $nav = $('.navbar-main');
+    const threshold = 50;
+    // Attaches a scroll event listener to the window object
     $(window).on('scroll', function() {
-      if ($(this).scrollTop() > 50) {
-        $nav.addClass('scrolled');
-      } else {
-        $nav.removeClass('scrolled');
-      }
+      // Checks if the current scroll position is greater than the threshold
+      const isScrolled = $(this).scrollTop() > threshold;
+      // Toggles the "scrolled" class on the $nav element depending on the value of isScrolled
+      $nav.toggleClass('scrolled', isScrolled);
     });
   },
+
 
   scrollToTop: function() {
     var $scrollButton = $('#scroll-top');
