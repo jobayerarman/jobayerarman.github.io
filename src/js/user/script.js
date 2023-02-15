@@ -86,24 +86,29 @@ var custom = {
   },
 
 
+  // Shows or hides the "scroll to top" button based on scroll position, and animates to top of page when clicked
   scrollToTop: function() {
-    var $scrollButton = $('#scroll-top');
-    var offset = 250;
+    // Select scroll to top button element and set initial offset
+    const $scrollButton = $('#scroll-top');
+    const offset = 250;
 
-    $(window).on('scroll', function() {
-      if ($(this).scrollTop() > offset) {
+    // Attach scroll event listener to window object
+    window.addEventListener('scroll', () => {
+    // If the scroll position is greater than offset, fade in the scroll button
+      if (window.scrollY > offset) {
         $scrollButton.fadeIn('slow');
       } else {
+      // Otherwise, fade it out
         $scrollButton.fadeOut('fast');
       }
-
-      return false;
     });
 
-    $scrollButton.on('click', 'a', function(e) {
+    // Attach click event listener to the scroll button
+    $scrollButton.on('click', 'a', (e) => {
+    // Prevents default link behavior
       e.preventDefault();
+      // Animates the scroll to the top of the page over 800 milliseconds
       $('html, body').animate({ scrollTop: 0 }, 800);
-      return false;
     });
   },
 
