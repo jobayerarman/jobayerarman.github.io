@@ -6,7 +6,7 @@ var custom = {
   height: window.innerHeight,
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
 
-  // methods
+  // Initializes a typing animation using the Typed.js library on the ".role" element, with the specified strings and configuration options.
   typeAnimation: () => {
     $('.role').typed({
       strings: ['^500 Dreamer ', '^500 Designer ', '^500 Developer ', '^500 Lifelong Learner '],
@@ -22,23 +22,21 @@ var custom = {
     const $preloader = $('.spinner-wrapper');
     const $overlay   = $('#preloader');
 
-    $(window).load(function() {
-      setTimeout(function() {
+    $(window).on('load', () => {
+      setTimeout(() => {
         $preloader.children().velocity({
           opacity: 0,
           translateY: '-80px'
         }, {
           duration: 400,
-          complete: function() {
+          complete: () => {
             $preloader.velocity({
               translateY: '-100%'
             },
             {
               duration: 1000,
-              progress: function() {
-                custom.typeAnimation();
-              },
-              complete: function() {
+              progress: custom.typeAnimation,
+              complete: () => {
                 $preloader.hide();
                 $overlay.removeClass().addClass('loaded');
               }
@@ -202,7 +200,7 @@ var custom = {
 
   init: function() {
     custom.preloader();
-    custom.dynamicHeader();
+    custom.adjustHeaderHeight();
     custom.navBackground();
     custom.scrollToTop();
     custom.navigation();
