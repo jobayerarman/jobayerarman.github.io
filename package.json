@@ -1,16 +1,19 @@
 {
   "name": "portfolio-website",
-  "description": "Personal website hosted on github",
+  "description": "This package is a personal website hosted on GitHub, showcasing the professional portfolio of Jobayer Arman",
   "version": "5.3.0",
   "author": {
     "name": "Jobayer Arman",
     "email": "carbonjha@gmail.com"
   },
-  "license": " ",
-  "homepage": "http://jobayerarman.github.io/",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/jobayerarman/jobayerarman.github.io"
+  },
+  "engines": {
+    "node": ">=8.10.0 <=10.24.1",
+    "npm": ">=6.0.0 <=6.14.12"
   },
   "scripts": {
     "dev": "gulp serve",
