@@ -213,7 +213,7 @@ var custom = {
       const elementHeight = section.outerHeight() + 40;
 
       // create a new ScrollMagic scene for this section
-      const highlightNav = new ScrollMagic.Scene({
+      new ScrollMagic.Scene({
         triggerElement: triggerID,
         duration: elementHeight,
         controller: custom.controller
