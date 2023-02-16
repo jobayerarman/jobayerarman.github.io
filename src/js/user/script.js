@@ -5,6 +5,8 @@ var custom = {
   width: window.innerWidth,
   height: window.innerHeight,
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false,
+  // create a new ScrollMagic controller
+  controller: new ScrollMagic.Controller(),
 
   // Initializes a typing animation using the Typed.js library on the ".role" element, with the specified strings and configuration options
   typeAnimation: () => {
@@ -62,13 +64,13 @@ var custom = {
   // Otherwise, the header height is set to the window height
   adjustHeaderHeight: function() {
     const MIN_HEIGHT = 750;
-    const $siteHeader = document.querySelector('#site-header');
+    const siteHeader = document.querySelector('#site-header');
     // Set the header height to the window height
-    $siteHeader.style.height = `${window.innerHeight}px`;
+    siteHeader.style.height = `${window.innerHeight}px`;
 
     // If the window height is greater than the minimum height, adjust the header height to the custom height plus 5 pixels
     if (window.innerHeight > MIN_HEIGHT) {
-      $siteHeader.style.height = `${custom.height + 5}px`;
+      siteHeader.style.height = `${custom.height + 5}px`;
     }
   },
 
@@ -116,7 +118,6 @@ var custom = {
   navigation: function() {
     // Define variables to store relevant elements of the navigation
     const $nav       = $('#navigation');
-    const scrollable = $nav.find('.page-scroll');
     const mainNav    = $nav.find('#main-navbar');
     const mobileNav  = $nav.find('#mobile-navbar');
     const menuToggle = $nav.find('#toggle-navbar');
@@ -164,60 +165,80 @@ var custom = {
   },
 
   animateSkill: function() {
-    var animationTime  = 2000;
-    var easing         = 'easeInOutExpo';
-    var $skill         = '#' + $('#skills').attr('id');
-    var $skillHeight   = $('#skills').outerHeight();
-    var $progressbar   = $('.progress-bar');
-
-    var controller     = new ScrollMagic.Controller();
-
-    var skillProgress  = new ScrollMagic.Scene({
-      triggerElement: $skill,
-      duration: $skillHeight,
+    // Define variables to use in the function
+    const animationTime = 2000;
+    const easing = 'easeInOutExpo';
+    const skillId = $('#skills').attr('id');
+    const skillHeight = $('#skills').outerHeight();
+    const progressBars = $('.progress-bar');
+    // Create a new ScrollMagic scene for the skills section
+    const skillProgress  = new ScrollMagic.Scene({
+      triggerElement: `#${skillId}`,
+      duration: skillHeight,
       offset: 100
     });
+
+    // Check if the custom trigger exists and add the progress animation to the scene
     if (!custom.trigger) {
       custom.trigger = true;
-      skillProgress.on('enter', function() {
-        $progressbar.each(function() {
-          var $this             = $(this);
-          var percent           = ($this.parent().data('progress-percent') / 100);
-          var progressWrapWidth = $this.width();
-          var progressTotal     = percent * progressWrapWidth;
-
-          $this.stop().animate({ left: progressTotal }, animationTime, easing);
+      // Animate each progress bar inside the skill section
+      skillProgress.on('enter', () => {
+        progressBars.each((index, progressBar) => {
+          const $progressBar = $(progressBar);
+          const percent = ($progressBar.parent().data('progress-percent') / 100);
+          const progressTotal = percent * $progressBar.width();
+          // Animate the progress bar to the percentage of its data attribute
+          $progressBar.stop().animate({ left: progressTotal }, animationTime, easing);
         });
       })
-      // .addIndicators()
-        .addTo(controller);
+        // add indicators for debugging (optional)
+        // .addIndicators()
+        // Add the scene to the controller
+        .addTo(custom.controller);
     }
   },
 
   linkHighlight: function() {
-    var controller  = new ScrollMagic.Controller();
-    var $sections   = $('section');
-    var $nav        = $('.navbar-main');
+    // select all sections on the page
+    const sections = $('section');
+    // select the main navbar
+    const nav = $('.navbar-main');
 
-    $sections.each(function() {
-      var $this          = $(this);
-      var $triggerID     = '#' + $this.attr('id');
-      var $elementHeight = $this.outerHeight() + 40;
+    // loop through each section
+    sections.each(function() {
+      const section = $(this);
+      // get the ID of the section
+      const triggerID = '#' + section.attr('id');
+      // get the height of the section plus some extra padding
+      const elementHeight = section.outerHeight() + 40;
 
-      var highlightNav = new ScrollMagic.Scene({
-        triggerElement: $triggerID,
-        duration: $elementHeight
+      // create a new ScrollMagic scene for this section
+      const highlightNav = new ScrollMagic.Scene({
+        triggerElement: triggerID,
+        duration: elementHeight,
+        controller: custom.controller
       })
-        .setClassToggle($triggerID, 'active')
-        .on('enter leave', function(event) {
+        // add a class to the section when it enters the viewport
+        .setClassToggle(triggerID, 'active')
+        // add an event listener for when the section enters or leaves the viewport
+        .on('enter leave', (event) => {
+          // get the ID of the current section
+          const sectionID = section.attr('id');
+
+          // select the link in the main navbar that corresponds to the current section
+          const link = nav.find('a[href="#' + sectionID + '"]');
+
+          // add or remove the "active" class from the link depending on whether the section is entering or leaving the viewport
           if (event.type == 'enter') {
-            $nav.find('a[href="#' + $this.attr('id') + '"]').addClass('active');
+            link.addClass('active');
           } else {
-            $nav.find('a[href="#' + $this.attr('id') + '"]').removeClass('active');
+            link.removeClass('active');
           }
         })
+        // add indicators for debugging (optional)
         // .addIndicators()
-        .addTo(controller);
+        // add the scene to the controller
+        .addTo(custom.controller);
     });
   },
 
