@@ -4,6 +4,9 @@
     "es6": true,
     "jquery": true
   },
+  "globals": {
+    "ScrollMagic": true
+  },
   "rules": {
     // enforce spacing inside single-line blocks
     // http://eslint.org/docs/rules/block-spacing
