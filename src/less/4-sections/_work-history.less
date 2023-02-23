@@ -1,0 +1,28 @@
+.job-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.job-date {
+  text-align: right;
+}
+
+.services-list {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 30px;
+    .text-justify();
+
+    &:before {
+      content: '\f10c';
+      font-family: FontAwesome;
+      position: absolute;
+      left: 0;
+      color: @mdc-light-green-900;
+    }
+  }
+}
