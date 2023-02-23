@@ -62,7 +62,7 @@ var custom = {
   // This function dynamically adjusts the height of the site header based on the window height
   // If the window height is greater than 750 pixels, the custom height plus 5 pixels is used
   // Otherwise, the header height is set to the window height
-  adjustHeaderHeight: function() {
+  adjustHeaderHeight: () => {
     const MIN_HEIGHT = 750;
     const siteHeader = document.querySelector('#site-header');
     // Set the header height to the window height
@@ -75,7 +75,7 @@ var custom = {
   },
 
   // Adds or removes "scrolled" class on ".navbar-main" based on the scroll position
-  navBackground: function() {
+  navBackground: () => {
     const $nav = $('.navbar-main');
     const threshold = 50;
     // Attaches a scroll event listener to the window object
@@ -89,7 +89,7 @@ var custom = {
 
 
   // Shows or hides the "scroll to top" button based on scroll position, and animates to top of page when clicked
-  scrollToTop: function() {
+  scrollToTop: () => {
     // Select scroll to top button element and set initial offset
     const $scrollButton = $('#scroll-top');
     const offset = 250;
@@ -115,7 +115,7 @@ var custom = {
   },
 
   // Defines the navigation function to handle the page scrolling and mobile menu toggle
-  navigation: function() {
+  navigation: () => {
     // Define variables to store relevant elements of the navigation
     const $nav       = $('#navigation');
     const mainNav    = $nav.find('#main-navbar');
@@ -123,25 +123,25 @@ var custom = {
     const menuToggle = $nav.find('#toggle-navbar');
 
     // If the screen width is less than or equal to 768px, copy the main nav HTML into the mobile nav
-    if (this.width <= 768) {
+    if (custom.width <= 768) {
       mobileNav.html(mainNav.html());
     }
 
     // Scrolls to clicked page section and closes mobile menu if open
     document.body.addEventListener('click', (e) => {
-      if (!e.target.matches('.page-scroll a')) return;
+      if (!e.target.parentNode.matches('.page-scroll a')) return;
       e.preventDefault();
 
-      const $anchor = $(e.target);
+      const $anchor = $(e.target.parentNode);
       const href = $anchor.attr('href');
-      const mobileChild = mobileNav.children('ul.expanded');
 
       // Scroll to the clicked section using smooth animation
       $('html, body').stop().animate({
-        scrollTop: $(href).offset().top - 73
+        scrollTop: $(href).offset().top - 38
       }, 1500, 'easeInOutExpo');
 
       // Collapse mobile navigation if expanded
+      const mobileChild = mobileNav.children('ul.expanded');
       if (mobileNav.children('ul').hasClass('expanded')) {
         mobileChild.slideUp('fast').removeClass('expanded');
         menuToggle.children('.bar').removeClass('animate');
@@ -164,7 +164,7 @@ var custom = {
     });
   },
 
-  animateSkill: function() {
+  animateSkill: () => {
     // Define variables to use in the function
     const animationTime = 2000;
     const easing = 'easeInOutExpo';
@@ -198,7 +198,7 @@ var custom = {
     }
   },
 
-  linkHighlight: function() {
+  linkHighlight: () => {
     // select all sections on the page
     const sections = $('section');
     // select the main navbar
@@ -242,18 +242,26 @@ var custom = {
     });
   },
 
-  scrollTrigger: function() {
+  scrollTrigger: () => {
 
   },
 
-  init: function() {
+  copyrightYear: () => {
+    const currentYear = new Date().getFullYear();
+    const footer = document.querySelector('footer');
+    const footerText = footer.querySelector('h6');
+    footerText.innerHTML = `Jobayer Arman &copy; 2015 - ${currentYear}`;
+  },
+
+  init: () => {
     custom.preloader();
     custom.adjustHeaderHeight();
     custom.navBackground();
     custom.scrollToTop();
     custom.navigation();
-    custom.animateSkill();
-    custom.linkHighlight();
+    // custom.animateSkill();
+    // custom.linkHighlight();
+    custom.copyrightYear();
   }
 };
 
