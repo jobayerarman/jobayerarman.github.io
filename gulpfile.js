@@ -20,78 +20,60 @@
  *
  * Edit the variables as per your project requirements.
  */
-// Project root folders
-const basePaths = {
-  src: 'src/',
-  dest: 'dist/'
-};
-// Styles folders and files
-const styleFiles = {
-  src: {
-    path: basePaths.src + 'less/',
-    mainFile: basePaths.src + 'less/main.less',
-    allFiles: basePaths.src + 'less/**/*.less'
+const paths = {
+  // Project root folders
+  base: {
+    src: 'src/',
+    dest: 'dist/'
   },
-  dest: {
-    path: basePaths.dest + 'css/',
-    files: basePaths.dest + 'css/*.+(css|map)'
-  }
-};
-// Scripts folders and files
-const scriptFiles = {
-  user: {
-    src: {
-      path: basePaths.src + 'js/user/',
-      files: basePaths.src + 'js/user/*.js'
+  // Styles folders and files
+  styles: {
+    src: 'src/less/',
+    mainFile: 'src/less/main.less',
+    allFile: 'src/less/**/*.less',
+    dest: 'dist/css/',
+    destFiles: 'dist/css/*.+(css|map)'
+  },
+  // Scripts folders and files
+  scripts: {
+    user: {
+      src: 'src/js/user/',
+      srcFiles: 'src/js/user/*.js',
+      dest: 'dist/js/',
+      destFiles: 'dist/js/*.+(js|map)',
+      fileName: 'user.js'
     },
-    dest: {
-      path: basePaths.dest + 'js/',
-      files: basePaths.dest + 'js/*.+(js|map)',
-      filename: 'user.js'
+    vendor: {
+      src: 'src/js/vendor/',
+      srcFiles: ['src/js/vendor/TweenMax.js', 'src/js/vendor/ScrollMagic.js', 'src/js/vendor/debug.addIndicators.js', 'src/js/vendor/velocity.js', 'src/js/vendor/velocity.ui.js', 'src/js/vendor/typed.js'],
+      dest: 'dist/js/',
+      destFiles: 'dist/js/*.+(js|map)',
+      fileName: 'vendor.js'
     }
   },
-  vendor: {
-    src: {
-      path: basePaths.src + 'js/vendor/',
-      files: ['src/js/vendor/TweenMax.js', 'src/js/vendor/ScrollMagic.js', 'src/js/vendor/debug.addIndicators.js', 'src/js/vendor/velocity.js', 'src/js/vendor/velocity.ui.js', 'src/js/vendor/typed.js']
-    },
-    dest: {
-      path: basePaths.dest + 'js/',
-      files: basePaths.dest + 'js/*.+(js|map)',
-      filename: 'vendor.js'
-    }
-  }
-};
-// HTML folders and files
-const htmlFiles = {
-  src: {
-    path: basePaths.src + 'site/',
-    pages: basePaths.src + 'site/pages/*.+(html|njk)',
-    files: basePaths.src + 'site/**/*.+(html|njk)',
-    templates: basePaths.src + 'site/templates'
+  // HTML folders and files
+  html: {
+    src: 'src/site/',
+    pages: 'src/site/pages/*.+(html|njk)',
+    files: 'src/site/**/*.+(html|njk)',
+    templates: 'src/site/templates',
+    dest: './',
+    destFiles: '*.html'
   },
-  dest: {
-    path: './',
-    files: '*.html'
-  }
-};
-// Image folders and files
-const imageFiles = {
-  src: {
-    path: basePaths.src + 'images/',
-    files: basePaths.src + 'images/*.{png,jpg,gif,svg}'
+  // Image folders and files
+  images: {
+    src: 'src/images/',
+    srcFiles: 'src/images/*.{png,jpg,gif,svg}',
+    dest: 'dist/images/',
+    destFiles: 'dist/images/*.{png,jpg,gif,svg}'
   },
-  dest: {
-    path: basePaths.dest + 'images/',
-    files: basePaths.dest + 'images/*.{png,jpg,gif,svg}'
+  // Watch variables
+  watch: {
+    styles: 'src/less/**/*.less',
+    scripts: 'src/js/user/*.js',
+    images: 'src/images/*.{png,jpg,gif,svg}',
+    html: 'src/site/**/*.+(html|njk)'
   }
-};
-// Watch variables
-const watchFiles = {
-  styles: styleFiles.src.allFiles,
-  scripts: scriptFiles.user.src.files,
-  images: imageFiles.src.files,
-  html: htmlFiles.src.files
 };
 
 // Browsers you care about for autoprefixing.
@@ -221,13 +203,13 @@ const bumpVersion = async () => {
  * Cleanups dest files
  */
 const cleanCss = () => {
-  return del([styleFiles.dest.files]);
+  return del([paths.styles.destFiles]);
 };
 const cleanJs = () => {
-  return del([scriptFiles.vendor.dest.files, scriptFiles.user.dest.files]);
+  return del([paths.scripts.vendor.destFiles, paths.scripts.user.destFiles]);
 };
 const cleanHtml = () => {
-  return del([htmlFiles.dest.files]);
+  return del([paths.html.destFiles]);
 };
 const cleanTask = parallel(cleanHtml, cleanCss, cleanJs);
 
@@ -240,7 +222,7 @@ const cleanTask = parallel(cleanHtml, cleanCss, cleanJs);
 const buildStyles = (done) => {
   const plugins = [cssnano({ preset: 'default' })];
 
-  return src(styleFiles.src.mainFile)
+  return src(paths.styles.mainFile)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(gulpif(config.sourceMaps, sourcemaps.init()))
 
@@ -256,7 +238,7 @@ const buildStyles = (done) => {
     .pipe(gulpif(config.isProduction, postcss(plugins)))
     .pipe(gulpif(config.isProduction, rename({ suffix: '.min' })))
 
-    .pipe(dest(styleFiles.dest.path))
+    .pipe(dest(paths.styles.dest))
 
     .pipe(filter('**/*.css'))                                                     // Filtering stream to only css files
     .pipe(browserSync.stream())                                                     // Injects CSS into browser
@@ -270,7 +252,7 @@ const buildStylesTask = series(cleanCss, buildStyles);
  * Lint JavaScript files using ESLint
  */
 const jsLint = (done) => {
-  return src(scriptFiles.user.src.files)
+  return src(paths.scripts.user.srcFiles)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(eslint())
     .pipe(eslint.format())          // eslint.format() outputs the lint results to the console.
@@ -288,12 +270,12 @@ const uglifyScripts = lazypipe()
   * Concatenate and uglify custom scripts.
   */
 const jsUser = (done) => {
-  src(scriptFiles.user.src.files)
+  src(paths.scripts.user.srcFiles)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(babel({ presets: ['babel-preset-es2015'] }))
-    .pipe(concat(scriptFiles.user.dest.filename))
+    .pipe(concat(paths.scripts.user.fileName))
     .pipe(gulpif(config.isProduction, uglifyScripts()))
-    .pipe(dest(scriptFiles.user.dest.path))
+    .pipe(dest(paths.scripts.user.dest))
     .pipe(size({ showFiles: true }));
   done();
 };
@@ -303,11 +285,11 @@ const buildUserScripts = series(jsLint, jsUser);
   * Concatenate and uglify vendor scripts.
   */
 const buildVendorScripts = (done) => {
-  src(scriptFiles.vendor.src.files)
+  src(paths.scripts.vendor.srcFiles)
     .pipe(plumber({ errorHandler: errorLog }))
-    .pipe(concat(scriptFiles.vendor.dest.filename))
+    .pipe(concat(paths.scripts.vendor.fileName))
     .pipe(uglifyScripts())
-    .pipe(dest(scriptFiles.vendor.dest.path))
+    .pipe(dest(paths.scripts.vendor.dest))
     .pipe(size({ showFiles: true }));
   done();
 };
@@ -320,14 +302,14 @@ const renderHtmlTask = (done) => {
   let cacheBust = lazypipe()
     .pipe(replace, /(dist)(.*)(\.)(css|js)/, '$1$2$3$4?' + date);
 
-  return src(htmlFiles.src.pages)
+  return src(paths.html.pages)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(htmlRender({
-      path: htmlFiles.src.templates
+      path: paths.html.templates
     }))
     .pipe(gulpif(config.isProduction, processhtml()))
     .pipe(gulpif(config.isProduction, cacheBust()))
-    .pipe(dest(htmlFiles.dest.path))
+    .pipe(dest(paths.html.dest))
     .pipe(size({ showFiles: true }));
   done();
 };
@@ -344,7 +326,7 @@ const renderHtmlTask = (done) => {
   *
   */
 const compressImageTask = () => {
-  return src(imageFiles.src.files)
+  return src(paths.images.srcFiles)
     .pipe(imagemin([
       imagemin.mozjpeg({ quality: 75, progressive: true }),
       imagemin.optipng({ optimizationLevel: 5 }),
@@ -355,7 +337,7 @@ const compressImageTask = () => {
         ]
       })
     ]))
-    .pipe(dest(imageFiles.dest.path));
+    .pipe(dest(paths.images.dest));
 };
 
 
@@ -407,10 +389,10 @@ const browserReload = (done) => {
  * Task: Watch for file modification at specific paths and run respective tasks accordingly
  */
 const devWatch = () => {
-  watch(watchFiles.styles, buildStylesTask);
-  watch(watchFiles.html, renderHtmlTask).on('change', browserReload());
-  watch(watchFiles.scripts, buildUserScripts).on('change', browserReload());
-  watch(watchFiles.images, compressImageTask).on('change', browserReload());
+  watch(paths.watch.styles, buildStylesTask);
+  watch(paths.watch.html, renderHtmlTask).on('change', browserReload());
+  watch(paths.watch.scripts, buildUserScripts).on('change', browserReload());
+  watch(paths.watch.images, compressImageTask).on('change', browserReload());
 };
 
 
