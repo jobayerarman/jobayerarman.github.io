@@ -97,15 +97,7 @@ const watchFiles = {
 // Browsers you care about for autoprefixing.
 // Browserlist https://github.com/ai/browserslist
 const AUTOPREFIXER_BROWSERS = [
-  'android >= 4',
-  'bb >= 10',
-  'chrome >= 34',
-  'ff >= 30',
-  'ie >= 9',
-  'ie_mob >= 10',
-  'ios >= 7',
-  'opera >= 23',
-  'safari >= 7',
+  'defaults'
 ];
 // End of project variables
 
@@ -119,7 +111,8 @@ const gutil                                  = require('gulp-util');            
 
 // CSS related plugins.
 const less                                   = require('gulp-less');             // Gulp pluign for Sass compilation.
-const cssmin                                 = require('gulp-cssmin');           // Minifies CSS files.
+const cssnano                                = require('cssnano');               // CSSnano is a modular compression tool
+const postcss                                = require('gulp-postcss');          // PostCSS is a tool for transforming CSS with JavaScript plugins
 const autoprefixer                           = require('gulp-autoprefixer');     // Autoprefixing magic.
 const sourcemaps                             = require('gulp-sourcemaps');       // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file.
 
@@ -248,10 +241,8 @@ const cleanTask = parallel(cleanHtml, cleanCss, cleanJs);
  * Compiles Less, Autoprefixes it and Minifies CSS.
  *
  */
-const buildStylesTask = (done) => {
-  const minifyCss = () => lazypipe()
-    .pipe(rename, { suffix: '.min' })
-    .pipe(cssmin, { keepSpecialComments: false });
+const buildStyles = (done) => {
+  const plugins = [cssnano({ preset: 'default' })];
 
   return src(styleFiles.src.mainFile)
     .pipe(plumber({ errorHandler: errorLog }))
@@ -266,15 +257,18 @@ const buildStylesTask = (done) => {
 
     .pipe(gulpif(config.sourceMaps, sourcemaps.write('.')))
 
-    .pipe(gulpif(config.production, minifyCss()))
+    .pipe(gulpif(config.production, postcss(plugins)))
+    .pipe(gulpif(config.production, rename({ suffix: '.min' })))
 
     .pipe(dest(styleFiles.dest.path))
+
     .pipe(filter('**/*.css'))                                                     // Filtering stream to only css files
     .pipe(browserSync.stream())                                                     // Injects CSS into browser
 
     .pipe(size({ showFiles: true }));
   done();
 };
+const buildStylesTask = series(cleanCss, buildStyles);
 
 /**
   * Task: `scripts`.
