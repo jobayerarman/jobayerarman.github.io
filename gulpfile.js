@@ -97,7 +97,7 @@ const watchFiles = {
 // Browsers you care about for autoprefixing.
 // Browserlist https://github.com/ai/browserslist
 const AUTOPREFIXER_BROWSERS = [
-  'defaults'
+  'last 5 versions', '> 5%'
 ];
 // End of project variables
 
@@ -107,7 +107,8 @@ const AUTOPREFIXER_BROWSERS = [
  * Load gulp plugins and assigning them semantic names.
  */
 const { src, dest, parallel, series, watch } = require('gulp');                  // Importing all the Gulp-related packages we want to use
-const gutil                                  = require('gulp-util');             // Utility functions for gulp plugins
+const argv                                   = require('minimist')(process.argv.slice(2)); // Parses the command line arguments passed to Gulp
+const fancyLog                               = require('fancy-log');             // Log things, prefixed with a timestamp
 
 // CSS related plugins.
 const less                                   = require('gulp-less');             // Gulp pluign for Sass compilation.
@@ -147,8 +148,8 @@ const rename                                 = require('gulp-rename');          
 const size                                   = require('gulp-size');             // Logs out the total size of files in the stream and optionally the individual file-sizes
 
 const config = {
-  production: !!gutil.env.production, // Two exclamations turn undefined into a proper false.
-  sourceMaps: !gutil.env.production
+  production: !!argv.production, // Two exclamations turn undefined into a proper false.
+  sourceMaps: !argv.production
 };
 
 /**
@@ -162,19 +163,14 @@ const getPackageJsonVersion = () => {
  * Notify Errors
  */
 const errorLog = (error) => {
-  // Pretty error reporting
-  let report = '\n';
-  const chalk = gutil.colors.white.bgRed;
-
-  report += chalk('TASK:') + ' [' + error.plugin + ']\n';
-  report += chalk('ERRR:') + ' ' + error.message + '\n';
-  if (error.lineNumber) { report += chalk('LINE:') + ' ' + error.lineNumber + '\n'; }
-  if (error.column) { report += chalk('COL:') + '  ' + error.column + '\n'; }
-  if (error.fileName) { report += chalk('FILE:') + ' ' + error.fileName + '\n'; }
-
-  console.error(report);
-
-  gutil.beep(); // System beep (backup)
+  const { bgWhite } = fancyLog.colors;
+  fancyLog.error(
+    `${bgWhite.red(' TASK: ')} [${error.plugin}]\n` +
+    `${bgWhite.red(' ERRR: ')} ${error.message}\n` +
+    (error.lineNumber ? `${bgWhite.red(' LINE:')} ${error.lineNumber}\n` : '') +
+    (error.column ? `${bgWhite.red(' COL: ')} ${error.column}\n` : '') +
+    (error.fileName ? `${bgWhite.red(' FILE:')} ${error.fileName}\n` : '')
+  );
 };
 
 /**
