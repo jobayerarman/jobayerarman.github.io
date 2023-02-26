@@ -338,18 +338,19 @@ const renderHtmlTask = (done) => {
   *     3. Generates and saves the optimized images in dist folder
   *
   */
-const compressImageTask = (done) => {
+const compressImageTask = () => {
   return src(imageFiles.src.files)
-
-    .pipe(imagemin({
-      optimizationLevel: 5, // 0-7 low-high
-      progressive: true,
-      interlaced: true,
-      svgoPlugins: [{ removeViewBox: false }]
-    }))
-
+    .pipe(imagemin([
+      imagemin.mozjpeg({ quality: 75, progressive: true }),
+      imagemin.optipng({ optimizationLevel: 5 }),
+      imagemin.svgo({
+        plugins: [
+          { removeViewBox: false },
+          { cleanupIDs: false }
+        ]
+      })
+    ]))
     .pipe(dest(imageFiles.dest.path));
-  done();
 };
 
 
