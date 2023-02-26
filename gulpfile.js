@@ -148,8 +148,8 @@ const rename                                 = require('gulp-rename');          
 const size                                   = require('gulp-size');             // Logs out the total size of files in the stream and optionally the individual file-sizes
 
 const config = {
-  production: !!argv.production, // Two exclamations turn undefined into a proper false.
-  sourceMaps: !argv.production
+  isProduction: argv.production ? true : false,
+  sourceMaps: argv.production ? false: true,
 };
 
 /**
@@ -253,8 +253,8 @@ const buildStyles = (done) => {
 
     .pipe(gulpif(config.sourceMaps, sourcemaps.write('.')))
 
-    .pipe(gulpif(config.production, postcss(plugins)))
-    .pipe(gulpif(config.production, rename({ suffix: '.min' })))
+    .pipe(gulpif(config.isProduction, postcss(plugins)))
+    .pipe(gulpif(config.isProduction, rename({ suffix: '.min' })))
 
     .pipe(dest(styleFiles.dest.path))
 
@@ -289,7 +289,7 @@ const jsUser = (done) => {
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(babel({ presets: ['babel-preset-es2015'] }))
     .pipe(concat(scriptFiles.user.dest.filename))
-    .pipe(gulpif(config.production, uglifyScripts()))
+    .pipe(gulpif(config.isProduction, uglifyScripts()))
     .pipe(dest(scriptFiles.user.dest.path))
     .pipe(size({ showFiles: true }));
   done();
@@ -313,15 +313,15 @@ const buildVendorScripts = (done) => {
 const renderHtmlTask = (done) => {
   let date = getDate();
   let cacheBust = lazypipe()
-    .pipe(replace, /(dist)(.*)(\.)(css|js)/g, '$1$2$3$4?' + date);
+    .pipe(replace, /(dist)(.*)(\.)(css|js)/, '$1$2$3$4?' + date);
 
   return src(htmlFiles.src.pages)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(htmlRender({
       path: htmlFiles.src.templates
     }))
-    .pipe(gulpif(config.production, processhtml()))
-    .pipe(gulpif(config.production, cacheBust()))
+    .pipe(gulpif(config.isProduction, processhtml()))
+    .pipe(gulpif(config.isProduction, cacheBust()))
     .pipe(dest(htmlFiles.dest.path))
     .pipe(size({ showFiles: true }));
   done();
