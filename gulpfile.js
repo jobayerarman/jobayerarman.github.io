@@ -53,7 +53,7 @@ const scriptFiles = {
   vendor: {
     src: {
       path: basePaths.src + 'js/vendor/',
-      files: basePaths.src + 'js/vendor/*.js'
+      files: ['src/js/vendor/TweenMax.js', 'src/js/vendor/ScrollMagic.js', 'src/js/vendor/debug.addIndicators.js', 'src/js/vendor/velocity.js', 'src/js/vendor/velocity.ui.js', 'src/js/vendor/typed.js']
     },
     dest: {
       path: basePaths.dest + 'js/',
@@ -267,24 +267,27 @@ const buildStyles = (done) => {
 const buildStylesTask = series(cleanCss, buildStyles);
 
 /**
-  * Task: `scripts`.
-  *
-  * Concatenate and uglify custom scripts.
-  *
-  */
+ * Lint JavaScript files using ESLint
+ */
 const jsLint = (done) => {
   return src(scriptFiles.user.src.files)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(eslint())
-    // eslint.format() outputs the lint results to the console.
-    .pipe(eslint.format())
-    // To have the process exit with an error code (1) on
-    // lint error, return the stream and pipe to failAfterError last.
-    .pipe(eslint.failAfterError());
+    .pipe(eslint.format())          // eslint.format() outputs the lint results to the console.
+    .pipe(eslint.failAfterError()); // To have the process exit with an error code (1) on lint error, return the stream and pipe to failAfterError last.
   done();
 };
+/**
+ * Declares a reusable function to minify JavaScript files with a .min suffix using lazypipe
+ */
+const uglifyScripts = lazypipe()
+  .pipe(rename, { suffix: '.min' })
+  .pipe(uglify);
+/**
+  * Task: `jsUser`.
+  * Concatenate and uglify custom scripts.
+  */
 const jsUser = (done) => {
-  let uglifyScripts = lazypipe().pipe(rename, { suffix: '.min' }).pipe(uglify);
   src(scriptFiles.user.src.files)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(babel({ presets: ['babel-preset-es2015'] }))
@@ -295,9 +298,11 @@ const jsUser = (done) => {
   done();
 };
 const buildUserScripts = series(jsLint, jsUser);
-
+/**
+  * Task: `buildVendorScripts`.
+  * Concatenate and uglify vendor scripts.
+  */
 const buildVendorScripts = (done) => {
-  let uglifyScripts = lazypipe().pipe(rename, { suffix: '.min' }).pipe(uglify);
   src(scriptFiles.vendor.src.files)
     .pipe(plumber({ errorHandler: errorLog }))
     .pipe(concat(scriptFiles.vendor.dest.filename))
