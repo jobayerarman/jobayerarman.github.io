@@ -241,7 +241,7 @@ const buildStyles = (done) => {
     .pipe(dest(paths.styles.dest))
 
     .pipe(filter('**/*.css'))                                                     // Filtering stream to only css files
-    .pipe(browserSync.stream())                                                     // Injects CSS into browser
+    .pipe(browserSync.stream())                                                   // Injects CSS into browser
 
     .pipe(size({ showFiles: true }));
   done();
