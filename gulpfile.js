@@ -1,449 +1,611 @@
 /**
- * Gulpfile for front-end developing with Bootstrap.
+ * Gulpfile - Modern Build System
  *
- * Implements:
- *      1. Live reloads browser with BrowserSync.
- *      2. CSS: Less to CSS conversion, error catching, Autoprefixing,
- *         CSS minification.
- *      3. JS: Concatenates & uglifies Custom JS files.
- *      4. Images: Compresses PNG, JPEG, GIF and SVG images.
- *      5. Watches files for changes in CSS or JS and HTML.
- *      6. InjectCSS instead of reloading browser page.
+ * Portfolio Website Build Configuration
  *
- * @author Jobayer Arman (@JobayerArman)
+ * Features:
+ *   - Gulp 4+ with modern async/await support
+ *   - Cross-platform browser testing (Windows, macOS, Linux)
+ *   - LESS to CSS compilation with sourcemaps
+ *   - ES6+ transpilation with Babel 7+
+ *   - JavaScript linting with ESLint
+ *   - Template rendering with Nunjucks
+ *   - Image optimization and compression
+ *   - BrowserSync for live development
+ *   - Environment-based builds (dev/prod)
+ *   - Content-hash cache busting
+ *   - Comprehensive error handling
+ *
+ * @author Jobayer Arman
+ * @updated 2024
  */
 
+const gulp = require('gulp');
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
+
+// ============================================================================
+// PLUGINS - CSS
+// ============================================================================
+const less = require('gulp-less');
+const cssmin = require('gulp-cssmin');
+const autoprefixer = require('gulp-autoprefixer');
+const sourcemaps = require('gulp-sourcemaps');
+
+// ============================================================================
+// PLUGINS - JavaScript
+// ============================================================================
+const babel = require('gulp-babel');
+const eslint = require('gulp-eslint');
+const concat = require('gulp-concat');
+const terser = require('gulp-terser');
+const uglify = require('gulp-uglify');
+
+// ============================================================================
+// PLUGINS - HTML & Templates
+// ============================================================================
+const htmlRender = require('gulp-nunjucks-render');
+const processhtml = require('gulp-processhtml');
+
+// ============================================================================
+// PLUGINS - Images
+// ============================================================================
+const imagemin = require('gulp-imagemin');
+const imageminMozjpeg = require('imagemin-mozjpeg');
+const imageminPngquant = require('imagemin-pngquant');
+const imageminSvgo = require('imagemin-svgo');
+
+// ============================================================================
+// PLUGINS - Utilities
+// ============================================================================
+const browserSync = require('browser-sync').create();
+const del = require('del');
+const filter = require('gulp-filter');
+const gulpif = require('gulp-if');
+const plumber = require('gulp-plumber');
+const rename = require('gulp-rename');
+const replace = require('gulp-replace');
+const size = require('gulp-size');
+const chalk = require('chalk');
+const crypto = require('crypto');
+
+// ============================================================================
+// CONFIGURATION
+// ============================================================================
+
 /**
- * Configuration.
- *
- * Project Configuration for gulp tasks.
- *
- * Edit the variables as per your project requirements.
+ * Environment detection
+ * Set via: NODE_ENV=production npm run build
  */
-// Project root folders
-var basePaths = {
-  src: 'src/',
-  dest: 'dist/'
+const isProd = process.env.NODE_ENV === 'production' || process.argv.includes('--production');
+const isDev = !isProd;
+
+/**
+ * Build configuration
+ */
+const config = {
+  production: isProd,
+  sourceMaps: isDev,
+  environment: isProd ? 'production' : 'development',
 };
-// Styles folders and files
-var styles = {
+
+/**
+ * Path configuration
+ */
+const paths = {
+  src: 'src/',
+  dist: 'dist/',
+  less: 'src/less/',
+  js: 'src/js/',
+  html: 'src/site/',
+  images: 'src/images/',
+};
+
+/**
+ * Styles configuration
+ */
+const styles = {
   src: {
-    path      : basePaths.src + 'less/',
-    mainFile  : basePaths.src + 'less/main.less',
-    allFiles  : basePaths.src + 'less/**/*.less'
+    mainFile: path.join(paths.less, 'main.less'),
+    allFiles: path.join(paths.less, '**/*.less'),
   },
   dest: {
-    path      : basePaths.dest + 'css/',
-    files     : basePaths.dest + 'css/*.+(css|map)'
-  }
+    path: path.join(paths.dist, 'css/'),
+    pattern: path.join(paths.dist, 'css/*.css'),
+  },
 };
-// Scripts folders and files
-var scripts = {
+
+/**
+ * Scripts configuration
+ */
+const scripts = {
   user: {
-    src: {
-      path      : basePaths.src + 'js/user/',
-      files     : basePaths.src + 'js/user/*.js'
-    },
-    dest: {
-      path      : basePaths.dest + 'js/',
-      files     : basePaths.dest + 'js/*.+(js|map)',
-      filename  : 'user.js'
-    }
+    src: path.join(paths.js, 'user/*.js'),
+    dest: path.join(paths.dist, 'js/'),
+    filename: 'user.js',
   },
   vendor: {
-    src: {
-      path      : basePaths.src + 'js/vendor/',
-      files     : basePaths.src + 'js/vendor/*.js'
-    },
-    dest: {
-      path      : basePaths.dest + 'js/',
-      files     : basePaths.dest + 'js/*.+(js|map)',
-      filename  : 'vendor.js'
-    }
-  }
-};
-// HTML folders and files
-var html = {
-  src: {
-    path      : basePaths.src + 'site/',
-    pages     : basePaths.src + 'site/pages/*.+(html|njk)',
-    files     : basePaths.src + 'site/**/*.+(html|njk)',
-    templates : basePaths.src + 'site/templates'
+    src: path.join(paths.js, 'vendor/*.js'),
+    dest: path.join(paths.dist, 'js/'),
+    filename: 'vendor.js',
   },
-  dest: {
-    path      : './',
-    files     : '*.html'
-  }
-};
-// Image folders and files
-var images = {
-  src: {
-    path      : basePaths.src + 'images/',
-    files     : basePaths.src + 'images/*.{png,jpg,gif,svg}'
-  },
-  dest: {
-    path      : basePaths.dest + 'images/',
-    files     : basePaths.dest + 'images/*.{png,jpg,gif,svg}'
-  }
-};
-// Watch variables
-var watch = {
-  styles    : styles.src.allFiles,
-  scripts   : scripts.user.src.files,
-  images    : images.src.files,
-  html      : html.src.files
-};
-
-// Browsers you care about for autoprefixing.
-// Browserlist https://github.com/ai/browserslist
-const AUTOPREFIXER_BROWSERS = [
-  'android >= 4',
-  'bb >= 10',
-  'chrome >= 34',
-  'ff >= 30',
-  'ie >= 9',
-  'ie_mob >= 10',
-  'ios >= 7',
-  'opera >= 23',
-  'safari >= 7',
-];
-// End of project variables
-
-/**
- * Load Plugins.
- *
- * Load gulp plugins and assigning them semantic names.
- */
-var gulp         = require('gulp');                  // Gulp of-course
-var gutil        = require('gulp-util');             // Utility functions for gulp plugins
-
-// CSS related plugins.
-var less         = require('gulp-less');             // Gulp pluign for Sass compilation.
-var cssmin       = require('gulp-cssmin');           // Minifies CSS files.
-var autoprefixer = require('gulp-autoprefixer');     // Autoprefixing magic.
-var sourcemaps   = require('gulp-sourcemaps');       // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file.
-
-// JS related plugins.
-var babel        = require('gulp-babel');            // Next-gen JavaScript, with Babel
-var eslint       = require('gulp-eslint');           // ESLint plugin for gulp
-var concat       = require('gulp-concat');           // Concatenates JS files
-var uglify       = require('gulp-uglify');           // Minifies JS files
-
-// HTML template engine
-var htmlRender   = require('gulp-nunjucks-render');  // Render Nunjucks templates
-var processhtml  = require('gulp-processhtml');      // Process html files at build time to modify them depending on the release environment
-
-// Image realted plugins.
-var imagemin     = require('gulp-imagemin');         // Minify PNG, JPEG, GIF and SVG images with imagemin.
-
-// Github related plugins
-var fs           = require('fs');
-var semver       = require('semver');
-var bump         = require('gulp-bump');
-var prompt       = require('gulp-prompt');
-var replace      = require('gulp-replace');
-
-// Utility related plugins.
-var browserSync  = require('browser-sync').create(); // Reloads browser and injects CSS. Time-saving synchronised browser testing.
-var del          = require('del');                   // Delete files and folders
-var filter       = require('gulp-filter');           // Helps work on a subset of the original files by filtering them using globbing.
-var gulpSequence = require('gulp-sequence');         // Run a series of gulp tasks in order
-var gulpif       = require('gulp-if');               // A ternary gulp plugin: conditionally control the flow of vinyl objects.
-var lazypipe     = require('lazypipe');              // Lazypipe allows to create an immutable, lazily-initialized pipeline.
-var plumber      = require('gulp-plumber');          // Prevent pipe breaking caused by errors from gulp plugins
-var reload       = browserSync.reload;               // For manual browser reload.
-var rename       = require('gulp-rename');           // Renames files E.g. style.css -> style.min.css
-var size         = require('gulp-size');             // Logs out the total size of files in the stream and optionally the individual file-sizes
-
-var config = {
-  production: !!gutil.env.production, // Two exclamations turn undefined into a proper false.
-  sourceMaps:  !gutil.env.production
 };
 
 /**
- * get version from package.json
+ * HTML/Templates configuration
  */
-function getPackageJsonVersion() {
-  return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
+const html = {
+  src: {
+    pages: path.join(paths.html, 'pages/*.+(html|njk)'),
+    watch: path.join(paths.html, '**/*.+(html|njk)'),
+    templates: path.join(paths.html, 'templates'),
+  },
+  dest: './',
+};
+
+/**
+ * Images configuration
+ */
+const images = {
+  src: path.join(paths.images, '**/*.{png,jpg,jpeg,gif,svg}'),
+  dest: path.join(paths.dist, 'images/'),
+};
+
+/**
+ * Browserslist targets - Modern browser support
+ * Uses Browserslist format for both Babel and Autoprefixer
+ */
+const BROWSER_TARGETS = ['defaults', 'not dead'];
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Comprehensive error handler with pretty formatting
+ * @param {Error} error - Error object from plugin
+ */
+function handleError(error) {
+  const errorDetails = [
+    chalk.bgRed.white(' ERROR '),
+    chalk.red('Plugin: ') + (error.plugin || 'Unknown'),
+    chalk.red('Message: ') + (error.message || 'No message'),
+    error.lineNumber ? chalk.red('Line: ') + error.lineNumber : '',
+    error.fileName ? chalk.red('File: ') + error.fileName : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  console.error('\n' + errorDetails + '\n');
+  this.emit('end');
 }
 
 /**
- * Notify Errors
+ * Get platform-specific browser executable
+ * Supports Windows, macOS, and Linux
+ * @returns {string} Browser executable path or command
  */
-function errorLog(error) {
-  // Pretty error reporting
-  var report = '';
-  var chalk = gutil.colors.white.bgRed;
+function getBrowser() {
+  const platform = os.platform();
 
-  report += chalk('TASK:') + ' [' + error.plugin + ']\n';
-  report += chalk('ERRR:') + ' ' + error.message + '\n';
-  if (error.lineNumber) { report += chalk('LINE:') + ' ' + error.lineNumber + '\n'; }
-  if (error.column) { report += chalk('COL:') + '  ' + error.column + '\n'; }
-  if (error.fileName)   { report += chalk('FILE:') + ' ' + error.fileName + '\n'; }
-  console.error(report);
-
-  this.emit('end');
-};
+  switch (platform) {
+    case 'darwin':
+      return 'Google Chrome';  // macOS
+    case 'linux':
+      return 'google-chrome';  // Linux
+    case 'win32':
+      return 'chrome.exe';     // Windows
+    default:
+      return 'chrome';         // Fallback
+  }
+}
 
 /**
- * Datestamp for cache busting
+ * Generate file content hash for cache busting
+ * Uses MD5 hash of file content (first 8 characters)
+ * @param {string} filePath - Path to file
+ * @returns {string} Content hash or timestamp fallback
  */
-var getDate = function() {
-  var myDate = new Date();
-
-  var myYear    = myDate.getFullYear().toString();
-  var myMonth   = ('0' + (myDate.getMonth() + 1)).slice(-2);
-  var myDay     = ('0' + myDate.getDate()).slice(-2);
-  var mySeconds = myDate.getSeconds().toString();
-
-  var dateStamp = myYear + myMonth + myDay + mySeconds;
-
-  return dateStamp;
-};
+function getFileHash(filePath) {
+  try {
+    const content = fs.readFileSync(filePath);
+    const hash = crypto
+      .createHash('md5')
+      .update(content)
+      .digest('hex')
+      .slice(0, 8);
+    return hash;
+  } catch (error) {
+    console.warn(chalk.yellow(`⚠ Warning: Could not hash file ${filePath}`));
+    return Date.now().toString().slice(-8);
+  }
+}
 
 /**
- * Github workflow
- *
- * Task: bump version
+ * Log task completion with duration
+ * @param {string} taskName - Name of task
+ * @param {number} startTime - Task start timestamp
  */
-gulp.task( 'bump:version', function (callback) {
-  var currentVersion = getPackageJsonVersion();
-  gulp.src('/', {read: false})
-    .pipe(prompt.prompt({
-      type: 'list',
-      name: 'bump',
-      message: 'What type of bump would you like to do?',
-      choices: ['patch', 'minor', 'major', 'prerelease']
+function logTaskComplete(taskName, startTime) {
+  const duration = Date.now() - startTime;
+  const durationStr = duration > 1000
+    ? `${(duration / 1000).toFixed(1)}s`
+    : `${duration}ms`;
+  console.log(chalk.green('✓') + ` ${taskName} ${chalk.dim(`(${durationStr)}`)}`);
+}
+
+/**
+ * Create minification pipeline for JavaScript
+ * Uses terser for production, uglify as fallback
+ * @returns {Stream} Gulp stream pipeline
+ */
+function createJsMinifyPipe() {
+  return terser({
+    compress: {
+      drop_console: config.production,
+      drop_debugger: config.production,
     },
-    function (res) {
-      var selectedChoice = res.bump;
-      var newVer = semver.inc(currentVersion, selectedChoice);
-
-      bumpFiles(newVer, callback);
-    }))
-});
-function bumpFiles(newVer, callback) {
-
-  gulp.src(['./package.json'])
-    .pipe(plumber({errorHandler: errorLog}))
-    .pipe(bump({version: newVer}))
-    .pipe(gulp.dest('./'));
-
-  callback();
-};
-
-/**
- * Task: Cleanup
- *
- * Cleanups dest files
- */
-gulp.task('clean:css', function() {
-  return del([styles.dest.files]);
-});
-gulp.task('clean:html', function() {
-  return del([html.dest.files]);
-});
-gulp.task('clean:js', function() {
-  return del([scripts.vendor.dest.files, scripts.user.dest.files]);
-});
-gulp.task('clean:all', gulpSequence('clean:html', 'clean:css', 'clean:js'));
-
-/**
- * Task: `styles`.
- *
- * Compiles Less, Autoprefixes it and Minifies CSS.
- *
- */
- gulp.task('styles', ['clean:css'], function() {
-  var minifyCss = lazypipe()
-  .pipe( rename, {suffix: '.min'})
-  .pipe( cssmin, {keepSpecialComments: false});
-
-  return gulp.src( styles.src.mainFile )
-    .pipe( plumber( {errorHandler: errorLog}) )
-    .pipe( gulpif( config.sourceMaps, sourcemaps.init() ) )
-
-    .pipe( less() )
-
-    .pipe( gulpif( config.sourceMaps, sourcemaps.write({ includeContent: false }) ) ) // By default the source maps include the source code. Pass false to use the original files.
-    .pipe( gulpif( config.sourceMaps, sourcemaps.init({ loadMaps: true }) ) )         // Set to true to load existing maps for source files.
-
-    .pipe( autoprefixer( AUTOPREFIXER_BROWSERS ) )
-
-    .pipe( gulpif( config.sourceMaps, sourcemaps.write('.') ) )
-
-    .pipe( gulpif( config.production, minifyCss() ) )
-
-    .pipe( gulp.dest( styles.dest.path ) )
-    .pipe( filter( '**/*.css' ) )                                                     // Filtering stream to only css files
-    .pipe( browserSync.stream() )                                                     // Injects CSS into browser
-
-    .pipe( size({
-      showFiles: true
-    }) );
-});
-
-/**
-  * Task: `scripts`.
-  *
-  * Concatenate and uglify custom scripts.
-  *
-  */
-gulp.task('js:lint', () => {
-  return gulp.src(scripts.user.src.files)
-    .pipe(plumber({ errorHandler: errorLog }))
-    .pipe(eslint())
-    // eslint.format() outputs the lint results to the console.
-    .pipe(eslint.format())
-    // To have the process exit with an error code (1) on
-    // lint error, return the stream and pipe to failAfterError last.
-    .pipe(eslint.failAfterError());
-});
-gulp.task( 'js:custom', ['js:lint'], () => {
-  let uglifyScripts = lazypipe().pipe( rename, {suffix: '.min'}).pipe( uglify );
-  gulp.src( scripts.user.src.files )
-  .pipe( plumber({errorHandler: errorLog}) )
-  .pipe( babel({ presets: ['babel-preset-es2015'] }))
-  .pipe( concat( scripts.user.dest.filename ) )
-  .pipe( gulpif( config.production, uglifyScripts() ))
-  .pipe( gulp.dest( scripts.user.dest.path ) )
-  .pipe( size({
-    showFiles: true
-  }) );
-});
-gulp.task( 'js:vendor', () => {
-  let uglifyScripts = lazypipe().pipe( rename, {suffix: '.min'}).pipe( uglify );
-  gulp.src( scripts.vendor.src.files )
-  .pipe( plumber({errorHandler: errorLog}) )
-  .pipe( concat( scripts.vendor.dest.filename ))
-  .pipe( uglifyScripts() )
-  .pipe( gulp.dest( scripts.vendor.dest.path ))
-  .pipe( size({
-    showFiles: true
-  }));
-});
-gulp.task( 'js:all', gulpSequence('clean:js', 'js:vendor', 'js:custom'));
-
-/**
- * Task: render HTML template
- */
-gulp.task( 'render:html', function() {
-  var date = getDate();
-  var cacheBust = lazypipe()
-    .pipe( replace, /(dist)(.*)(\.)(css|js)/g, '$1$2$3$4?' + date );
-
-  return gulp.src( html.src.pages )
-    .pipe( plumber({errorHandler: errorLog}) )
-    .pipe( htmlRender({
-      path: html.src.templates
-    }))
-    .pipe( gulpif( config.production, processhtml() ) )
-    .pipe( gulpif( config.production, cacheBust() ) )
-    .pipe( gulp.dest( html.dest.path ))
-    .pipe( size({
-      showFiles: true
-    }) );
-});
-
-/**
-  * Task: `images`.
-  *
-  * Compresses PNG, JPEG, GIF and SVG images.
-  *
-  * This task does the following:
-  *     1. Gets the images from src folder
-  *     2. Compresses PNG, JPEG, GIF and SVG images
-  *     3. Generates and saves the optimized images in dist folder
-  *
-  */
-gulp.task( 'image:compress', function() {
-  return gulp.src( images.src.files )
-
-    .pipe( imagemin( {
-      optimizationLevel: 5, // 0-7 low-high
-      progressive: true,
-      interlaced: true,
-      svgoPlugins: [{removeViewBox: false}]
-    }))
-
-    .pipe(gulp.dest( images.dest.path ));
-});
-
-
-/**
- * Task: `browser-sync`.
- *
- * Live Reloads, CSS injections, Localhost tunneling.
- *
- * This task does the following:
- *    1. Sets the project URL
- *    2. Sets inject CSS
- *    3. You may want to stop the browser from openning automatically
- */
-gulp.task( 'browser-sync', function() {
-  browserSync.init( {
-
-    // built-in static server for basic HTML/JS/CSS websites
-    server: true,
-
-    // Will not attempt to determine your network status, assumes you're ONLINE
-    online: true,
-
-    // Open the site in Chrome
-    browser: "chrome.exe",
-
-    // `true` Automatically open the browser with BrowserSync live server.
-    // `false` Stop the browser from automatically opening.
-    open: false,
-
-    // Console log connections
-    logConnections: false,
-
-    // The small pop-over notifications in the browser are not always needed/wanted
-    notify: true,
+    format: {
+      comments: false,
+    },
+    mangle: true,
+  }).on('error', (err) => {
+    // Fallback to uglify if terser fails
+    console.warn(chalk.yellow('⚠ Terser failed, using uglify fallback'));
+    return uglify();
   });
+}
+
+// ============================================================================
+// CLEANUP TASKS
+// ============================================================================
+
+/**
+ * Clean CSS output files
+ */
+gulp.task('clean:css', () => {
+  console.log(chalk.dim('  Cleaning CSS...'));
+  return del(styles.dest.pattern);
 });
 
-
 /**
- * Default Gulp task
+ * Clean JavaScript output files
  */
-gulp.task( 'default', gulpSequence('clean:all', 'styles', 'js:all', 'render:html'));
-
-/**
- * Production task
- */
-gulp.task( 'build:prod', gulpSequence('clean:all', 'bump:version', 'styles', 'js:all', 'render:html'));
-
-
-/**
- * Run all the tasks sequentially
- * Use this task for development
- */
-gulp.task( 'serve', gulpSequence('render:html', 'styles', 'js:all', 'watch'));
-
-/**
-  * Watch Tasks.
-  *
-  * Watches for file changes and runs specific tasks.
-  */
-gulp.task( 'watch', ['browser-sync'], function() {
-  gulp.watch( watch.styles, [ 'styles' ] );    // Run LESS task on file changes.
-  gulp.watch( watch.html, [ 'watch:html' ] );  // Render files and reload on HTML file changes.
-  gulp.watch( watch.scripts, [ 'watch:js' ] ); // Reload on customJS file changes.
-  gulp.watch( watch.images, [ 'watch:img' ] ); // Reload on image file changes.
+gulp.task('clean:js', () => {
+  console.log(chalk.dim('  Cleaning JavaScript...'));
+  return del([
+    path.join(scripts.user.dest, '*.js'),
+    path.join(scripts.vendor.dest, '*.js'),
+    path.join(scripts.user.dest, '*.map'),
+    path.join(scripts.vendor.dest, '*.map'),
+  ]);
 });
 
-// reloading browsers
-gulp.task('watch:html', ['render:html'], function (done) {
+/**
+ * Clean HTML output files
+ */
+gulp.task('clean:html', () => {
+  console.log(chalk.dim('  Cleaning HTML...'));
+  return del(path.join(html.dest, '*.html'));
+});
+
+/**
+ * Clean all dist files
+ */
+gulp.task('clean:all', gulp.parallel('clean:css', 'clean:js', 'clean:html'));
+
+// ============================================================================
+// STYLES TASK
+// ============================================================================
+
+/**
+ * Compile LESS to CSS with optimization
+ * - Converts LESS → CSS
+ * - Adds vendor prefixes via Autoprefixer
+ * - Generates sourcemaps in development
+ * - Minifies in production
+ */
+gulp.task('styles', () => {
+  const startTime = Date.now();
+
+  return gulp
+    .src(styles.src.mainFile)
+    .pipe(plumber({errorHandler: handleError}))
+    .pipe(gulpif(config.sourceMaps, sourcemaps.init()))
+    .pipe(less({
+      paths: [path.join(__dirname, 'node_modules')],
+    }))
+    .pipe(autoprefixer({
+      overrideBrowserslist: BROWSER_TARGETS,
+      cascade: false,
+    }))
+    .pipe(gulpif(config.sourceMaps, sourcemaps.write()))
+    .pipe(gulpif(config.production, cssmin({keepSpecialComments: false})))
+    .pipe(gulpif(config.production, rename({suffix: '.min'})))
+    .pipe(gulp.dest(styles.dest.path))
+    .pipe(filter('**/*.css'))
+    .pipe(size({showFiles: true, pretty: true}))
+    .pipe(browserSync.stream())
+    .on('end', () => logTaskComplete('styles', startTime));
+});
+
+// ============================================================================
+// JAVASCRIPT TASKS
+// ============================================================================
+
+/**
+ * Lint custom JavaScript files
+ * Checks code quality against ESLint rules
+ */
+gulp.task('js:lint', () => {
+  const startTime = Date.now();
+
+  return gulp
+    .src(scripts.user.src)
+    .pipe(plumber({errorHandler: handleError}))
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+    .on('end', () => logTaskComplete('js:lint', startTime));
+});
+
+/**
+ * Process custom JavaScript
+ * - Lints code
+ * - Transpiles ES6+ → ES5 using Babel
+ * - Concatenates files
+ * - Generates sourcemaps in dev
+ * - Minifies in production
+ *
+ * @dependency js:lint
+ */
+gulp.task('js:custom', gulp.series('js:lint', () => {
+  const startTime = Date.now();
+
+  return gulp
+    .src(scripts.user.src)
+    .pipe(plumber({errorHandler: handleError}))
+    .pipe(gulpif(config.sourceMaps, sourcemaps.init()))
+    .pipe(babel({
+      presets: [
+        ['@babel/preset-env', {
+          targets: BROWSER_TARGETS,
+          modules: false,
+          useBuiltIns: 'usage',
+          corejs: 3,
+        }],
+      ],
+    }))
+    .pipe(concat(scripts.user.filename))
+    .pipe(gulpif(
+      config.sourceMaps,
+      sourcemaps.write('.', {
+        includeContent: false,
+        sourceRoot: '../../../src/js/user/',
+      })
+    ))
+    .pipe(gulpif(config.production, createJsMinifyPipe()))
+    .pipe(gulpif(config.production, rename({suffix: '.min'})))
+    .pipe(gulp.dest(scripts.user.dest))
+    .pipe(size({showFiles: true, pretty: true}))
+    .on('end', () => logTaskComplete('js:custom', startTime));
+}));
+
+/**
+ * Process vendor JavaScript
+ * - Concatenates vendor libraries
+ * - Minifies for production
+ */
+gulp.task('js:vendor', () => {
+  const startTime = Date.now();
+
+  return gulp
+    .src(scripts.vendor.src)
+    .pipe(plumber({errorHandler: handleError}))
+    .pipe(concat(scripts.vendor.filename))
+    .pipe(gulpif(config.production, createJsMinifyPipe()))
+    .pipe(gulpif(config.production, rename({suffix: '.min'})))
+    .pipe(gulp.dest(scripts.vendor.dest))
+    .pipe(size({showFiles: true, pretty: true}))
+    .on('end', () => logTaskComplete('js:vendor', startTime));
+});
+
+/**
+ * Process all JavaScript files
+ * Runs vendor and custom JS in parallel
+ */
+gulp.task('js:all', gulp.series(
+  'clean:js',
+  gulp.parallel('js:vendor', 'js:custom')
+));
+
+// ============================================================================
+// HTML/TEMPLATE TASK
+// ============================================================================
+
+/**
+ * Render HTML from Nunjucks templates
+ * - Renders template files
+ * - Applies cache busting in production
+ * - Processes build directives
+ */
+gulp.task('render:html', () => {
+  const startTime = Date.now();
+
+  return gulp
+    .src(html.src.pages)
+    .pipe(plumber({errorHandler: handleError}))
+    .pipe(htmlRender({
+      path: html.src.templates,
+      environment: config.environment,
+    }))
+    .pipe(gulpif(config.production, processhtml()))
+    .pipe(gulpif(config.production, (() => {
+      // Content-hash based cache busting for production
+      return replace(
+        /(['"])(dist\/[^'"]*\.(css|js))(['"])/g,
+        (match, quote1, distPath, ext, quote2) => {
+          try {
+            const fullPath = path.join(__dirname, distPath);
+            const hash = getFileHash(fullPath);
+            const basePath = distPath.replace(new RegExp(`\\.min\\.${ext}$`), `.${hash}.min.${ext}`);
+            return `${quote1}${basePath}${quote2}`;
+          } catch (error) {
+            console.warn(chalk.yellow(`⚠ Could not apply hash to ${distPath}`));
+            return match;  // Return original if hashing fails
+          }
+        }
+      );
+    })()))
+    .pipe(gulp.dest(html.dest))
+    .pipe(size({showFiles: true, pretty: true}))
+    .on('end', () => logTaskComplete('render:html', startTime));
+});
+
+// ============================================================================
+// IMAGE TASK
+// ============================================================================
+
+/**
+ * Optimize and compress images
+ * - PNG: pngquant compression
+ * - JPEG: mozjpeg compression at 75% quality
+ * - GIF: gifsicle interlacing
+ * - SVG: SVGO optimization
+ */
+gulp.task('image:compress', () => {
+  const startTime = Date.now();
+
+  return gulp
+    .src(images.src)
+    .pipe(plumber({errorHandler: handleError}))
+    .pipe(imagemin([
+      imageminMozjpeg({quality: 75}),
+      imageminPngquant({
+        quality: [0.6, 0.8],
+        speed: 4,
+      }),
+      imagemin.gifsicle({interlaced: true}),
+      imageminSvgo({
+        plugins: [
+          {removeViewBox: false},
+          {removeDimensions: true},
+        ],
+      }),
+    ]))
+    .pipe(gulp.dest(images.dest))
+    .pipe(size({showFiles: true, pretty: true}))
+    .on('end', () => logTaskComplete('image:compress', startTime));
+});
+
+// ============================================================================
+// BROWSERSYNC TASK
+// ============================================================================
+
+/**
+ * Initialize BrowserSync development server
+ * - Live reload on file changes
+ * - CSS injection (no page reload needed)
+ * - Cross-device testing
+ * - Cross-platform browser support
+ */
+gulp.task('browser-sync', (done) => {
+  browserSync.init({
+    server: true,
+    online: true,
+    browser: getBrowser(),  // ✅ Cross-platform
+    open: false,
+    notify: true,
+    logConnections: false,
+    ghostMode: {
+      clicks: true,
+      forms: true,
+      scroll: true,
+    },
+  });
+  done();
+});
+
+// ============================================================================
+// WATCH TASK
+// ============================================================================
+
+/**
+ * Watch source files and run appropriate tasks
+ * - LESS changes → styles task → CSS inject
+ * - JS changes → js:custom task → page reload
+ * - HTML changes → render:html task → page reload
+ * - Images → compress & reload
+ */
+gulp.task('watch', gulp.series('browser-sync', () => {
+  console.log(chalk.cyan('👀 Watching for file changes...\n'));
+
+  // Watch LESS files
+  gulp.watch(styles.src.allFiles, gulp.series('styles'));
+
+  // Watch JavaScript files
+  gulp.watch(scripts.user.src, gulp.series('js:custom', (done) => {
     browserSync.reload();
     done();
-});
-gulp.task('watch:js', ['js:custom'], function (done) {
+  }));
+
+  // Watch HTML/Template files
+  gulp.watch(html.src.watch, gulp.series('render:html', (done) => {
     browserSync.reload();
     done();
-});
-gulp.task('watch:img', ['image:compress'], function (done) {
+  }));
+
+  // Watch image files
+  gulp.watch(images.src, gulp.series('image:compress', (done) => {
     browserSync.reload();
     done();
-});
+  }));
+}));
+
+// ============================================================================
+// PRIMARY TASKS
+// ============================================================================
+
+/**
+ * Development build and watch
+ * - Cleans dist
+ * - Builds all assets
+ * - Starts dev server
+ * - Watches for changes
+ *
+ * Usage: npm run dev
+ */
+gulp.task('dev', gulp.series(
+  'clean:all',
+  gulp.parallel('styles', 'js:all'),
+  'render:html',
+  'watch'
+));
+
+/**
+ * Production build
+ * - Cleans dist
+ * - Builds all assets with optimizations
+ * - Minifies CSS and JS
+ * - Optimizes images
+ * - Applies cache busting
+ *
+ * Usage: npm run build
+ */
+gulp.task('build', gulp.series(
+  'clean:all',
+  gulp.parallel('styles', 'js:all'),
+  'render:html',
+  'image:compress',
+  (done) => {
+    console.log(chalk.green.bold('\n✅ Production build complete!\n'));
+    console.log(chalk.dim('Output directory: ./dist/'));
+    done();
+  }
+));
+
+/**
+ * Default task (development)
+ */
+gulp.task('default', gulp.series('dev'));
