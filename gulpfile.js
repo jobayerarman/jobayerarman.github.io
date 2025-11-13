@@ -235,7 +235,8 @@ function logTaskComplete(taskName, startTime) {
   const durationStr = duration > 1000
     ? `${(duration / 1000).toFixed(1)}s`
     : `${duration}ms`;
-  console.log(chalk.green('✓') + ` ${taskName} ${chalk.dim(`(${durationStr)}`)}`);
+  const timing = chalk.dim('(' + durationStr + ')');
+  console.log(chalk.green('✓') + ' ' + taskName + ' ' + timing);
 }
 
 /**
