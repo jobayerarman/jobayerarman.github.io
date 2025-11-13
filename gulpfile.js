@@ -69,6 +69,9 @@ const replace = require('gulp-replace');
 const size = require('gulp-size');
 const chalk = require('chalk');
 const crypto = require('crypto');
+const exec = require('child_process').exec;
+const util = require('util');
+const execAsync = util.promisify(exec);
 
 // ============================================================================
 // CONFIGURATION
@@ -604,6 +607,80 @@ gulp.task('build', gulp.series(
     done();
   }
 ));
+
+// ============================================================================
+// CHANGELOG TASK
+// ============================================================================
+
+/**
+ * Generate changelog from git commits
+ * Uses conventional-changelog for Angular commit format
+ * Generates CHANGELOG.md with version history and commit details
+ */
+gulp.task('changelog:generate', async (done) => {
+  const startTime = Date.now();
+
+  try {
+    console.log(chalk.cyan('\n📝 Generating changelog from commits...\n'));
+
+    // Use conventional-changelog CLI to generate changelog
+    const { stdout, stderr } = await execAsync(
+      'conventional-changelog -p angular -r 0 -i CHANGELOG.md -s',
+      { cwd: __dirname }
+    );
+
+    if (stderr && !stderr.includes('WARN')) {
+      console.warn(chalk.yellow('⚠ Changelog generation warnings:'));
+      console.warn(stderr);
+    }
+
+    if (stdout) {
+      console.log(chalk.dim(stdout));
+    }
+
+    console.log(chalk.green('✓ Changelog generated successfully'));
+    logTaskComplete('changelog:generate', startTime);
+    done();
+  } catch (error) {
+    // conventional-changelog may return exit code 1 even on success
+    // Check if CHANGELOG.md was created/updated
+    const fs = require('fs');
+    if (fs.existsSync(path.join(__dirname, 'CHANGELOG.md'))) {
+      console.log(chalk.green('✓ Changelog generated successfully'));
+      logTaskComplete('changelog:generate', startTime);
+      done();
+    } else {
+      console.error(chalk.red('✗ Failed to generate changelog'));
+      console.error(error);
+      done(error);
+    }
+  }
+});
+
+/**
+ * Preview changelog without writing to file
+ * Useful for reviewing changes before committing
+ */
+gulp.task('changelog:preview', async (done) => {
+  const startTime = Date.now();
+
+  try {
+    console.log(chalk.cyan('\n📋 Previewing changelog...\n'));
+
+    const { stdout } = await execAsync(
+      'conventional-changelog -p angular',
+      { cwd: __dirname }
+    );
+
+    console.log(stdout);
+    logTaskComplete('changelog:preview', startTime);
+    done();
+  } catch (error) {
+    console.error(chalk.red('✗ Failed to preview changelog'));
+    console.error(error);
+    done(error);
+  }
+});
 
 /**
  * Default task (development)

@@ -1,0 +1,36 @@
+{
+  "preset": "angular",
+  "headerPattern": "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+  "headerCorrespondence": [
+    "type",
+    "scope",
+    "subject"
+  ],
+  "referenceActions": [
+    "close",
+    "closes",
+    "closed",
+    "fix",
+    "fixes",
+    "fixed",
+    "resolve",
+    "resolves",
+    "resolved",
+    "ref",
+    "refs",
+    "reference",
+    "references"
+  ],
+  "issuePrefixes": [
+    "#"
+  ],
+  "noteKeywords": [
+    "BREAKING CHANGE",
+    "BREAKING CHANGES"
+  ],
+  "commitUrlFormat": "https://github.com/jobayerarman/jobayerarman.github.io/commit/{{hash}}",
+  "compareUrlFormat": "https://github.com/jobayerarman/jobayerarman.github.io/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "https://github.com/jobayerarman/jobayerarman.github.io/issues/{{id}}",
+  "userUrlFormat": "https://github.com/{{user}}",
+  "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
+}
